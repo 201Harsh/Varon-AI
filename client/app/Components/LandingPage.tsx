@@ -194,7 +194,7 @@ export default function VaronAILanding() {
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
+              transition={{ duration: 0.4, delay: 1 }}
               className="relative"
             >
               <div
@@ -216,7 +216,7 @@ export default function VaronAILanding() {
                       <motion.div
                         initial={{ y: 50, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.5 }}
+                        transition={{ duration: 0.5, delay: 2 }}
                         className={`max-w-[85%] rounded-xl sm:rounded-2xl p-3 sm:p-4 transition-colors duration-300 ${
                           isDarkMode ? "bg-emerald-500/20" : "bg-emerald-500/10"
                         }`}
@@ -232,7 +232,7 @@ export default function VaronAILanding() {
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 1, duration: 0.5 }}
+                      transition={{ delay: 3, duration: 0.5 }}
                       className="flex justify-start"
                     >
                       <div
@@ -264,7 +264,7 @@ export default function VaronAILanding() {
                     <motion.div
                       initial={{ opacity: 0, scale: 0.2 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 1.5, duration: 0.5 }}
+                      transition={{ delay: 4, duration: 0.5 }}
                       className="grid grid-cols-3 gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-dashed border-emerald-500/30"
                     >
                       {[
@@ -291,7 +291,7 @@ export default function VaronAILanding() {
                           key={agent.name}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 2 + index * 0.2 }}
+                          transition={{ delay: 5 + index * 0.2, duration: 0.4 }}
                           className="text-center"
                         >
                           <motion.div
@@ -344,7 +344,7 @@ export default function VaronAILanding() {
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 2.5 }}
+                      transition={{ delay: 6, duration: 0.8 }}
                       className="flex justify-start"
                     >
                       <div
@@ -368,7 +368,7 @@ export default function VaronAILanding() {
                           <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
-                            transition={{ delay: 3 }}
+                            transition={{ delay: 6.5, duration: 1 }}
                             className="flex items-center gap-1 ml-auto"
                           >
                             <span
@@ -387,7 +387,7 @@ export default function VaronAILanding() {
                         <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
-                          transition={{ delay: 3.5 }}
+                          transition={{ delay: 6.5, duration: 0.8 }}
                           className="space-y-1.5 sm:space-y-2 text-xs"
                         >
                           <p>
@@ -402,7 +402,7 @@ export default function VaronAILanding() {
                           <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: "100%" }}
-                            transition={{ delay: 3.9, duration: 1 }}
+                            transition={{ delay: 7, duration: 1 }}
                             className={`h-1 rounded-full bg-linear-to-r from-emerald-500 to-teal-500`}
                           />
                         </motion.div>
@@ -411,7 +411,7 @@ export default function VaronAILanding() {
                         <motion.div
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 4.5 }}
+                          transition={{ delay: 8.5, duration: 0.8 }}
                           className={`mt-3 p-2 sm:p-3 rounded-lg sm:rounded-xl border transition-colors duration-300 ${
                             isDarkMode
                               ? "bg-emerald-500/10 border-emerald-500/30"
@@ -491,7 +491,7 @@ export default function VaronAILanding() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
+            transition={{ delay: 1.5 }}
             className="mt-8 sm:mt-12 text-center"
           >
             <motion.button
