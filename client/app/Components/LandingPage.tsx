@@ -886,7 +886,7 @@ export default function VaronAILanding() {
                       transition={{ delay: index * 0.1 }}
                       className="flex items-start space-x-3"
                     >
-                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2 shrink-0"></div>
                       <span
                         className={`text-sm sm:text-base transition-colors duration-300 ${
                           isDarkMode ? "text-gray-300" : "text-gray-700"
@@ -931,7 +931,7 @@ export default function VaronAILanding() {
                       transition={{ delay: index * 0.1 }}
                       className="flex items-start space-x-3"
                     >
-                      <div className="w-2 h-2 bg-emerald-500 rounded-full mt-2 flex-shrink-0"></div>
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full mt-2 shrink-0"></div>
                       <span
                         className={`text-sm sm:text-base transition-colors duration-300 ${
                           isDarkMode ? "text-gray-300" : "text-gray-700"
@@ -1079,7 +1079,7 @@ export default function VaronAILanding() {
                       key={idx}
                       className="flex items-center space-x-2 text-sm"
                     >
-                      <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                      <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full shrink-0"></div>
                       <span
                         className={`transition-colors duration-300 ${
                           isDarkMode ? "text-gray-300" : "text-gray-600"
@@ -1317,7 +1317,7 @@ export default function VaronAILanding() {
                     transition={{ delay: index * 0.1 }}
                     className="flex items-center space-x-2"
                   >
-                    <FiCheck className="text-emerald-500 flex-shrink-0" />
+                    <FiCheck className="text-emerald-500 shrink-0" />
                     <span
                       className={`text-sm sm:text-base transition-colors duration-300 ${
                         isDarkMode ? "text-gray-300" : "text-gray-600"
