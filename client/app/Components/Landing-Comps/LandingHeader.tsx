@@ -1,12 +1,12 @@
 import { FaRobot } from "react-icons/fa";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const LandingHeader = ({
   isDarkMode,
   toggleTheme,
   activeSection,
-  scrollToSection,
   isMenuOpen,
   setIsMenuOpen,
 }: any) => {
@@ -68,15 +68,34 @@ const LandingHeader = ({
               {/* Desktop Menu */}
               <div className="hidden md:flex items-center space-x-8">
                 {[
-                  "how-it-works",
-                  "assistants",
-                  "why-varon",
-                  "architecture",
-                  "use-cases",
-                ].map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => scrollToSection(item)}
+                  {
+                    item: "Home",
+                    link: "/",
+                  },
+                  {
+                    item: "About us",
+                    link: "/about",
+                  },
+                  {
+                    item: "Contact",
+                    link: "/contact",
+                  },
+                  {
+                    item: "Architecture",
+                    link: "#architecture",
+                  },
+                  {
+                    item: "How it works",
+                    link: "#how-it-works",
+                  },
+                  {
+                    item: "AI Assistants",
+                    link: "#assistants",
+                  },
+                ].map(({ item, link }: any, index: number) => (
+                  <Link
+                    href={link}
+                    key={index}
                     className={`transition-all duration-300 ${
                       activeSection === item
                         ? "text-emerald-500 font-semibold"
@@ -88,15 +107,15 @@ const LandingHeader = ({
                     {item
                       .split("-")
                       .map(
-                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                        (word: string) =>
+                          word.charAt(0).toUpperCase() + word.slice(1)
                       )
                       .join(" ")}
-                  </button>
+                  </Link>
                 ))}
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => scrollToSection("cta")}
                   className={`px-6 py-2 rounded-full font-semibold transition-all ${
                     isDarkMode
                       ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
@@ -129,15 +148,34 @@ const LandingHeader = ({
                 }`}
               >
                 {[
-                  "how-it-works",
-                  "assistants",
-                  "why-varon",
-                  "architecture",
-                  "use-cases",
-                ].map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => scrollToSection(item)}
+                  {
+                    item: "Home",
+                    link: "/",
+                  },
+                  {
+                    item: "About us",
+                    link: "/about",
+                  },
+                  {
+                    item: "Contact",
+                    link: "/contact",
+                  },
+                  {
+                    item: "Architecture",
+                    link: "#architecture",
+                  },
+                  {
+                    item: "How it works",
+                    link: "#how-it-works",
+                  },
+                  {
+                    item: "AI Assistants",
+                    link: "#assistants",
+                  },
+                ].map(({ item, link }: any, idx: number) => (
+                  <Link
+                    href={link}
+                    key={idx}
                     className={`block w-full text-left py-2 transition-colors ${
                       isDarkMode
                         ? "text-gray-400 hover:text-white"
@@ -147,13 +185,13 @@ const LandingHeader = ({
                     {item
                       .split("-")
                       .map(
-                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                        (word: string) =>
+                          word.charAt(0).toUpperCase() + word.slice(1)
                       )
                       .join(" ")}
-                  </button>
+                  </Link>
                 ))}
                 <button
-                  onClick={() => scrollToSection("cta")}
                   className={`w-full py-2 rounded-full font-semibold transition-colors ${
                     isDarkMode
                       ? "bg-linear-to-r from-emerald-500 to-teal-500"
