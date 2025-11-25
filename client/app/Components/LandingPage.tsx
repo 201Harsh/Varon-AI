@@ -1288,7 +1288,7 @@ export default function VaronAILanding() {
       </section>
 
       {/* Footer */}
-      <LandingFooter isDarkMode={isDarkMode} />
+      <LandingFooter />
     </div>
   );
 }

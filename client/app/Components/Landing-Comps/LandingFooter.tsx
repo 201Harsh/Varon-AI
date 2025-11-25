@@ -1,3 +1,4 @@
+import { useTheme } from "@/app/theme/ThemeToogle";
 import {
   FaRobot,
   FaTwitter,
@@ -8,10 +9,12 @@ import {
 } from "react-icons/fa";
 import { FiArrowUp, FiGlobe, FiShield, FiHeart } from "react-icons/fi";
 
-const LandingFooter = ({ isDarkMode }: any) => {
+const LandingFooter = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  const { isDarkMode } = useTheme();
 
   const currentYear = new Date().getFullYear();
 
