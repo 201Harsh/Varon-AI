@@ -32,7 +32,6 @@ import LandingHeader from "../Components/Landing-Comps/LandingHeader";
 export default function AIAssistantsPage() {
   const { isDarkMode } = useTheme();
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-  const [selectedAssistant, setSelectedAssistant] = useState<any>(null);
   const [isProcessPlaying, setIsProcessPlaying] = useState(false);
   const [currentProcessStep, setCurrentProcessStep] = useState(0);
 

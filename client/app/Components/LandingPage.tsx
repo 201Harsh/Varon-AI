@@ -20,8 +20,25 @@ import {
   FiUsers as FiTeam,
   FiBarChart,
   FiArrowUpRight,
+  FiStar,
+  FiPause,
 } from "react-icons/fi";
-import { FaTeamspeak, FaRegLightbulb } from "react-icons/fa";
+import {
+  FaTeamspeak,
+  FaRegLightbulb,
+  FaLightbulb,
+  FaUsers,
+  FaCheck,
+  FaCheckCircle,
+  FaCog,
+  FaNetworkWired,
+  FaBrain,
+  FaTasks,
+  FaSearch,
+  FaShieldAlt,
+  FaLayerGroup,
+  FaUserCheck,
+} from "react-icons/fa";
 import LandingFooter from "./Landing-Comps/LandingFooter";
 import LandingHeader from "./Landing-Comps/LandingHeader";
 import { useTheme } from "../theme/ThemeToogle";
@@ -30,6 +47,104 @@ import Image from "next/image";
 
 export default function VaronAILanding() {
   const { isDarkMode } = useTheme();
+  const [isProcessPlaying, setIsProcessPlaying] = useState(false);
+  const [currentProcessStep, setCurrentProcessStep] = useState(0);
+
+  const toggleProcess = () => {
+    if (isProcessPlaying) {
+      setIsProcessPlaying(false);
+    } else {
+      setIsProcessPlaying(true);
+      // Simulate process steps
+      const steps = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+      let current = 0;
+      const interval = setInterval(() => {
+        if (current < steps.length) {
+          setCurrentProcessStep(steps[current]);
+          current++;
+        } else {
+          clearInterval(interval);
+          setIsProcessPlaying(false);
+          setCurrentProcessStep(0);
+        }
+      }, 1100);
+    }
+  };
+
+  const processSteps = [
+    {
+      step: 1,
+      title: "Request Intake & Quick Evaluation",
+      description:
+        "Varon receives the user request and instantly checks if it can answer directly or if the task requires a specialized AI assistant.",
+      icon: FaUserCheck,
+      duration: "2.08s",
+    },
+    {
+      step: 2,
+      title: "Intent Understanding",
+      description:
+        "Varon analyzes the request deeply using NLP to capture intent, context, priority, constraints, and hidden requirements.",
+      icon: FaSearch,
+      duration: "3.7s",
+    },
+    {
+      step: 3,
+      title: "Task Breakdown",
+      description:
+        "If needed, Varon breaks the request into smaller structured tasks and micro-steps for optimal execution.",
+      icon: FaTasks,
+      duration: "4.2s",
+    },
+    {
+      step: 4,
+      title: "Specialist Matching",
+      description:
+        "Varon selects the ideal AI assistants based on expertise, performance history, and availability.",
+      icon: FaBrain,
+      duration: "5.5s",
+    },
+    {
+      step: 5,
+      title: "Parallel Task Execution",
+      description:
+        "Selected assistants work simultaneously on their assigned tasks, reducing total completion time dramatically.",
+      icon: FaNetworkWired,
+      duration: "7.8s - 11.5s",
+    },
+    {
+      step: 6,
+      title: "Quality Monitoring",
+      description:
+        "Varon supervises each assistants work, resolves bottlenecks, manages dependencies, and ensures all outputs meet quality standards.",
+      icon: FaCog,
+      duration: "1.9s - 5.8s",
+    },
+    {
+      step: 7,
+      title: "Smart Integration",
+      description:
+        "All outputs are merged, refined, validated, and transformed into a single polished solution.",
+      icon: FaLayerGroup,
+      duration: "1.4s - 2.6s",
+    },
+    {
+      step: 8,
+      title: "Final Validation",
+      description:
+        "Before presenting, Varon double-checks accuracy, clarity, and consistency—just like a real project manager performing a final review.",
+      icon: FaShieldAlt,
+      duration: "0.9s - 1.8s",
+    },
+    {
+      step: 9,
+      title: "Delivery & Optional Refinement",
+      description:
+        "Varon delivers the final result and instantly offers follow-up refinements or new actions based on user feedback.",
+      icon: FaCheckCircle,
+      duration: "2.7s - 6.4s",
+    },
+  ];
 
   return (
     <div
@@ -508,8 +623,9 @@ export default function VaronAILanding() {
                 isDarkMode ? "text-gray-300" : "text-gray-600"
               }`}
             >
-              Think of Varon as your intelligent team manager who coordinates
-              specialized AI experts
+              Varon acts as the central brain, assigning tasks to a network of
+              specialist AIs and synchronizing their output into one perfect
+              result.
             </p>
           </motion.div>
 
@@ -661,134 +777,204 @@ export default function VaronAILanding() {
       </section>
 
       {/* AI Assistants Section */}
-      <section id="assistants" className="py-16 sm:py-20">
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12 sm:mb-16"
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
-              Meet Your{" "}
-              <span
-                className={`transition-colors duration-300 ${
-                  isDarkMode
-                    ? "bg-linear-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent"
-                    : "bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent"
+      <section className="mb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className={`rounded-2xl p-8 border transition-colors duration-300 ${
+            isDarkMode
+              ? "bg-gray-800 border-gray-700"
+              : "bg-white border-gray-200"
+          }`}
+        >
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2
+                className={`text-3xl font-bold mb-4 transition-colors duration-300 ${
+                  isDarkMode ? "text-white" : "text-gray-800"
                 }`}
               >
-                AI Dream Team
-              </span>
-            </h2>
-            <p
-              className={`text-lg sm:text-xl transition-colors duration-300 max-w-2xl lg:max-w-3xl mx-auto ${
-                isDarkMode ? "text-gray-300" : "text-gray-600"
+                How Varon Thinks & Coordinates
+              </h2>
+              <p
+                className={`text-lg transition-colors duration-300 ${
+                  isDarkMode ? "text-gray-300" : "text-gray-600"
+                }`}
+              >
+                Watch Varon's intelligent coordination process in action
+              </p>
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={toggleProcess}
+              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-3 ${
+                isDarkMode
+                  ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
+                  : "bg-linear-to-r from-emerald-400 to-teal-400 hover:shadow-lg hover:shadow-emerald-400/25 text-white"
               }`}
             >
-              Each specialist is trained to excel in one specific area, ensuring
-              top-quality results
-            </p>
-          </motion.div>
+              {isProcessPlaying ? (
+                <FiPause className="text-xl" />
+              ) : (
+                <FiPlay className="text-xl" />
+              )}
+              {isProcessPlaying ? "Pause Demo" : "Start Demo"}
+            </motion.button>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto">
-            {[
-              {
-                icon: FiSearch,
-                title: "Search AI",
-                description:
-                  "Expert at finding precise information online with incredible accuracy",
-                features: ["Web Search", "Data Analysis", "Fact Checking"],
-              },
-              {
-                icon: FiCode,
-                title: "Coding AI",
-                description:
-                  "Specialized in writing, debugging, and optimizing code across all languages",
-                features: ["Code Generation", "Debugging", "Optimization"],
-              },
-              {
-                icon: FiImage,
-                title: "Design AI",
-                description:
-                  "Creative expert for visuals, UI/UX ideas, and design concepts",
-                features: ["UI/UX Design", "Visual Concepts", "Prototyping"],
-              },
-              {
-                icon: FiMessageSquare,
-                title: "Messaging AI",
-                description:
-                  "Professional communication for emails, WhatsApp, Instagram, and more",
-                features: ["Email Writing", "Social Media", "CRM Integration"],
-              },
-              {
-                icon: FiGlobe,
-                title: "Scraper AI",
-                description:
-                  "Data extraction specialist gathering information from any website",
-                features: [
-                  "Web Scraping",
-                  "Data Processing",
-                  "API Integration",
-                ],
-              },
-              {
-                icon: FiFileText,
-                title: "Docs AI",
-                description:
-                  "Document expert for summaries, reports, and professional writing",
-                features: ["Documentation", "Reports", "Summaries"],
-              },
-            ].map((assistant, index) => (
+          {/* Process Visualization */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {processSteps.map((step, index) => (
               <motion.div
-                key={assistant.title}
+                key={step.step}
                 initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className={`rounded-xl sm:rounded-2xl p-4 sm:p-6 border transition-all duration-300 group ${
-                  isDarkMode
-                    ? "bg-gray-800/50 border-gray-700 hover:border-emerald-500/50"
-                    : "bg-white border-gray-200 hover:border-emerald-500/50"
+                animate={{
+                  opacity:
+                    isProcessPlaying && currentProcessStep >= index ? 1 : 0.7,
+                  scale:
+                    isProcessPlaying && currentProcessStep === index ? 1.05 : 1,
+                  y: isProcessPlaying && currentProcessStep === index ? -5 : 0,
+                }}
+                transition={{ duration: 0.5 }}
+                className={`p-6 rounded-xl border-2 transition-all duration-500 ${
+                  isProcessPlaying && currentProcessStep >= index
+                    ? "border-emerald-500 bg-emerald-500/10"
+                    : isDarkMode
+                    ? "border-gray-600 bg-gray-700/50"
+                    : "border-gray-300 bg-gray-50"
                 }`}
               >
-                <div
-                  className={`w-12 h-12 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform ${
-                    isDarkMode
-                      ? "bg-linear-to-r from-emerald-500 to-teal-500"
-                      : "bg-linear-to-r from-emerald-400 to-teal-400"
-                  }`}
-                >
-                  <assistant.icon className="text-xl sm:text-2xl" />
-                </div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">
-                  {assistant.title}
-                </h3>
-                <p
-                  className={`mb-3 sm:mb-4 text-sm sm:text-base transition-colors duration-300 ${
-                    isDarkMode ? "text-gray-400" : "text-gray-600"
-                  }`}
-                >
-                  {assistant.description}
-                </p>
-                <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                  {assistant.features.map((feature, idx) => (
-                    <span
-                      key={idx}
-                      className={`text-xs px-2 py-1 rounded-full transition-colors duration-300 ${
-                        isDarkMode
-                          ? "bg-emerald-500/20 text-emerald-400"
-                          : "bg-emerald-500/10 text-emerald-600"
+                <div className="flex items-center gap-4 mb-4">
+                  <div
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors duration-300 ${
+                      isProcessPlaying && currentProcessStep >= index
+                        ? "bg-emerald-500 text-white"
+                        : isDarkMode
+                        ? "bg-gray-600 text-gray-400"
+                        : "bg-gray-200 text-gray-600"
+                    }`}
+                  >
+                    <step.icon className="text-xl" />
+                  </div>
+                  <div>
+                    <div
+                      className={`text-sm font-medium transition-colors duration-300 ${
+                        isProcessPlaying && currentProcessStep >= index
+                          ? "text-emerald-400"
+                          : isDarkMode
+                          ? "text-gray-400"
+                          : "text-gray-500"
                       }`}
                     >
-                      {feature}
-                    </span>
-                  ))}
+                      Step {step.step}
+                    </div>
+                    <div
+                      className={`font-semibold transition-colors duration-300 ${
+                        isDarkMode ? "text-white" : "text-gray-800"
+                      }`}
+                    >
+                      {step.title}
+                    </div>
+                  </div>
+                </div>
+                <p
+                  className={`text-sm transition-colors duration-300 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-600"
+                  }`}
+                >
+                  {step.description}
+                </p>
+                <div
+                  className={`text-xs mt-3 transition-colors duration-300 ${
+                    isProcessPlaying && currentProcessStep >= index
+                      ? "text-emerald-400"
+                      : isDarkMode
+                      ? "text-gray-500"
+                      : "text-gray-400"
+                  }`}
+                >
+                  ⏱️ {step.duration}
                 </div>
               </motion.div>
             ))}
           </div>
-        </div>
+
+          {/* Process Explanation */}
+          <div
+            className={`mt-8 p-6 rounded-xl border transition-colors duration-300 ${
+              isDarkMode
+                ? "bg-gray-700/50 border-gray-600"
+                : "bg-gray-50 border-gray-200"
+            }`}
+          >
+            <h3
+              className={`text-xl font-semibold mb-4 transition-colors duration-300 ${
+                isDarkMode ? "text-white" : "text-gray-800"
+              }`}
+            >
+              Intelligent Task Assignment Logic
+            </h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 className={`font-semibold mb-3 text-emerald-500`}>
+                  Factors Considered:
+                </h4>
+                <ul
+                  className={`space-y-2 text-sm transition-colors duration-300 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-600"
+                  }`}
+                >
+                  <li className="flex items-start gap-2">
+                    <FaCheck className="text-emerald-500 mt-0.5 shrink-0" />
+                    <span>Domain expertise and specialization</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <FaCheck className="text-emerald-500 mt-0.5 shrink-0" />
+                    <span>Current workload and availability</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <FaCheck className="text-emerald-500 mt-0.5 shrink-0" />
+                    <span>Task complexity and estimated time</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <FaCheck className="text-emerald-500 mt-0.5 shrink-0" />
+                    <span>Quality and performance history</span>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 className={`font-semibold mb-3 text-emerald-500`}>
+                  Coordination Benefits:
+                </h4>
+                <ul
+                  className={`space-y-2 text-sm transition-colors duration-300 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-600"
+                  }`}
+                >
+                  <li className="flex items-start gap-2">
+                    <FiZap className="text-emerald-500 mt-0.5 shrink-0" />
+                    <span>Parallel processing for faster results</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <FiStar className="text-emerald-500 mt-0.5 shrink-0" />
+                    <span>Expert-level quality in each domain</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <FaUsers className="text-emerald-500 mt-0.5 shrink-0" />
+                    <span>Seamless collaboration between specialists</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <FaLightbulb className="text-emerald-500 mt-0.5 shrink-0" />
+                    <span>Continuous learning and improvement</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </section>
 
       {/* Why Varon Section */}
@@ -929,7 +1115,7 @@ export default function VaronAILanding() {
                 The Perfect Formula
               </h3>
               <p className="text-2xl sm:text-3xl font-bold bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
-                Varon AI = One Boss AI + Many Expert Assistant AIs
+                Varon AI = Executive Brain + A Network of Skilled AI Workers
               </p>
               <p
                 className={`text-lg sm:text-xl mt-3 sm:mt-4 transition-colors duration-300 ${
@@ -1198,7 +1384,7 @@ export default function VaronAILanding() {
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6">
-              Ready to Lead Your{" "}
+              Ready to Upgrade Your{" "}
               <span
                 className={`transition-colors duration-300 ${
                   isDarkMode
@@ -1206,7 +1392,7 @@ export default function VaronAILanding() {
                     : "bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent"
                 }`}
               >
-                AI Dream Team
+                AI Experience
               </span>
               ?
             </h2>
@@ -1216,8 +1402,8 @@ export default function VaronAILanding() {
                 isDarkMode ? "text-gray-300" : "text-gray-600"
               }`}
             >
-              Stop settling for generic AI assistants. Get specialized expertise
-              coordinated by an intelligent manager.
+              Move beyond generic AI replies. Experience guidance from a true
+              decision-making AI manager.
             </p>
 
             <motion.div
@@ -1267,7 +1453,7 @@ export default function VaronAILanding() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 text-left max-w-4xl mx-auto">
                 {[
                   "✓ One intelligent AI manager",
-                  "✓ 6+ specialized AI assistants",
+                  "✓ 20+ specialized AI assistants",
                   "✓ Higher accuracy & reliability",
                   "✓ Natural conversation interface",
                   "✓ Cross-domain expertise",
