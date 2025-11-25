@@ -27,28 +27,31 @@ import {
 } from "react-icons/fi";
 import {
   SiNextdotjs,
-  SiTensorflow,
   SiMongodb,
   SiExpress,
   SiTailwindcss,
   SiTypescript,
-  SiOpenai,
-  SiDocker,
-  SiAmazonwebservices,
+  SiMysql,
+  SiSocketdotio,
+  SiGooglegemini,
+  SiGithub,
 } from "react-icons/si";
 import LandingHeader from "../Components/Landing-Comps/LandingHeader";
 import { useTheme } from "../theme/ThemeToogle";
 import LandingFooter from "../Components/Landing-Comps/LandingFooter";
+import Image from "next/image";
 
 export default function AboutPage() {
-  const [activeTab, setActiveTab] = useState("mission");
+  const [activeTab, setActiveTab] = useState("developer");
 
   const { isDarkMode } = useTheme();
 
   return (
     <div
       className={`min-h-screen transition-colors duration-300 ${
-        isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
+        isDarkMode
+          ? "bg-linear-to-r from-gray-950 to-black text-white"
+          : "bg-gray-50 text-gray-900"
       }`}
     >
       {/* Header */}
@@ -56,8 +59,8 @@ export default function AboutPage() {
         <div
           className={`absolute inset-0 transition-colors duration-300 ${
             isDarkMode
-              ? "bg-linear-to-r from-emerald-500/10 to-teal-500/10"
-              : "bg-linear-to-r from-emerald-500/5 to-teal-500/5"
+              ? "bg-linear-to-r from-emerald-500/15 to-teal-500/15"
+              : "bg-linear-to-r from-emerald-500/10 to-teal-500/10"
           }`}
         ></div>
 
@@ -98,10 +101,10 @@ export default function AboutPage() {
       <div className="container mx-auto px-6 -mt-8 relative z-20">
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {[
+            { id: "developer", label: "Developer", icon: FiUsers },
             { id: "mission", label: "Our Mission", icon: FaRegLightbulb },
             { id: "architecture", label: "Architecture", icon: FiCpu },
             { id: "technology", label: "Technology", icon: FaCode },
-            { id: "developer", label: "Developer", icon: FiUsers },
           ].map((tab) => (
             <motion.button
               key={tab.id}
@@ -220,7 +223,7 @@ export default function AboutPage() {
                   ].map((feature, index) => (
                     <div key={index} className="flex items-start gap-4">
                       <div
-                        className={`w-12 h-12 rounded-xl flex items-center shrink-0 transition-colors duration-300 ${
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors duration-300 ${
                           isDarkMode ? "bg-emerald-500/20" : "bg-emerald-500/10"
                         }`}
                       >
@@ -542,11 +545,11 @@ export default function AboutPage() {
                   category: "Frontend & UI",
                   technologies: [
                     {
-                      name: "Next.js 14",
+                      name: "Next JS",
                       icon: SiNextdotjs,
-                      color: "text-black dark:text-white",
+                      color: `${isDarkMode ? "text-white" : "text-black"}`,
                     },
-                    { name: "React 18", icon: FaReact, color: "text-blue-500" },
+                    { name: "React JS", icon: FaReact, color: "text-sky-500" },
                     {
                       name: "TypeScript",
                       icon: SiTypescript,
@@ -568,25 +571,25 @@ export default function AboutPage() {
                   category: "Backend & AI",
                   technologies: [
                     {
-                      name: "Node.js",
+                      name: "Node JS",
                       icon: FaNodeJs,
                       color: "text-green-600",
                     },
                     { name: "Python", icon: FaPython, color: "text-blue-500" },
                     {
-                      name: "TensorFlow",
-                      icon: SiTensorflow,
-                      color: "text-orange-500",
+                      name: "Socket.io",
+                      icon: SiSocketdotio,
+                      color: "text-red-500",
                     },
                     {
-                      name: "OpenAI API",
-                      icon: SiOpenai,
-                      color: "text-green-500",
+                      name: "Google Gemini",
+                      icon: SiGooglegemini,
+                      color: "text-blue-400",
                     },
                     {
                       name: "Express.js",
                       icon: SiExpress,
-                      color: "text-gray-600",
+                      color: `${isDarkMode ? "text-gray-300" : "text-black"}`,
                     },
                   ],
                 },
@@ -599,11 +602,15 @@ export default function AboutPage() {
                       color: "text-green-500",
                     },
                     {
-                      name: "AWS",
-                      icon: SiAmazonwebservices,
+                      name: "MY-SQL",
+                      icon: SiMysql,
                       color: "text-orange-500",
                     },
-                    { name: "Docker", icon: SiDocker, color: "text-blue-500" },
+                    {
+                      name: "GitHub",
+                      icon: SiGithub,
+                      color: `${isDarkMode ? "text-white" : "text-black"}`,
+                    },
                     { name: "Git", icon: FaGitAlt, color: "text-orange-600" },
                     {
                       name: "REST APIs",
@@ -617,8 +624,8 @@ export default function AboutPage() {
                   key={index}
                   className={`rounded-2xl p-6 border transition-colors duration-300 ${
                     isDarkMode
-                      ? "bg-gray-800 border-gray-700"
-                      : "bg-white border-gray-200"
+                      ? "bg-gray-900 border-gray-700"
+                      : "bg-white border-gray-300"
                   }`}
                 >
                   <h3
@@ -767,19 +774,27 @@ export default function AboutPage() {
               <div className="flex flex-col md:flex-row items-center gap-8">
                 {/* Developer Avatar */}
                 <div className="shrink-0">
-                  <div className="w-32 h-32 bg-linear-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center">
-                    <span className="text-4xl font-bold text-white">H</span>
+                  <div className="w-52 h-52 bg-linear-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
+                    <Image
+                      src="/img/dev.jpeg"
+                      alt="Developer Avatar"
+                      width={100}
+                      height={100}
+                      priority
+                      unoptimized
+                      className="w-full h-full object-cover rounded-full"
+                    />
                   </div>
                 </div>
 
                 {/* Developer Info */}
                 <div className="flex-1 text-center md:text-left">
                   <h3
-                    className={`text-2xl font-bold mb-2 transition-colors duration-300 ${
+                    className={`text-4xl font-bold mb-2 transition-colors duration-300 ${
                       isDarkMode ? "text-white" : "text-gray-800"
                     }`}
                   >
-                    Harsh
+                    Harsh Pandey
                   </h3>
                   <p className="text-lg text-emerald-500 mb-4">
                     Full Stack AI Developer
@@ -803,7 +818,7 @@ export default function AboutPage() {
                           : "bg-emerald-500/10 text-emerald-600"
                       }`}
                     >
-                      <FiAward className="inline mr-1" /> 5+ Years Experience
+                      <FiAward className="inline mr-1" /> Web Developer
                     </span>
                     <span
                       className={`px-3 py-1 rounded-full text-sm font-medium transition-colors duration-300 ${
@@ -861,13 +876,13 @@ export default function AboutPage() {
                     },
                     {
                       category: "Database",
-                      skills: "MongoDB, PostgreSQL, Firebase",
+                      skills: "MongoDB, PostgreSQL, Firebase , MySQL",
                     },
                     {
                       category: "AI/ML",
-                      skills: "TensorFlow, OpenAI APIs, Machine Learning",
+                      skills: "Basic Machine Learning and AI Skills",
                     },
-                    { category: "DevOps", skills: "AWS, Docker, CI/CD, Git" },
+                    { category: "DevOps", skills: "Yet to be determined" },
                   ].map((skill, index) => (
                     <div
                       key={index}
