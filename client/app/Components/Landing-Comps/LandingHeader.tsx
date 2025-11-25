@@ -80,7 +80,7 @@ const LandingHeader = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={toggleTheme}
-                className={`hidden md:block p-2 rounded-lg transition-colors duration-300 ${
+                className={`hidden lg:block p-2 rounded-lg transition-colors duration-300 ${
                   isDarkMode
                     ? "bg-gray-800 hover:bg-gray-700 text-gray-200"
                     : "bg-gray-100 hover:bg-gray-200 text-gray-700"
@@ -94,7 +94,7 @@ const LandingHeader = () => {
               </motion.button>
 
               {/* Desktop Menu Links */}
-              <div className="hidden md:flex items-center space-x-8">
+              <div className="hidden lg:flex items-center space-x-8 whitespace-nowrap">
                 {navLinks.map(({ item, link }, index) => (
                   <Link
                     href={link}
@@ -127,7 +127,19 @@ const LandingHeader = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`md:hidden p-2 rounded-lg transition-colors duration-300 ${
+                onClick={toggleTheme}
+                className={`lg:hidden p-2 rounded-lg transition-colors ${
+                  isDarkMode
+                    ? "bg-gray-800 text-yellow-400"
+                    : "bg-gray-100 text-gray-600"
+                }`}
+              >
+                {isDarkMode ? <FiSun /> : <FiMoon />}
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`lg:hidden p-2 rounded-lg transition-colors duration-300 ${
                   isDarkMode
                     ? "bg-gray-800 hover:bg-gray-700 text-white"
                     : "bg-gray-100 hover:bg-gray-200 text-gray-900"
@@ -152,7 +164,7 @@ const LandingHeader = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               onClick={() => setIsMenuOpen(false)}
-              className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden"
             />
 
             {/* 2. The Drawer (80% Width, Right Aligned) */}
@@ -161,7 +173,7 @@ const LandingHeader = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className={`fixed top-0 right-0 bottom-0 z-50 w-[80%] md:hidden shadow-2xl flex flex-col ${
+              className={`fixed top-0 right-0 bottom-0 z-50 w-[80%] lg:hidden shadow-2xl flex flex-col ${
                 isDarkMode
                   ? "bg-gray-900 border-l border-gray-800"
                   : "bg-white border-l border-gray-200"
