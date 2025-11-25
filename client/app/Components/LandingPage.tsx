@@ -324,13 +324,19 @@ export default function VaronAILanding() {
                       >
                         <div className="flex items-center gap-2 mb-1 sm:mb-2">
                           <div
-                            className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-colors duration-300 ${
+                            className={`w-5 h-5 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-colors duration-300 ${
                               isDarkMode
-                                ? "bg-linear-to-r from-emerald-500 to-teal-500"
-                                : "bg-linear-to-r from-emerald-400 to-teal-400"
+                                ? "bg-linear-to-r from-emerald-950 via-teal-950 to-black/30"
+                                : "bg-linear-to-r from-teal-900 to-emerald-950"
                             }`}
                           >
-                            <FaTeamspeak className="text-xs" />
+                            <Image
+                              width={100}
+                              height={100}
+                              src="/img/logo.png"
+                              alt="logo"
+                              priority
+                            />
                           </div>
                           <span className="text-xs font-semibold">
                             Varon AI
