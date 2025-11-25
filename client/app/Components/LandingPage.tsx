@@ -25,6 +25,7 @@ import { FaTeamspeak, FaRegLightbulb } from "react-icons/fa";
 import LandingFooter from "./Landing-Comps/LandingFooter";
 import LandingHeader from "./Landing-Comps/LandingHeader";
 import { useTheme } from "../theme/ThemeToogle";
+import Link from "next/link";
 
 export default function VaronAILanding() {
   const { isDarkMode } = useTheme();
@@ -119,29 +120,33 @@ export default function VaronAILanding() {
                 transition={{ delay: 0.8 }}
                 className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start items-center"
               >
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`px-6 py-3 sm:px-8 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all flex items-center gap-2 w-full sm:w-auto justify-center ${
-                    isDarkMode
-                      ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-xl hover:shadow-emerald-500/25"
-                      : "bg-linear-to-r from-emerald-400 to-teal-400 hover:shadow-xl hover:shadow-emerald-400/25"
-                  }`}
-                >
-                  Try Varon AI Free <FiArrowRight />
-                </motion.button>
+                <Link href="/register">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`cursor-pointer px-6 py-3 sm:px-8 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all flex items-center gap-2 w-full sm:w-auto justify-center ${
+                      isDarkMode
+                        ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-xl hover:shadow-emerald-500/25"
+                        : "bg-linear-to-r from-emerald-400 to-teal-400 hover:shadow-xl hover:shadow-emerald-400/25"
+                    }`}
+                  >
+                    Try Varon AI Free <FiArrowRight />
+                  </motion.button>
+                </Link>
 
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`border px-6 py-3 sm:px-8 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all flex items-center gap-2 w-full sm:w-auto justify-center ${
-                    isDarkMode
-                      ? "border-emerald-500/50 hover:bg-emerald-500/10"
-                      : "border-emerald-500/30 hover:bg-emerald-500/10"
-                  }`}
-                >
-                  <FiPlay /> See How It Works
-                </motion.button>
+                <Link href="/assistants">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`cursor-pointer border px-6 py-3 sm:px-8 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all flex items-center gap-2 w-full sm:w-auto justify-center ${
+                      isDarkMode
+                        ? "border-emerald-500/50 hover:bg-emerald-500/10"
+                        : "border-emerald-500/30 hover:bg-emerald-500/10"
+                    }`}
+                  >
+                    <FiPlay /> See How It Works
+                  </motion.button>
+                </Link>
               </motion.div>
             </motion.div>
 
@@ -237,8 +242,8 @@ export default function VaronAILanding() {
                         },
                         {
                           icon: FiFileText,
-                          name: "Docs AI",
-                          color: "from-orange-500 to-red-500",
+                          name: "Varon AI",
+                          color: "from-emerald-500 to-green-400",
                           active: false,
                         },
                       ].map((agent, index) => (
