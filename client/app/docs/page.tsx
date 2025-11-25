@@ -28,6 +28,7 @@ import {
   FiChevronUp,
 } from "react-icons/fi";
 import { useTheme } from "../theme/ThemeToogle";
+import LandingHeader from "../Components/Landing-Comps/LandingHeader";
 
 export default function DocsPage() {
   const { isDarkMode } = useTheme();
@@ -398,57 +399,9 @@ export default function DocsPage() {
       }`}
     >
       {/* Header */}
-      <header
-        className={`sticky top-0 z-50 border-b transition-colors duration-300 ${
-          isDarkMode
-            ? "bg-gray-800 border-gray-700"
-            : "bg-white border-gray-200"
-        }`}
-      >
-        <div className="container mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300 ${
-                  isDarkMode
-                    ? "bg-linear-to-r from-emerald-500 to-teal-500"
-                    : "bg-linear-to-r from-emerald-400 to-teal-400"
-                }`}
-              >
-                <FaRobot className="text-xl text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
-                  Varon AI Documentation
-                </h1>
-                <p
-                  className={`text-sm transition-colors duration-300 ${
-                    isDarkMode ? "text-gray-400" : "text-gray-600"
-                  }`}
-                >
-                  Complete Guide to AI Assistant Coordination
-                </p>
-              </div>
-            </div>
+      <LandingHeader />
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`p-2 rounded-lg md:hidden transition-colors duration-300 ${
-                isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-              }`}
-            >
-              {isMobileMenuOpen ? (
-                <FiX className="text-xl" />
-              ) : (
-                <FiMenu className="text-xl" />
-              )}
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto px-4 sm:px-6 py-8">
+      <div className="container mx-auto px-4 sm:px-6 py-8 mt-14">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar Navigation */}
           <div
