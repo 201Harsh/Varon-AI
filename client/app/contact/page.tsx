@@ -36,8 +36,8 @@ export default function ContactPage() {
         <div
           className={`absolute inset-0 transition-colors duration-300 ${
             isDarkMode
-              ? "bg-gradient-to-r from-emerald-500/10 to-teal-500/10"
-              : "bg-gradient-to-r from-emerald-500/5 to-teal-500/5"
+              ? "bg-linear-to-r from-emerald-500/10 to-teal-500/10"
+              : "bg-linear-to-r from-emerald-500/5 to-teal-500/5"
           }`}
         ></div>
 
@@ -50,7 +50,7 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
               Get In Touch
             </h1>
             <p
@@ -233,8 +233,8 @@ export default function ContactPage() {
                 type="submit"
                 className={`w-full py-4 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 ${
                   isDarkMode
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
-                    : "bg-gradient-to-r from-emerald-400 to-teal-400 hover:shadow-lg hover:shadow-emerald-400/25 text-white"
+                    ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
+                    : "bg-linear-to-r from-emerald-400 to-teal-400 hover:shadow-lg hover:shadow-emerald-400/25 text-white"
                 }`}
               >
                 <FiSend className="text-xl" />
@@ -352,8 +352,8 @@ export default function ContactPage() {
             <div
               className={`rounded-2xl p-8 border transition-colors duration-300 ${
                 isDarkMode
-                  ? "bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20"
-                  : "bg-gradient-to-r from-emerald-500/5 to-teal-500/5 border-emerald-500/20"
+                  ? "bg-linear-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20"
+                  : "bg-linear-to-r from-emerald-500/5 to-teal-500/5 border-emerald-500/20"
               }`}
             >
               <div className="flex items-center gap-4 mb-4">

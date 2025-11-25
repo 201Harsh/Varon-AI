@@ -55,8 +55,8 @@ export default function AboutPage() {
         <div
           className={`absolute inset-0 transition-colors duration-300 ${
             isDarkMode
-              ? "bg-gradient-to-r from-emerald-500/10 to-teal-500/10"
-              : "bg-gradient-to-r from-emerald-500/5 to-teal-500/5"
+              ? "bg-linear-to-r from-emerald-500/10 to-teal-500/10"
+              : "bg-linear-to-r from-emerald-500/5 to-teal-500/5"
           }`}
         ></div>
 
@@ -70,7 +70,7 @@ export default function AboutPage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
               About Varon AI
             </h1>
             <p
@@ -109,7 +109,7 @@ export default function AboutPage() {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-3 px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                 activeTab === tab.id
-                  ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25"
+                  ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25"
                   : isDarkMode
                   ? "bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700"
                   : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
@@ -219,7 +219,7 @@ export default function AboutPage() {
                   ].map((feature, index) => (
                     <div key={index} className="flex items-start gap-4">
                       <div
-                        className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${
+                        className={`w-12 h-12 rounded-xl flex items-center shrink-0 transition-colors duration-300 ${
                           isDarkMode ? "bg-emerald-500/20" : "bg-emerald-500/10"
                         }`}
                       >
@@ -251,8 +251,8 @@ export default function AboutPage() {
             <div
               className={`rounded-2xl p-8 md:p-12 border transition-colors duration-300 ${
                 isDarkMode
-                  ? "bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20"
-                  : "bg-gradient-to-r from-emerald-500/5 to-teal-500/5 border-emerald-500/20"
+                  ? "bg-linear-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20"
+                  : "bg-linear-to-r from-emerald-500/5 to-teal-500/5 border-emerald-500/20"
               }`}
             >
               <div className="grid md:grid-cols-2 gap-8">
@@ -386,7 +386,7 @@ export default function AboutPage() {
                       : "bg-white border-gray-200"
                   }`}
                 >
-                  <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold text-lg mb-4">
+                  <div className="w-12 h-12 bg-linear-to-r from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold text-lg mb-4">
                     {stage.step}
                   </div>
                   <h3
@@ -473,7 +473,7 @@ export default function AboutPage() {
                   },
                 ].map((role, index) => (
                   <div key={index} className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-linear-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                       <FaRobot className="text-2xl text-white" />
                     </div>
                     <h4
@@ -649,8 +649,8 @@ export default function AboutPage() {
             <div
               className={`rounded-2xl p-8 border transition-colors duration-300 ${
                 isDarkMode
-                  ? "bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20"
-                  : "bg-gradient-to-r from-emerald-500/5 to-teal-500/5 border-emerald-500/20"
+                  ? "bg-linear-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20"
+                  : "bg-linear-to-r from-emerald-500/5 to-teal-500/5 border-emerald-500/20"
               }`}
             >
               <h3
@@ -675,19 +675,19 @@ export default function AboutPage() {
                     }`}
                   >
                     <li className="flex items-start gap-2">
-                      <FiCheck className="text-emerald-500 mt-1 flex-shrink-0" />
+                      <FiCheck className="text-emerald-500 mt-shrink-0" />
                       <span>
                         Intelligent task routing based on AI capabilities
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <FiCheck className="text-emerald-500 mt-1 flex-shrink-0" />
+                      <FiCheck className="text-emerald-500 mt-shrink-0" />
                       <span>
                         Real-time performance monitoring and load balancing
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <FiCheck className="text-emerald-500 mt-1 flex-shrink-0" />
+                      <FiCheck className="text-emerald-500 mt-shrink-0" />
                       <span>
                         Context preservation across multiple AI interactions
                       </span>
@@ -708,17 +708,17 @@ export default function AboutPage() {
                     }`}
                   >
                     <li className="flex items-start gap-2">
-                      <FiCheck className="text-emerald-500 mt-1 flex-shrink-0" />
+                      <FiCheck className="text-emerald-500 mt-1 shrink-0" />
                       <span>
                         Microservices-based architecture for scalability
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <FiCheck className="text-emerald-500 mt-1 flex-shrink-0" />
+                      <FiCheck className="text-emerald-500 mt-1 shrink-0" />
                       <span>Real-time communication between AI components</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <FiCheck className="text-emerald-500 mt-1 flex-shrink-0" />
+                      <FiCheck className="text-emerald-500 mt-1 shrink-0" />
                       <span>
                         Secure API gateway for all external communications
                       </span>
@@ -765,8 +765,8 @@ export default function AboutPage() {
             >
               <div className="flex flex-col md:flex-row items-center gap-8">
                 {/* Developer Avatar */}
-                <div className="flex-shrink-0">
-                  <div className="w-32 h-32 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center">
+                <div className="shrink-0">
+                  <div className="w-32 h-32 bg-linear-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center">
                     <span className="text-4xl font-bold text-white">H</span>
                   </div>
                 </div>
@@ -916,7 +916,7 @@ export default function AboutPage() {
                     "Scalable AI Architecture",
                   ].map((focus, index) => (
                     <div key={index} className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full shrink-0"></div>
                       <span
                         className={`transition-colors duration-300 ${
                           isDarkMode ? "text-gray-300" : "text-gray-600"
@@ -934,8 +934,8 @@ export default function AboutPage() {
             <div
               className={`rounded-2xl p-8 border transition-colors duration-300 ${
                 isDarkMode
-                  ? "bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20"
-                  : "bg-gradient-to-r from-emerald-500/5 to-teal-500/5 border-emerald-500/20"
+                  ? "bg-linear-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20"
+                  : "bg-linear-to-r from-emerald-500/5 to-teal-500/5 border-emerald-500/20"
               }`}
             >
               <h4
