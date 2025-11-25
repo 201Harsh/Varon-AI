@@ -67,8 +67,7 @@ export default function AIAssistantsPage() {
       category: "Development & Engineering",
       icon: FaCode,
       color: "from-blue-500 to-cyan-500",
-      description:
-        "Specialized AIs for software development and technical tasks",
+      description: "Specialized AIs for software development tasks",
       assistants: [
         {
           name: "Code Architect AI",
@@ -364,25 +363,24 @@ export default function AIAssistantsPage() {
   const processSteps = [
     {
       step: 1,
-      title: "Request Intake & Quick Evaluation",
+      title: "Request Intake",
       description:
-        "Varon receives the user request and instantly checks if it can answer directly or if the task requires a specialized AI assistant.",
+        "Varon receives request and checks if it needs specialist AI.",
       icon: FaUserCheck,
       duration: "2.08s",
     },
     {
       step: 2,
-      title: "Intent Understanding",
+      title: "Intent Analysis",
       description:
-        "Varon analyzes the request deeply using NLP to capture intent, context, priority, constraints, and hidden requirements.",
+        "Deep NLP analysis to capture context, priority, and constraints.",
       icon: FaSearch,
       duration: "3.7s",
     },
     {
       step: 3,
       title: "Task Breakdown",
-      description:
-        "If needed, Varon breaks the request into smaller structured tasks and micro-steps for optimal execution.",
+      description: "Request broken into structured micro-steps for execution.",
       icon: FaTasks,
       duration: "4.2s",
     },
@@ -390,59 +388,55 @@ export default function AIAssistantsPage() {
       step: 4,
       title: "Specialist Matching",
       description:
-        "Varon selects the ideal AI assistants based on expertise, performance history, and availability.",
+        "Selects ideal assistants based on expertise and availability.",
       icon: FaBrain,
       duration: "5.5s",
     },
     {
       step: 5,
-      title: "Parallel Task Execution",
-      description:
-        "Selected assistants work simultaneously on their assigned tasks, reducing total completion time dramatically.",
+      title: "Parallel Execution",
+      description: "Assistants work simultaneously, reducing completion time.",
       icon: FaNetworkWired,
-      duration: "7.8s - 11.5s",
+      duration: "7.8s",
     },
     {
       step: 6,
       title: "Quality Monitoring",
-      description:
-        "Varon supervises each assistants work, resolves bottlenecks, manages dependencies, and ensures all outputs meet quality standards.",
+      description: "Varon supervises work and manages dependencies.",
       icon: FaCog,
-      duration: "1.9s - 5.8s",
+      duration: "1.9s",
     },
     {
       step: 7,
       title: "Smart Integration",
-      description:
-        "All outputs are merged, refined, validated, and transformed into a single polished solution.",
+      description: "Outputs merged and transformed into a single solution.",
       icon: FaLayerGroup,
-      duration: "1.4s - 2.6s",
+      duration: "1.4s",
     },
     {
       step: 8,
       title: "Final Validation",
-      description:
-        "Before presenting, Varon double-checks accuracy, clarity, and consistency—just like a real project manager performing a final review.",
+      description: "Accuracy and consistency double-check before delivery.",
       icon: FaShieldAlt,
-      duration: "0.9s - 1.8s",
+      duration: "0.9s",
     },
     {
       step: 9,
-      title: "Delivery & Optional Refinement",
-      description:
-        "Varon delivers the final result and instantly offers follow-up refinements or new actions based on user feedback.",
+      title: "Delivery",
+      description: "Final result delivered with optional follow-up actions.",
       icon: FaCheckCircle,
-      duration: "2.7s - 6.4s",
+      duration: "2.7s",
     },
   ];
+
   return (
     <div
-      className={`min-h-screen transition-colors duration-300 ${
+      className={`min-h-screen overflow-x-hidden transition-colors duration-300 ${
         isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
       }`}
     >
       {/* Header */}
-      <header className="relative py-20 overflow-hidden">
+      <header className="relative py-12 md:py-20 overflow-hidden">
         <div
           className={`absolute inset-0 transition-colors duration-300 ${
             isDarkMode
@@ -453,25 +447,25 @@ export default function AIAssistantsPage() {
 
         <LandingHeader />
 
-        <div className="container mx-auto px-6 relative z-10 mt-12">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10 mt-8 md:mt-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent font-mono">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 md:mb-6 bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent font-mono wrap-break-word">
               The Varon AI Syndicate
             </h1>
             <p
-              className={`text-xl md:text-2xl mb-8 transition-colors duration-300 ${
+              className={`text-lg sm:text-xl md:text-2xl mb-6 md:mb-8 transition-colors duration-300 ${
                 isDarkMode ? "text-gray-300" : "text-gray-600"
               }`}
             >
               20+ Specialized AI Assistants Coordinated by Varon
             </p>
             <p
-              className={`text-lg max-w-3xl mx-auto transition-colors duration-300 ${
+              className={`text-base sm:text-lg max-w-3xl mx-auto transition-colors duration-300 ${
                 isDarkMode ? "text-gray-400" : "text-gray-500"
               }`}
             >
@@ -483,34 +477,34 @@ export default function AIAssistantsPage() {
         </div>
       </header>
 
-      <div className="container mx-auto px-6 pb-20 mt-8">
+      <div className="container mx-auto px-4 sm:px-6 pb-20 mt-8">
         {/* How Varon Thinks Section */}
-        <section className="mb-20">
+        <section className="mb-16 md:mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className={`rounded-2xl p-8 border transition-colors duration-300 ${
+            className={`rounded-2xl p-4 sm:p-6 md:p-8 border transition-colors duration-300 ${
               isDarkMode
                 ? "bg-gray-800 border-gray-700"
                 : "bg-white border-gray-200"
             }`}
           >
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8">
               <div>
                 <h2
-                  className={`text-3xl font-bold mb-4 transition-colors duration-300 ${
+                  className={`text-2xl sm:text-3xl font-bold mb-2 md:mb-4 transition-colors duration-300 ${
                     isDarkMode ? "text-white" : "text-gray-800"
                   }`}
                 >
-                  How Varon Thinks & Coordinates
+                  How Varon Thinks
                 </h2>
                 <p
-                  className={`text-lg transition-colors duration-300 ${
+                  className={`text-base sm:text-lg transition-colors duration-300 ${
                     isDarkMode ? "text-gray-300" : "text-gray-600"
                   }`}
                 >
-                  Watch Varon's intelligent coordination process in action
+                  Watch Varon's intelligent coordination process
                 </p>
               </div>
 
@@ -518,7 +512,7 @@ export default function AIAssistantsPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={toggleProcess}
-                className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-3 ${
+                className={`w-full md:w-auto px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 ${
                   isDarkMode
                     ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
                     : "bg-linear-to-r from-emerald-400 to-teal-400 hover:shadow-lg hover:shadow-emerald-400/25 text-white"
@@ -534,7 +528,7 @@ export default function AIAssistantsPage() {
             </div>
 
             {/* Process Visualization */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {processSteps.map((step, index) => (
                 <motion.div
                   key={step.step}
@@ -550,7 +544,7 @@ export default function AIAssistantsPage() {
                       isProcessPlaying && currentProcessStep === index ? -5 : 0,
                   }}
                   transition={{ duration: 0.5 }}
-                  className={`p-6 rounded-xl border-2 transition-all duration-500 ${
+                  className={`p-4 sm:p-6 rounded-xl border-2 transition-all duration-500 ${
                     isProcessPlaying && currentProcessStep >= index
                       ? "border-emerald-500 bg-emerald-500/10"
                       : isDarkMode
@@ -560,7 +554,7 @@ export default function AIAssistantsPage() {
                 >
                   <div className="flex items-center gap-4 mb-4">
                     <div
-                      className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors duration-300 ${
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-colors duration-300 shrink-0 ${
                         isProcessPlaying && currentProcessStep >= index
                           ? "bg-emerald-500 text-white"
                           : isDarkMode
@@ -568,11 +562,11 @@ export default function AIAssistantsPage() {
                           : "bg-gray-200 text-gray-600"
                       }`}
                     >
-                      <step.icon className="text-xl" />
+                      <step.icon className="text-lg sm:text-xl" />
                     </div>
                     <div>
                       <div
-                        className={`text-sm font-medium transition-colors duration-300 ${
+                        className={`text-xs sm:text-sm font-medium transition-colors duration-300 ${
                           isProcessPlaying && currentProcessStep >= index
                             ? "text-emerald-400"
                             : isDarkMode
@@ -583,7 +577,7 @@ export default function AIAssistantsPage() {
                         Step {step.step}
                       </div>
                       <div
-                        className={`font-semibold transition-colors duration-300 ${
+                        className={`font-semibold text-sm sm:text-base transition-colors duration-300 ${
                           isDarkMode ? "text-white" : "text-gray-800"
                         }`}
                       >
@@ -592,7 +586,7 @@ export default function AIAssistantsPage() {
                     </div>
                   </div>
                   <p
-                    className={`text-sm transition-colors duration-300 ${
+                    className={`text-sm transition-colors duration-300 line-clamp-3 ${
                       isDarkMode ? "text-gray-300" : "text-gray-600"
                     }`}
                   >
@@ -615,14 +609,14 @@ export default function AIAssistantsPage() {
 
             {/* Process Explanation */}
             <div
-              className={`mt-8 p-6 rounded-xl border transition-colors duration-300 ${
+              className={`mt-8 p-4 sm:p-6 rounded-xl border transition-colors duration-300 ${
                 isDarkMode
                   ? "bg-gray-700/50 border-gray-600"
                   : "bg-gray-50 border-gray-200"
               }`}
             >
               <h3
-                className={`text-xl font-semibold mb-4 transition-colors duration-300 ${
+                className={`text-lg sm:text-xl font-semibold mb-4 transition-colors duration-300 ${
                   isDarkMode ? "text-white" : "text-gray-800"
                 }`}
               >
@@ -695,17 +689,17 @@ export default function AIAssistantsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
               <div>
                 <h2
-                  className={`text-3xl font-bold mb-2 transition-colors duration-300 ${
+                  className={`text-2xl sm:text-3xl font-bold mb-2 transition-colors duration-300 ${
                     isDarkMode ? "text-white" : "text-gray-800"
                   }`}
                 >
                   Meet Your AI Team
                 </h2>
                 <p
-                  className={`text-lg transition-colors duration-300 ${
+                  className={`text-base sm:text-lg transition-colors duration-300 ${
                     isDarkMode ? "text-gray-300" : "text-gray-600"
                   }`}
                 >
@@ -713,7 +707,7 @@ export default function AIAssistantsPage() {
                 </p>
               </div>
               <div
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300 ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300 self-start sm:self-center ${
                   isDarkMode
                     ? "bg-emerald-500/20 text-emerald-400"
                     : "bg-emerald-500/10 text-emerald-600"
@@ -724,7 +718,7 @@ export default function AIAssistantsPage() {
             </div>
 
             {/* Categories Grid */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {aiAssistants.map((category, categoryIndex) => (
                 <motion.div
                   key={categoryIndex}
@@ -740,38 +734,47 @@ export default function AIAssistantsPage() {
                   {/* Category Header */}
                   <button
                     onClick={() => toggleCategory(category.category)}
-                    className={`w-full p-8 text-left transition-colors duration-300 ${
+                    className={`w-full p-4 sm:p-6 md:p-8 text-left transition-colors duration-300 ${
                       isDarkMode ? "hover:bg-gray-700/50" : "hover:bg-gray-50"
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-6">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto">
                         <div
-                          className={`w-16 h-16 rounded-2xl bg-linear-to-r ${category.color} flex items-center justify-center`}
+                          className={`w-12 h-12 sm:w-16 sm:h-16 shrink-0 rounded-2xl bg-linear-to-r ${category.color} flex items-center justify-center`}
                         >
-                          <category.icon className="text-2xl text-white" />
+                          <category.icon className="text-xl sm:text-2xl text-white" />
                         </div>
                         <div className="text-left">
                           <h3
-                            className={`text-2xl font-bold mb-2 transition-colors duration-300 ${
+                            className={`text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2 transition-colors duration-300 ${
                               isDarkMode ? "text-white" : "text-gray-800"
                             }`}
                           >
                             {category.category}
                           </h3>
                           <p
-                            className={`transition-colors duration-300 ${
+                            className={`text-xs sm:text-sm md:text-base hidden sm:block transition-colors duration-300 ${
                               isDarkMode ? "text-gray-400" : "text-gray-600"
                             }`}
                           >
-                            {category.description} •{" "}
-                            {category.assistants.length} assistants
+                            {category.description}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
+
+                      {/* Mobile Description (shown below icon) */}
+                      <p
+                        className={`text-xs sm:hidden w-full transition-colors duration-300 ${
+                          isDarkMode ? "text-gray-400" : "text-gray-600"
+                        }`}
+                      >
+                        {category.description}
+                      </p>
+
+                      <div className="flex items-center justify-between w-full sm:w-auto gap-4 mt-2 sm:mt-0">
                         <div
-                          className={`px-3 py-1 rounded-full text-sm font-medium transition-colors duration-300 ${
+                          className={`px-3 py-1 rounded-full text-xs sm:text-sm font-medium transition-colors duration-300 ${
                             isDarkMode
                               ? "bg-gray-700 text-gray-300"
                               : "bg-gray-100 text-gray-600"
@@ -780,9 +783,9 @@ export default function AIAssistantsPage() {
                           {category.assistants.length} Assistants
                         </div>
                         {expandedCategory === category.category ? (
-                          <FiChevronUp className="text-2xl text-gray-400" />
+                          <FiChevronUp className="text-xl sm:text-2xl text-gray-400" />
                         ) : (
-                          <FiChevronDown className="text-2xl text-gray-400" />
+                          <FiChevronDown className="text-xl sm:text-2xl text-gray-400" />
                         )}
                       </div>
                     </div>
@@ -798,8 +801,8 @@ export default function AIAssistantsPage() {
                         transition={{ duration: 0.3 }}
                         className="border-t"
                       >
-                        <div className="p-8">
-                          <div className="grid lg:grid-cols-2 gap-8">
+                        <div className="p-4 sm:p-6 md:p-8">
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                             {category.assistants.map(
                               (assistant, assistantIndex) => (
                                 <motion.div
@@ -807,16 +810,16 @@ export default function AIAssistantsPage() {
                                   initial={{ opacity: 0, y: 20 }}
                                   animate={{ opacity: 1, y: 0 }}
                                   transition={{ delay: assistantIndex * 0.1 }}
-                                  className={`p-6 rounded-xl border transition-colors duration-300 ${
+                                  className={`p-4 sm:p-6 rounded-xl border transition-colors duration-300 ${
                                     isDarkMode
                                       ? "bg-gray-700/50 border-gray-600"
                                       : "bg-gray-50 border-gray-200"
                                   }`}
                                 >
-                                  <div className="flex items-start justify-between mb-4">
+                                  <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-4 gap-2 sm:gap-4">
                                     <div>
                                       <h4
-                                        className={`text-xl font-semibold mb-2 transition-colors duration-300 ${
+                                        className={`text-lg sm:text-xl font-semibold mb-1 sm:mb-2 transition-colors duration-300 ${
                                           isDarkMode
                                             ? "text-white"
                                             : "text-gray-800"
@@ -835,7 +838,7 @@ export default function AIAssistantsPage() {
                                       </p>
                                     </div>
                                     <div
-                                      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-300 ${
+                                      className={`self-start px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors duration-300 ${
                                         isDarkMode
                                           ? "bg-emerald-500/20 text-emerald-400"
                                           : "bg-emerald-500/10 text-emerald-600"
@@ -848,7 +851,7 @@ export default function AIAssistantsPage() {
                                   <div className="space-y-4">
                                     <div>
                                       <div
-                                        className={`text-sm font-medium mb-2 transition-colors duration-300 ${
+                                        className={`text-sm font-medium mb-1 transition-colors duration-300 ${
                                           isDarkMode
                                             ? "text-gray-400"
                                             : "text-gray-500"
@@ -878,7 +881,7 @@ export default function AIAssistantsPage() {
                                           (capability, capIndex) => (
                                             <span
                                               key={capIndex}
-                                              className={`px-3 py-1 rounded-full text-xs transition-colors duration-300 ${
+                                              className={`px-2 sm:px-3 py-1 rounded-full text-xs transition-colors duration-300 ${
                                                 isDarkMode
                                                   ? "bg-gray-600 text-gray-300"
                                                   : "bg-gray-200 text-gray-700"
@@ -910,21 +913,21 @@ export default function AIAssistantsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className={`mt-20 rounded-2xl p-12 border text-center transition-colors duration-300 ${
+          className={`mt-16 sm:mt-20 rounded-2xl p-6 sm:p-12 border text-center transition-colors duration-300 ${
             isDarkMode
               ? "bg-linear-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20"
               : "bg-linear-to-r from-emerald-500/5 to-teal-500/5 border-emerald-500/20"
           }`}
         >
           <h3
-            className={`text-3xl font-bold mb-6 transition-colors duration-300 ${
+            className={`text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 transition-colors duration-300 ${
               isDarkMode ? "text-white" : "text-gray-800"
             }`}
           >
             Ready to Deploy Your AI Dream Team?
           </h3>
           <p
-            className={`text-xl mb-8 max-w-2xl mx-auto transition-colors duration-300 ${
+            className={`text-base sm:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto transition-colors duration-300 ${
               isDarkMode ? "text-gray-300" : "text-gray-600"
             }`}
           >
@@ -935,7 +938,7 @@ export default function AIAssistantsPage() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center gap-3 ${
+              className={`w-full sm:w-auto px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 ${
                 isDarkMode
                   ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
                   : "bg-linear-to-r from-emerald-400 to-teal-400 hover:shadow-lg hover:shadow-emerald-400/25 text-white"
@@ -946,7 +949,7 @@ export default function AIAssistantsPage() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 border ${
+              className={`w-full sm:w-auto px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 border ${
                 isDarkMode
                   ? "border-emerald-500/50 hover:bg-emerald-500/10"
                   : "border-emerald-500/30 hover:bg-emerald-500/10"
