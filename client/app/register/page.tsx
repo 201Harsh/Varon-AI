@@ -205,6 +205,8 @@ export default function RegisterPage() {
                         }`}
                       />
                       <input
+                        id="name"
+                        name="name"
                         type="text"
                         required
                         value={formData.name}
@@ -237,6 +239,8 @@ export default function RegisterPage() {
                         }`}
                       />
                       <input
+                        id="email"
+                        name="email"
                         type="email"
                         required
                         value={formData.email}
@@ -269,6 +273,8 @@ export default function RegisterPage() {
                         }`}
                       />
                       <input
+                        id="password"
+                        name="password"
                         type={showPassword ? "text" : "password"}
                         required
                         value={formData.password}
@@ -315,7 +321,9 @@ export default function RegisterPage() {
                     whileHover={{ scale: isLoading ? 1 : 1.02 }}
                     whileTap={{ scale: isLoading ? 1 : 0.98 }}
                     className={`w-full py-4 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 ${
-                      isLoading ? "opacity-70 cursor-not-allowed" : ""
+                      isLoading
+                        ? "opacity-70 cursor-not-allowed"
+                        : "cursor-pointer"
                     } ${
                       isDarkMode
                         ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
@@ -363,8 +371,10 @@ export default function RegisterPage() {
                   disabled={isLoading}
                   whileHover={{ scale: isLoading ? 1 : 1.02 }}
                   whileTap={{ scale: isLoading ? 1 : 0.98 }}
-                  className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 border ${
-                    isLoading ? "opacity-70 cursor-not-allowed" : ""
+                  className={`w-full py-3  rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 border ${
+                    isLoading
+                      ? "opacity-70 cursor-not-allowed"
+                      : "cursor-pointer"
                   } ${
                     isDarkMode
                       ? "border-gray-600 bg-gray-700 hover:bg-gray-600 text-white"
@@ -507,7 +517,7 @@ export default function RegisterPage() {
                     disabled={isLoading || otp.some((digit) => digit === "")}
                     whileHover={{ scale: isLoading ? 1 : 1.02 }}
                     whileTap={{ scale: isLoading ? 1 : 0.98 }}
-                    className={`w-full py-4 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 ${
+                    className={`w-full py-4 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer ${
                       isLoading || otp.some((digit) => digit === "")
                         ? "opacity-70 cursor-not-allowed"
                         : ""
@@ -549,7 +559,7 @@ export default function RegisterPage() {
               <Link href="/login">
                 <button
                   onClick={() => console.log("Navigate to login")}
-                  className="text-emerald-500 hover:text-emerald-400 font-medium"
+                  className="text-emerald-500 hover:text-emerald-400 font-medium cursor-pointer"
                 >
                   Log In
                 </button>
