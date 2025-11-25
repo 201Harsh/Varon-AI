@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  FaRobot,
   FaSearch,
   FaCode,
   FaPalette,
@@ -17,6 +16,10 @@ import {
   FaArrowRight,
   FaCheck,
   FaUsers,
+  FaLayerGroup,
+  FaShieldAlt,
+  FaCheckCircle,
+  FaUserCheck,
 } from "react-icons/fa";
 import {
   FiZap,
@@ -32,8 +35,8 @@ import LandingHeader from "../Components/Landing-Comps/LandingHeader";
 export default function AIAssistantsPage() {
   const { isDarkMode } = useTheme();
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-  const [isProcessPlaying, setIsProcessPlaying] = useState(false);
-  const [currentProcessStep, setCurrentProcessStep] = useState(0);
+  const [isProcessPlaying, setIsProcessPlaying] = useState<boolean>(false);
+  const [currentProcessStep, setCurrentProcessStep] = useState<number>(0);
 
   const toggleCategory = (category: string) => {
     setExpandedCategory(expandedCategory === category ? null : category);
@@ -44,8 +47,7 @@ export default function AIAssistantsPage() {
       setIsProcessPlaying(false);
     } else {
       setIsProcessPlaying(true);
-      // Simulate process steps
-      const steps = [0, 1, 2, 3, 4, 5];
+      const steps = [0, 1, 2, 3, 4, 5, 6, 7, 8];
       let current = 0;
       const interval = setInterval(() => {
         if (current < steps.length) {
@@ -56,7 +58,7 @@ export default function AIAssistantsPage() {
           setIsProcessPlaying(false);
           setCurrentProcessStep(0);
         }
-      }, 1500);
+      }, 1300);
     }
   };
 
@@ -362,54 +364,77 @@ export default function AIAssistantsPage() {
   const processSteps = [
     {
       step: 1,
-      title: "Request Analysis",
+      title: "Request Intake & Quick Evaluation",
       description:
-        "Varon analyzes the user's request using advanced NLP to understand intent, context, and requirements",
-      icon: FaSearch,
-      duration: "0.5s",
+        "Varon receives the user request and instantly checks if it can answer directly or if the task requires a specialized AI assistant.",
+      icon: FaUserCheck,
+      duration: "2.08s",
     },
     {
       step: 2,
-      title: "Task Decomposition",
+      title: "Intent Understanding",
       description:
-        "Complex requests are broken down into smaller, manageable sub-tasks",
-      icon: FaTasks,
-      duration: "0.8s",
+        "Varon analyzes the request deeply using NLP to capture intent, context, priority, constraints, and hidden requirements.",
+      icon: FaSearch,
+      duration: "3.7s",
     },
     {
       step: 3,
-      title: "Assistant Selection",
+      title: "Task Breakdown",
       description:
-        "Varon identifies the most qualified AI assistants based on domain expertise and availability",
-      icon: FaBrain,
-      duration: "1.2s",
+        "If needed, Varon breaks the request into smaller structured tasks and micro-steps for optimal execution.",
+      icon: FaTasks,
+      duration: "4.2s",
     },
     {
       step: 4,
-      title: "Task Distribution",
+      title: "Specialist Matching",
       description:
-        "Sub-tasks are assigned to specialized assistants for parallel processing",
-      icon: FaNetworkWired,
-      duration: "0.7s",
+        "Varon selects the ideal AI assistants based on expertise, performance history, and availability.",
+      icon: FaBrain,
+      duration: "5.5s",
     },
     {
       step: 5,
-      title: "Quality Coordination",
+      title: "Parallel Task Execution",
       description:
-        "Varon monitors progress, manages dependencies, and ensures quality standards",
-      icon: FaCog,
-      duration: "2.5s",
+        "Selected assistants work simultaneously on their assigned tasks, reducing total completion time dramatically.",
+      icon: FaNetworkWired,
+      duration: "7.8s - 11.5s",
     },
     {
       step: 6,
-      title: "Result Integration",
+      title: "Quality Monitoring",
       description:
-        "All outputs are combined, refined, and delivered as a cohesive solution",
-      icon: FaCheck,
-      duration: "1.8s",
+        "Varon supervises each assistants work, resolves bottlenecks, manages dependencies, and ensures all outputs meet quality standards.",
+      icon: FaCog,
+      duration: "1.9s - 5.8s",
+    },
+    {
+      step: 7,
+      title: "Smart Integration",
+      description:
+        "All outputs are merged, refined, validated, and transformed into a single polished solution.",
+      icon: FaLayerGroup,
+      duration: "1.4s - 2.6s",
+    },
+    {
+      step: 8,
+      title: "Final Validation",
+      description:
+        "Before presenting, Varon double-checks accuracy, clarity, and consistency—just like a real project manager performing a final review.",
+      icon: FaShieldAlt,
+      duration: "0.9s - 1.8s",
+    },
+    {
+      step: 9,
+      title: "Delivery & Optional Refinement",
+      description:
+        "Varon delivers the final result and instantly offers follow-up refinements or new actions based on user feedback.",
+      icon: FaCheckCircle,
+      duration: "2.7s - 6.4s",
     },
   ];
-
   return (
     <div
       className={`min-h-screen transition-colors duration-300 ${
@@ -435,8 +460,8 @@ export default function AIAssistantsPage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
-              AI Dream Team
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent font-mono">
+              The Varon AI Syndicate
             </h1>
             <p
               className={`text-xl md:text-2xl mb-8 transition-colors duration-300 ${
@@ -458,7 +483,7 @@ export default function AIAssistantsPage() {
         </div>
       </header>
 
-      <div className="container mx-auto px-6 pb-20 -mt-8">
+      <div className="container mx-auto px-6 pb-20 mt-8">
         {/* How Varon Thinks Section */}
         <section className="mb-20">
           <motion.div
