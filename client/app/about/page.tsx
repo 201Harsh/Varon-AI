@@ -38,6 +38,7 @@ import {
 } from "react-icons/si";
 import LandingHeader from "../Components/Landing-Comps/LandingHeader";
 import { useTheme } from "../theme/ThemeToogle";
+import LandingFooter from "../Components/Landing-Comps/LandingFooter";
 
 export default function AboutPage() {
   const [activeTab, setActiveTab] = useState("mission");
@@ -996,6 +997,7 @@ export default function AboutPage() {
           </motion.div>
         )}
       </div>
+      <LandingFooter />
     </div>
   );
 }

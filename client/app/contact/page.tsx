@@ -21,6 +21,7 @@ import {
 } from "react-icons/fi";
 import { useTheme } from "../theme/ThemeToogle";
 import LandingHeader from "../Components/Landing-Comps/LandingHeader";
+import LandingFooter from "../Components/Landing-Comps/LandingFooter";
 
 export default function ContactPage() {
   const { isDarkMode } = useTheme();
@@ -536,6 +537,7 @@ export default function ContactPage() {
           </div>
         </motion.div>
       </div>
+      <LandingFooter />
     </div>
   );
 }
