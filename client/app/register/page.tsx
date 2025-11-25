@@ -9,14 +9,21 @@ import {
   FaGoogle,
   FaArrowLeft,
   FaCheck,
-  FaRobot,
 } from "react-icons/fa";
-import { FiEye, FiEyeOff, FiMail, FiKey, FiUserCheck } from "react-icons/fi";
+import {
+  FiEye,
+  FiEyeOff,
+  FiMail,
+  FiKey,
+  FiUserCheck,
+  FiSun,
+  FiMoon,
+} from "react-icons/fi";
 import { useTheme } from "../theme/ThemeToogle";
 import Link from "next/link";
 
 export default function RegisterPage() {
-  const { isDarkMode } = useTheme();
+  const { isDarkMode, toggleTheme } = useTheme();
   const [step, setStep] = useState<"credentials" | "otp">("credentials");
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -121,12 +128,32 @@ export default function RegisterPage() {
       }`}
     >
       <div className="w-full max-w-md">
+        {/* Theme Toggle Button */}
+        <div className="absolute right-20 top-20">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={toggleTheme}
+            className={`p-2 rounded-lg transition-colors duration-300 ${
+              isDarkMode
+                ? "bg-gray-800 hover:bg-gray-700 text-gray-300"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-600"
+            }`}
+          >
+            {isDarkMode ? (
+              <FiSun className="text-lg" />
+            ) : (
+              <FiMoon className="text-lg" />
+            )}
+          </motion.button>
+        </div>
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-8"
+          className="text-center mb-4"
         >
           <h1 className="text-3xl font-bold bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
             Join Varon AI
@@ -507,12 +534,12 @@ export default function RegisterPage() {
             >
               Already have an account?{" "}
               <Link href="/login">
-              <button
-                onClick={() => console.log("Navigate to login")}
-                className="text-emerald-500 hover:text-emerald-400 font-medium"
-              >
-                Log In
-              </button>
+                <button
+                  onClick={() => console.log("Navigate to login")}
+                  className="text-emerald-500 hover:text-emerald-400 font-medium"
+                >
+                  Log In
+                </button>
               </Link>
             </p>
           </div>

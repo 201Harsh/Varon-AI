@@ -14,7 +14,7 @@ import { useTheme } from "../theme/ThemeToogle";
 import Link from "next/link";
 
 export default function LoginPage() {
-  const { isDarkMode } = useTheme();
+  const { isDarkMode, toggleTheme } = useTheme();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -62,8 +62,6 @@ export default function LoginPage() {
     setGoogleLoading(false);
   };
 
-  const { toggleTheme } = useTheme();
-
   return (
     <div
       className={`min-h-screen flex items-center justify-center p-4 transition-colors duration-300 ${
@@ -71,6 +69,26 @@ export default function LoginPage() {
       }`}
     >
       <div className="w-full max-w-md">
+        {/* Theme Toggle Button */}
+        <div className="absolute right-20 top-20">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={toggleTheme}
+            className={`p-2 rounded-lg transition-colors duration-300 ${
+              isDarkMode
+                ? "bg-gray-800 hover:bg-gray-700 text-gray-300"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-600"
+            }`}
+          >
+            {isDarkMode ? (
+              <FiSun className="text-lg" />
+            ) : (
+              <FiMoon className="text-lg" />
+            )}
+          </motion.button>
+        </div>
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -78,25 +96,6 @@ export default function LoginPage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          {/* Theme Toggle Button */}
-          <div className="absolute right-20 top-20">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={toggleTheme}
-              className={`p-2 rounded-lg transition-colors duration-300 ${
-                isDarkMode
-                  ? "bg-gray-800 hover:bg-gray-700 text-gray-300"
-                  : "bg-gray-100 hover:bg-gray-200 text-gray-600"
-              }`}
-            >
-              {isDarkMode ? (
-                <FiSun className="text-lg" />
-              ) : (
-                <FiMoon className="text-lg" />
-              )}
-            </motion.button>
-          </div>
           <h1 className="text-3xl font-bold bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
             Welcome Back
           </h1>
