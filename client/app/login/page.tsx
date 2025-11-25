@@ -137,6 +137,8 @@ export default function LoginPage() {
                   }`}
                 />
                 <input
+                  id="email"
+                  name="email"
                   type="email"
                   required
                   value={formData.email}
@@ -182,6 +184,8 @@ export default function LoginPage() {
                   }`}
                 />
                 <input
+                  id="password"
+                  name="password"
                   type={showPassword ? "text" : "password"}
                   required
                   value={formData.password}
@@ -241,7 +245,7 @@ export default function LoginPage() {
               whileHover={{ scale: isLoading ? 1 : 1.02 }}
               whileTap={{ scale: isLoading ? 1 : 0.98 }}
               className={`w-full py-4 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 ${
-                isLoading ? "opacity-70 cursor-not-allowed" : ""
+                isLoading ? "opacity-70 cursor-not-allowed" : "cursor-pointer"
               } ${
                 isDarkMode
                   ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
@@ -290,7 +294,7 @@ export default function LoginPage() {
             whileHover={{ scale: googleLoading ? 1 : 1.02 }}
             whileTap={{ scale: googleLoading ? 1 : 0.98 }}
             className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 border ${
-              googleLoading ? "opacity-70 cursor-not-allowed" : ""
+              googleLoading ? "opacity-70 cursor-not-allowed" : "cursor-pointer"
             } ${
               isDarkMode
                 ? "border-gray-600 bg-gray-700 hover:bg-gray-600 text-white"
@@ -337,7 +341,7 @@ export default function LoginPage() {
             <Link href="/register">
               <button
                 onClick={() => console.log("Navigate to register")}
-                className="text-emerald-500 hover:text-emerald-400 font-medium inline-flex items-center gap-1"
+                className="text-emerald-500 cursor-pointer hover:text-emerald-400 font-medium inline-flex items-center gap-1"
               >
                 Create Account <FiArrowRight className="text-xs" />
               </button>
