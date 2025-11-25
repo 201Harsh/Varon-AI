@@ -401,7 +401,7 @@ export default function DocsPage() {
       {/* Header */}
       <LandingHeader />
 
-      <div className="container mx-auto px-4 sm:px-6 py-8 mt-14">
+      <div className="container mx-auto px-4 sm:px-6 py-8 pt-28">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar Navigation */}
           <div

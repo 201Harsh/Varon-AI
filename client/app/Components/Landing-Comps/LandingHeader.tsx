@@ -47,8 +47,8 @@ const LandingHeader = () => {
               <div
                 className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-300 ${
                   isDarkMode
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-500"
-                    : "bg-gradient-to-r from-emerald-400 to-teal-400"
+                    ? "bg-linear-to-r from-emerald-500 to-teal-500"
+                    : "bg-linear-to-r from-emerald-400 to-teal-400"
                 }`}
               >
                 <FaRobot className="text-xl text-white" />
@@ -56,8 +56,8 @@ const LandingHeader = () => {
               <span
                 className={`text-xl font-bold transition-colors duration-300 ${
                   isDarkMode
-                    ? "bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent"
-                    : "bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent"
+                    ? "bg-linear-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent"
+                    : "bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent"
                 }`}
               >
                 Varon AI
@@ -106,8 +106,8 @@ const LandingHeader = () => {
                   whileTap={{ scale: 0.95 }}
                   className={`px-6 py-2 rounded-full font-semibold transition-all text-white ${
                     isDarkMode
-                      ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
-                      : "bg-gradient-to-r from-emerald-400 to-teal-400 hover:shadow-lg hover:shadow-emerald-400/25"
+                      ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
+                      : "bg-linear-to-r from-emerald-400 to-teal-400 hover:shadow-lg hover:shadow-emerald-400/25"
                   }`}
                 >
                   Get Started
@@ -231,8 +231,8 @@ const LandingHeader = () => {
                   <button
                     className={`w-full py-3 rounded-xl font-semibold text-white shadow-lg transition-transform active:scale-95 ${
                       isDarkMode
-                        ? "bg-gradient-to-r from-emerald-600 to-teal-600"
-                        : "bg-gradient-to-r from-emerald-400 to-teal-400"
+                        ? "bg-linear-to-r from-emerald-600 to-teal-600"
+                        : "bg-linear-to-r from-emerald-400 to-teal-400"
                     }`}
                   >
                     Get Started
