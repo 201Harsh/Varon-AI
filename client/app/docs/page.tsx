@@ -411,14 +411,14 @@ export default function DocsPage() {
               <div
                 className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300 ${
                   isDarkMode
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-500"
-                    : "bg-gradient-to-r from-emerald-400 to-teal-400"
+                    ? "bg-linear-to-r from-emerald-500 to-teal-500"
+                    : "bg-linear-to-r from-emerald-400 to-teal-400"
                 }`}
               >
                 <FaRobot className="text-xl text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
                   Varon AI Documentation
                 </h1>
                 <p
@@ -452,7 +452,7 @@ export default function DocsPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar Navigation */}
           <div
-            className={`lg:w-80 flex-shrink-0 rounded-2xl p-6 border transition-colors duration-300 ${
+            className={`lg:w-80 shrink-0 rounded-2xl p-6 border transition-colors duration-300 ${
               isDarkMode
                 ? "bg-gray-800 border-gray-700"
                 : "bg-white border-gray-200"
@@ -689,7 +689,7 @@ export default function DocsPage() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
                             <div
-                              className={`w-12 h-12 rounded-xl bg-gradient-to-r ${category.color} flex items-center justify-center`}
+                              className={`w-12 h-12 rounded-xl bg-linear-to-r ${category.color} flex items-center justify-center`}
                             >
                               <category.icon className="text-xl text-white" />
                             </div>
@@ -826,7 +826,7 @@ export default function DocsPage() {
                           "Delivers cohesive, polished results",
                         ].map((step, index) => (
                           <div key={index} className="flex items-start gap-3">
-                            <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center shrink-0 mt-0.5">
                               <FiCheck className="text-white text-sm" />
                             </div>
                             <span
@@ -905,8 +905,8 @@ export default function DocsPage() {
               transition={{ duration: 0.6, delay: 0.6 }}
               className={`rounded-2xl p-8 border text-center transition-colors duration-300 ${
                 isDarkMode
-                  ? "bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20"
-                  : "bg-gradient-to-r from-emerald-500/5 to-teal-500/5 border-emerald-500/20"
+                  ? "bg-linear-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20"
+                  : "bg-linear-to-r from-emerald-500/5 to-teal-500/5 border-emerald-500/20"
               }`}
             >
               <h3
@@ -927,8 +927,8 @@ export default function DocsPage() {
               <button
                 className={`px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 mx-auto ${
                   isDarkMode
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
-                    : "bg-gradient-to-r from-emerald-400 to-teal-400 hover:shadow-lg hover:shadow-emerald-400/25 text-white"
+                    ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
+                    : "bg-linear-to-r from-emerald-400 to-teal-400 hover:shadow-lg hover:shadow-emerald-400/25 text-white"
                 }`}
               >
                 Get Started <FiArrowRight />
