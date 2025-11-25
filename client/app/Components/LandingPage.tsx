@@ -24,46 +24,10 @@ import {
 import { FaTeamspeak, FaRegLightbulb } from "react-icons/fa";
 import LandingFooter from "./Landing-Comps/LandingFooter";
 import LandingHeader from "./Landing-Comps/LandingHeader";
+import { useTheme } from "../theme/ThemeToogle";
 
 export default function VaronAILanding() {
-  const [activeSection, setActiveSection] = useState("hero");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = [
-        "hero",
-        "how-it-works",
-        "assistants",
-        "why-varon",
-        "architecture",
-        "use-cases",
-        "cta",
-      ];
-      const current = sections.find((section) => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
-        }
-        return false;
-      });
-      if (current) setActiveSection(current);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToSection = (sectionId: string) => {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
-    setIsMenuOpen(false);
-  };
-
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+  const { isDarkMode } = useTheme();
 
   return (
     <div
@@ -72,14 +36,7 @@ export default function VaronAILanding() {
       }`}
     >
       {/* Navigation */}
-      <LandingHeader
-        isDarkMode={isDarkMode}
-        toggleTheme={toggleTheme}
-        activeSection={activeSection}
-        scrollToSection={scrollToSection}
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-      />
+      <LandingHeader />
 
       {/* Hero Section */}
       <section
@@ -165,7 +122,6 @@ export default function VaronAILanding() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => scrollToSection("cta")}
                   className={`px-6 py-3 sm:px-8 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all flex items-center gap-2 w-full sm:w-auto justify-center ${
                     isDarkMode
                       ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-xl hover:shadow-emerald-500/25"
@@ -178,7 +134,6 @@ export default function VaronAILanding() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => scrollToSection("how-it-works")}
                   className={`border px-6 py-3 sm:px-8 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all flex items-center gap-2 w-full sm:w-auto justify-center ${
                     isDarkMode
                       ? "border-emerald-500/50 hover:bg-emerald-500/10"
@@ -495,7 +450,6 @@ export default function VaronAILanding() {
             className="mt-8 sm:mt-12 text-center"
           >
             <motion.button
-              onClick={() => scrollToSection("how-it-works")}
               animate={{ y: [0, 8, 0] }}
               transition={{ repeat: Infinity, duration: 2 }}
               className={`transition-colors duration-300 ${

@@ -2,21 +2,24 @@ import { FaRobot } from "react-icons/fa";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useState } from "react";
+import { useTheme } from "@/app/theme/ThemeToogle";
 
-const LandingHeader = ({
-  isDarkMode,
-  toggleTheme,
-  activeSection,
-  isMenuOpen,
-  setIsMenuOpen,
-}: any) => {
+const LandingHeader = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
+
+  const clickonMenuitems = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const { toggleTheme, isDarkMode } = useTheme();
+
   return (
     <>
       <nav
-        className={`fixed left-0 right-0 top-0 z-50 backdrop-blur-md border-b transition-colors duration-300 ${
-          isDarkMode
-            ? "bg-black/80 border-emerald-500/20"
-            : "bg-white/80 border-emerald-500/30"
+        className={`fixed left-0 right-0 top-0 z-50 backdrop-blur-lg border-b transition-colors duration-300 ${
+          isDarkMode ? "border-emerald-500/20" : "border-emerald-500/30"
         }`}
       >
         <div className="container mx-auto px-6 py-4">
@@ -176,6 +179,7 @@ const LandingHeader = ({
                   <Link
                     href={link}
                     key={idx}
+                    onClick={clickonMenuitems}
                     className={`block w-full text-left py-2 transition-colors ${
                       isDarkMode
                         ? "text-gray-400 hover:text-white"
