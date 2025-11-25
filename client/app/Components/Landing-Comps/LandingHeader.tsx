@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useTheme } from "@/app/theme/ThemeToogle"; // Ensure this path is correct
+import Image from "next/image";
 
 const LandingHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,30 +40,38 @@ const LandingHeader = () => {
         <div className="container mx-auto">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex items-center space-x-2"
-            >
-              <div
-                className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-300 ${
-                  isDarkMode
-                    ? "bg-linear-to-r from-emerald-500 to-teal-500"
-                    : "bg-linear-to-r from-emerald-400 to-teal-400"
-                }`}
+            <Link href="/">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="flex items-center space-x-2"
               >
-                <FaRobot className="text-xl text-white" />
-              </div>
-              <span
-                className={`text-xl font-bold transition-colors duration-300 ${
-                  isDarkMode
-                    ? "bg-linear-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent"
-                    : "bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent"
-                }`}
-              >
-                Varon AI
-              </span>
-            </motion.div>
+                <div
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-300 ${
+                    isDarkMode
+                      ? "bg-linear-to-r from-emerald-950 via-teal-950 to-black/30"
+                      : "bg-linear-to-r from-black to-black"
+                  }`}
+                >
+                  <Image
+                    width={100}
+                    height={100}
+                    src="/img/logo.png"
+                    alt="logo"
+                    priority
+                  />
+                </div>
+                <span
+                  className={`text-xl font-bold transition-colors duration-300 ${
+                    isDarkMode
+                      ? "bg-linear-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent"
+                      : "bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent"
+                  }`}
+                >
+                  Varon AI
+                </span>
+              </motion.div>
+            </Link>
 
             {/* Desktop Actions */}
             <div className="flex items-center space-x-4">

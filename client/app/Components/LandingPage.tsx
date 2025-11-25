@@ -26,6 +26,7 @@ import LandingFooter from "./Landing-Comps/LandingFooter";
 import LandingHeader from "./Landing-Comps/LandingHeader";
 import { useTheme } from "../theme/ThemeToogle";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function VaronAILanding() {
   const { isDarkMode } = useTheme();
@@ -67,11 +68,17 @@ export default function VaronAILanding() {
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                 className={`w-16 h-16 sm:w-20 sm:h-20 mb-6 mx-auto lg:mx-0 rounded-2xl flex items-center justify-center transition-colors duration-300 ${
                   isDarkMode
-                    ? "bg-linear-to-r from-emerald-500 to-teal-500"
-                    : "bg-linear-to-r from-emerald-400 to-teal-400"
+                    ? "bg-linear-to-r from-emerald-950 via-teal-950 to-black/30"
+                    : "bg-linear-to-r from-black to-black"
                 }`}
               >
-                <FaTeamspeak className="text-2xl sm:text-3xl" />
+                <Image
+                  width={100}
+                  height={100}
+                  src="/img/logo.png"
+                  alt="logo"
+                  priority
+                />
               </motion.div>
 
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
@@ -97,9 +104,9 @@ export default function VaronAILanding() {
               >
                 The{" "}
                 <span className="font-semibold text-emerald-500">
-                  boss-level AI
+                  AI commander
                 </span>{" "}
-                that leads your digital team
+                that runs your entire AI team
               </motion.p>
 
               <motion.p
