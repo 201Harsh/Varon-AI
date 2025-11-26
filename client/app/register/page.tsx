@@ -9,6 +9,7 @@ import {
   FaGoogle,
   FaArrowLeft,
   FaCheck,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 import {
   FiEye,
@@ -18,9 +19,24 @@ import {
   FiUserCheck,
   FiSun,
   FiMoon,
+  FiX,
 } from "react-icons/fi";
 import { useTheme } from "../theme/ThemeToogle";
 import Link from "next/link";
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  password?: string;
+  otp?: string;
+  general?: string;
+}
+
+interface OTPErrors {
+  invalid?: boolean;
+  expired?: boolean;
+  attempts?: boolean;
+}
 
 export default function RegisterPage() {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -33,59 +49,165 @@ export default function RegisterPage() {
   });
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [otpErrors, setOtpErrors] = useState<OTPErrors>({});
+  const [showOtpPopup, setShowOtpPopup] = useState(false);
+
+  // Validation functions
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password: string): boolean => {
+    return password.length >= 6;
+  };
+
+  const validateName = (name: string): boolean => {
+    return name.trim().length >= 2;
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    // Name validation
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (!validateName(formData.name)) {
+      newErrors.name = "Name must be at least 2 characters long";
+    }
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    // Password validation
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (!validatePassword(formData.password)) {
+      newErrors.password = "Password must be at least 6 characters long";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateOTP = (): boolean => {
+    const enteredOtp = otp.join("");
+
+    if (enteredOtp.length !== 6) {
+      setErrors((prev) => ({ ...prev, otp: "Please enter all 6 digits" }));
+      return false;
+    }
+
+    if (!/^\d{6}$/.test(enteredOtp)) {
+      setErrors((prev) => ({ ...prev, otp: "OTP must contain only numbers" }));
+      return false;
+    }
+
+    setErrors((prev) => ({ ...prev, otp: undefined }));
+    return true;
+  };
 
   // Separate function for credentials submission
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Clear previous errors
+    setErrors({});
+
+    if (!validateForm()) {
+      return;
+    }
+
     setIsLoading(true);
 
-    // Fake API call simulation
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      // Fake API call simulation
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    console.log("Credentials submitted:", formData);
-    setIsLoading(false);
-    setStep("otp");
+      console.log("Credentials submitted:", formData);
 
-    // In real app, this would trigger OTP sending to email
-    console.log("OTP sent to:", formData.email);
+      // Simulate successful submission
+      setStep("otp");
+      setShowOtpPopup(true);
+
+      // In real app, this would trigger OTP sending to email
+      console.log("OTP sent to:", formData.email);
+    } catch (error) {
+      setErrors({ general: "Failed to create account. Please try again." });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Separate function for OTP verification
   const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    // Fake API call simulation
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    const enteredOtp = otp.join("");
-    console.log("OTP submitted:", enteredOtp);
-
-    // Fake OTP verification
-    if (enteredOtp === "123456") {
-      // Hardcoded for demo
-      console.log("OTP verified successfully!");
-      // Here you would typically redirect to dashboard
-      alert("Registration successful! Welcome to Varon AI.");
-    } else {
-      alert("Invalid OTP. Please try again.");
+    if (!validateOTP()) {
+      return;
     }
 
-    setIsLoading(false);
+    setIsLoading(true);
+    setOtpErrors({});
+
+    try {
+      // Fake API call simulation
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      const enteredOtp = otp.join("");
+      console.log("OTP submitted:", enteredOtp);
+
+      // Fake OTP verification with different error scenarios
+      if (enteredOtp === "123456") {
+        // Hardcoded for demo - success case
+        console.log("OTP verified successfully!");
+        setShowOtpPopup(false);
+        // Here you would typically redirect to dashboard
+        alert("Registration successful! Welcome to Varon AI.");
+      } else if (enteredOtp === "000000") {
+        // Simulate expired OTP
+        setOtpErrors({ expired: true });
+        setErrors({ otp: "OTP has expired. Please request a new one." });
+      } else if (enteredOtp === "111111") {
+        // Simulate too many attempts
+        setOtpErrors({ attempts: true });
+        setErrors({
+          otp: "Too many failed attempts. Please try again in 5 minutes.",
+        });
+      } else {
+        // Invalid OTP
+        setOtpErrors({ invalid: true });
+        setErrors({ otp: "Invalid OTP. Please try again." });
+      }
+    } catch (error) {
+      setErrors({ general: "Failed to verify OTP. Please try again." });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Separate function for Google authentication
   const handleGoogleAuth = async () => {
     setIsLoading(true);
+    setErrors({});
 
-    // Fake Google auth simulation
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Fake Google auth simulation
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    console.log("Google authentication initiated");
-    // Here you would typically redirect to Google OAuth
-    alert("Google authentication would be implemented here.");
-
-    setIsLoading(false);
+      console.log("Google authentication initiated");
+      // Here you would typically redirect to Google OAuth
+      alert("Google authentication would be implemented here.");
+    } catch (error) {
+      setErrors({ general: "Google authentication failed. Please try again." });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleOtpChange = (value: string, index: number) => {
@@ -94,6 +216,14 @@ export default function RegisterPage() {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
+
+    // Clear OTP error when user starts typing
+    if (errors.otp) {
+      setErrors((prev) => ({ ...prev, otp: undefined }));
+    }
+    if (otpErrors.invalid) {
+      setOtpErrors({});
+    }
 
     // Auto-focus next input
     if (value && index < 5) {
@@ -112,12 +242,34 @@ export default function RegisterPage() {
       if (index < 6) newOtp[index] = char;
     });
     setOtp(newOtp);
+
+    // Clear errors on paste
+    if (errors.otp) {
+      setErrors((prev) => ({ ...prev, otp: undefined }));
+    }
+    setOtpErrors({});
   };
 
   const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       const prevInput = document.getElementById(`otp-${index - 1}`);
       if (prevInput) prevInput.focus();
+    }
+  };
+
+  const resendOTP = () => {
+    setOtp(["", "", "", "", "", ""]);
+    setErrors((prev) => ({ ...prev, otp: undefined }));
+    setOtpErrors({});
+    console.log("Resending OTP to:", formData.email);
+    // In real app, this would call your OTP resend API
+    alert("New OTP sent to your email!");
+  };
+
+  const clearError = (field: keyof FormErrors) => {
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
+    if (field === "otp") {
+      setOtpErrors({});
     }
   };
 
@@ -178,6 +330,32 @@ export default function RegisterPage() {
               : "bg-white border-gray-200 shadow-xl"
           }`}
         >
+          {/* General Error Display */}
+          {errors.general && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`mb-6 p-4 rounded-lg border flex items-start gap-3 ${
+                isDarkMode
+                  ? "bg-red-500/10 border-red-500/20 text-red-400"
+                  : "bg-red-50 border-red-200 text-red-600"
+              }`}
+            >
+              <FaExclamationTriangle className="text-lg mt-0.5 shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm font-medium">{errors.general}</p>
+              </div>
+              <button
+                onClick={() => clearError("general")}
+                className={`p-1 rounded transition-colors ${
+                  isDarkMode ? "hover:bg-red-500/20" : "hover:bg-red-100"
+                }`}
+              >
+                <FiX className="text-sm" />
+              </button>
+            </motion.div>
+          )}
+
           <AnimatePresence mode="wait">
             {/* Credentials Step */}
             {step === "credentials" && (
@@ -208,19 +386,33 @@ export default function RegisterPage() {
                         id="name"
                         name="name"
                         type="text"
-                        required
                         value={formData.name}
-                        onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
-                        }
+                        onChange={(e) => {
+                          setFormData({ ...formData, name: e.target.value });
+                          if (errors.name) clearError("name");
+                        }}
                         className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-colors duration-300 ${
-                          isDarkMode
+                          errors.name
+                            ? isDarkMode
+                              ? "border-red-500 bg-red-500/10 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                              : "border-red-500 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                            : isDarkMode
                             ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                         }`}
                         placeholder="Enter your full name"
                       />
                     </div>
+                    {errors.name && (
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-red-500 text-xs mt-1 flex items-center gap-1"
+                      >
+                        <FaExclamationTriangle className="text-xs" />
+                        {errors.name}
+                      </motion.p>
+                    )}
                   </div>
 
                   {/* Email Field */}
@@ -242,19 +434,33 @@ export default function RegisterPage() {
                         id="email"
                         name="email"
                         type="email"
-                        required
                         value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
+                        onChange={(e) => {
+                          setFormData({ ...formData, email: e.target.value });
+                          if (errors.email) clearError("email");
+                        }}
                         className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-colors duration-300 ${
-                          isDarkMode
+                          errors.email
+                            ? isDarkMode
+                              ? "border-red-500 bg-red-500/10 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                              : "border-red-500 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                            : isDarkMode
                             ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                         }`}
                         placeholder="Enter your email"
                       />
                     </div>
+                    {errors.email && (
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-red-500 text-xs mt-1 flex items-center gap-1"
+                      >
+                        <FaExclamationTriangle className="text-xs" />
+                        {errors.email}
+                      </motion.p>
+                    )}
                   </div>
 
                   {/* Password Field */}
@@ -276,18 +482,24 @@ export default function RegisterPage() {
                         id="password"
                         name="password"
                         type={showPassword ? "text" : "password"}
-                        required
                         value={formData.password}
-                        onChange={(e) =>
-                          setFormData({ ...formData, password: e.target.value })
-                        }
+                        onChange={(e) => {
+                          setFormData({
+                            ...formData,
+                            password: e.target.value,
+                          });
+                          if (errors.password) clearError("password");
+                        }}
                         className={`w-full pl-10 pr-12 py-3 rounded-lg border transition-colors duration-300 ${
-                          isDarkMode
+                          errors.password
+                            ? isDarkMode
+                              ? "border-red-500 bg-red-500/10 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                              : "border-red-500 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                            : isDarkMode
                             ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                         }`}
                         placeholder="Create a password"
-                        minLength={6}
                       />
                       <button
                         type="button"
@@ -305,13 +517,25 @@ export default function RegisterPage() {
                         )}
                       </button>
                     </div>
-                    <p
-                      className={`text-xs mt-1 transition-colors duration-300 ${
-                        isDarkMode ? "text-gray-500" : "text-gray-400"
-                      }`}
-                    >
-                      Minimum 6 characters
-                    </p>
+                    <div className="flex justify-between items-center mt-1">
+                      <p
+                        className={`text-xs transition-colors duration-300 ${
+                          isDarkMode ? "text-gray-500" : "text-gray-400"
+                        }`}
+                      >
+                        Minimum 6 characters
+                      </p>
+                      {errors.password && (
+                        <motion.p
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className="text-red-500 text-xs flex items-center gap-1"
+                        >
+                          <FaExclamationTriangle className="text-xs" />
+                          {errors.password}
+                        </motion.p>
+                      )}
+                    </div>
                   </div>
 
                   {/* Submit Button */}
@@ -371,7 +595,7 @@ export default function RegisterPage() {
                   disabled={isLoading}
                   whileHover={{ scale: isLoading ? 1 : 1.02 }}
                   whileTap={{ scale: isLoading ? 1 : 0.98 }}
-                  className={`w-full py-3  rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 border ${
+                  className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 border ${
                     isLoading
                       ? "opacity-70 cursor-not-allowed"
                       : "cursor-pointer"
@@ -419,7 +643,11 @@ export default function RegisterPage() {
               >
                 {/* Back Button */}
                 <button
-                  onClick={() => setStep("credentials")}
+                  onClick={() => {
+                    setStep("credentials");
+                    setErrors({});
+                    setOtpErrors({});
+                  }}
                   className={`flex items-center gap-2 mb-6 transition-colors duration-300 ${
                     isDarkMode
                       ? "text-gray-400 hover:text-gray-300"
@@ -474,7 +702,11 @@ export default function RegisterPage() {
                         onPaste={handleOtpPaste}
                         onKeyDown={(e) => handleKeyDown(e, index)}
                         className={`w-12 h-12 text-center text-lg font-semibold rounded-lg border transition-colors duration-300 ${
-                          isDarkMode
+                          errors.otp || otpErrors.invalid
+                            ? isDarkMode
+                              ? "border-red-500 bg-red-500/10 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                              : "border-red-500 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                            : isDarkMode
                             ? "bg-gray-700 border-gray-600 text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                             : "bg-white border-gray-300 text-gray-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                         }`}
@@ -482,6 +714,43 @@ export default function RegisterPage() {
                       />
                     ))}
                   </div>
+
+                  {/* OTP Error Display */}
+                  {errors.otp && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className={`p-3 rounded-lg border flex items-start gap-3 ${
+                        isDarkMode
+                          ? "bg-red-500/10 border-red-500/20 text-red-400"
+                          : "bg-red-50 border-red-200 text-red-600"
+                      }`}
+                    >
+                      <FaExclamationTriangle className="text-lg mt-0.5 shrink-0" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{errors.otp}</p>
+                        {otpErrors.expired && (
+                          <button
+                            type="button"
+                            onClick={resendOTP}
+                            className="text-sm underline mt-1 hover:no-underline"
+                          >
+                            Resend OTP
+                          </button>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => clearError("otp")}
+                        className={`p-1 rounded transition-colors ${
+                          isDarkMode
+                            ? "hover:bg-red-500/20"
+                            : "hover:bg-red-100"
+                        }`}
+                      >
+                        <FiX className="text-sm" />
+                      </button>
+                    </motion.div>
+                  )}
 
                   <p
                     className={`text-center text-sm transition-colors duration-300 ${
@@ -492,9 +761,7 @@ export default function RegisterPage() {
                     <button
                       type="button"
                       className="text-emerald-500 hover:text-emerald-400 font-medium"
-                      onClick={() =>
-                        console.log("Resend OTP to:", formData.email)
-                      }
+                      onClick={resendOTP}
                     >
                       resend
                     </button>
@@ -509,6 +776,10 @@ export default function RegisterPage() {
                     }`}
                   >
                     💡 Demo: Use <strong>123456</strong> as OTP
+                    <br />
+                    <span className="text-xs opacity-80">
+                      Try 000000 for expired, 111111 for too many attempts
+                    </span>
                   </div>
 
                   {/* Verify Button */}
@@ -583,6 +854,60 @@ export default function RegisterPage() {
           </div>
         </motion.div>
       </div>
+
+      {/* OTP Success Popup */}
+      <AnimatePresence>
+        {showOtpPopup && step === "otp" && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className={`rounded-2xl p-6 max-w-sm w-full border transition-colors duration-300 ${
+                isDarkMode
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-white border-gray-200"
+              }`}
+            >
+              <div className="text-center">
+                <div className="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+                  <FiMail className="text-2xl text-emerald-500" />
+                </div>
+                <h3
+                  className={`text-xl font-bold mb-2 transition-colors duration-300 ${
+                    isDarkMode ? "text-white" : "text-gray-800"
+                  }`}
+                >
+                  OTP Sent!
+                </h3>
+                <p
+                  className={`text-sm mb-4 transition-colors duration-300 ${
+                    isDarkMode ? "text-gray-400" : "text-gray-600"
+                  }`}
+                >
+                  We've sent a 6-digit verification code to your email address.
+                  Please check your inbox and enter the code to continue.
+                </p>
+                <button
+                  onClick={() => setShowOtpPopup(false)}
+                  className={`w-full py-3 rounded-lg font-semibold transition-colors duration-300 ${
+                    isDarkMode
+                      ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                      : "bg-emerald-500 hover:bg-emerald-600 text-white"
+                  }`}
+                >
+                  Got it!
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
