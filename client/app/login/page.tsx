@@ -1,17 +1,37 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FaEnvelope,
   FaLock,
   FaGoogle,
   FaEye,
   FaEyeSlash,
+  FaExclamationTriangle,
 } from "react-icons/fa";
-import { FiLogIn, FiKey, FiArrowRight, FiSun, FiMoon } from "react-icons/fi";
+import {
+  FiLogIn,
+  FiKey,
+  FiArrowRight,
+  FiSun,
+  FiMoon,
+  FiX,
+} from "react-icons/fi";
 import { useTheme } from "../theme/ThemeToogle";
 import Link from "next/link";
+
+interface FormErrors {
+  email?: string;
+  password?: string;
+  general?: string;
+}
+
+interface LoginAttempts {
+  count: number;
+  lastAttempt: number;
+  lockedUntil?: number;
+}
 
 export default function LoginPage() {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -19,48 +39,220 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [googleLoading, setGoogleLoading] = useState<boolean>(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
+  const [loginAttempts, setLoginAttempts] = useState<LoginAttempts>({
+    count: 0,
+    lastAttempt: 0,
+  });
+
+  // Validation functions
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password: string): boolean => {
+    return password.length >= 6;
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    // Password validation
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (!validatePassword(formData.password)) {
+      newErrors.password = "Password must be at least 6 characters long";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Check if account is temporarily locked
+  const isAccountLocked = (): boolean => {
+    if (loginAttempts.lockedUntil && Date.now() < loginAttempts.lockedUntil) {
+      const remainingTime = Math.ceil(
+        (loginAttempts.lockedUntil - Date.now()) / 1000 / 60
+      );
+      setErrors({
+        general: `Too many failed attempts. Please try again in ${remainingTime} minutes.`,
+      });
+      return true;
+    }
+    return false;
+  };
+
+  // Reset lock if time has passed
+  const resetLockIfExpired = () => {
+    if (loginAttempts.lockedUntil && Date.now() >= loginAttempts.lockedUntil) {
+      setLoginAttempts({ count: 0, lastAttempt: 0 });
+    }
+  };
 
   // Separate function for email/password login
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    // Fake API call simulation
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    // Clear previous errors
+    setErrors({});
 
-    console.log("Email login attempted:", {
-      email: formData.email,
-      password: formData.password,
-    });
+    // Reset lock if expired
+    resetLockIfExpired();
 
-    // Fake authentication logic
-    if (formData.email && formData.password) {
-      console.log("Login successful!");
-      alert("Welcome back to Varon AI!");
-      // Here you would typically redirect to dashboard
-    } else {
-      alert("Please fill in all fields");
+    // Check if account is locked
+    if (isAccountLocked()) {
+      return;
     }
 
-    setIsLoading(false);
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Fake API call simulation
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      console.log("Email login attempted:", {
+        email: formData.email,
+        password: formData.password,
+        rememberMe,
+      });
+
+      // Fake authentication logic with different scenarios
+      if (
+        formData.email === "demo@varon.ai" &&
+        formData.password === "123456"
+      ) {
+        // Success case
+        console.log("Login successful!");
+        setLoginAttempts({ count: 0, lastAttempt: 0 });
+
+        if (rememberMe) {
+          console.log("Remember me enabled - storing session");
+          // In real app, set longer-lasting token
+        }
+
+        alert("Welcome back to Varon AI!");
+        // Here you would typically redirect to dashboard
+      } else if (formData.email === "locked@varon.ai") {
+        // Simulate locked account
+        const newAttempts = loginAttempts.count + 1;
+        if (newAttempts >= 3) {
+          const lockedUntil = Date.now() + 15 * 60 * 1000; // 15 minutes
+          setLoginAttempts({
+            count: newAttempts,
+            lastAttempt: Date.now(),
+            lockedUntil,
+          });
+          setErrors({
+            general:
+              "Too many failed attempts. Your account has been temporarily locked for 15 minutes.",
+          });
+        } else {
+          setLoginAttempts({
+            count: newAttempts,
+            lastAttempt: Date.now(),
+          });
+          setErrors({
+            general: `Invalid credentials. ${
+              3 - newAttempts
+            } attempts remaining.`,
+          });
+        }
+      } else if (formData.email === "inactive@varon.ai") {
+        // Simulate inactive account
+        setErrors({
+          general:
+            "This account has been inactive. Please check your email to reactivate.",
+        });
+      } else {
+        // General invalid credentials
+        const newAttempts = loginAttempts.count + 1;
+        if (newAttempts >= 5) {
+          const lockedUntil = Date.now() + 30 * 60 * 1000; // 30 minutes
+          setLoginAttempts({
+            count: newAttempts,
+            lastAttempt: Date.now(),
+            lockedUntil,
+          });
+          setErrors({
+            general:
+              "Too many failed attempts. Please try again in 30 minutes or reset your password.",
+          });
+        } else {
+          setLoginAttempts({
+            count: newAttempts,
+            lastAttempt: Date.now(),
+          });
+          setErrors({
+            general: "Invalid email or password. Please try again.",
+          });
+        }
+      }
+    } catch (error) {
+      setErrors({
+        general: "Login failed. Please check your connection and try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Separate function for Google authentication
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
+    setErrors({});
 
-    // Fake Google auth simulation
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Fake Google auth simulation
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    console.log("Google authentication initiated");
-    // Here you would typically redirect to Google OAuth
-    alert("Google authentication would be implemented here.");
-
-    setGoogleLoading(false);
+      console.log("Google authentication initiated");
+      // Here you would typically redirect to Google OAuth
+      alert("Google authentication would be implemented here.");
+    } catch (error) {
+      setErrors({ general: "Google authentication failed. Please try again." });
+    } finally {
+      setGoogleLoading(false);
+    }
   };
+
+  // Handle forgot password
+  const handleForgotPassword = () => {
+    if (!formData.email) {
+      setErrors({ email: "Please enter your email address to reset password" });
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
+      setErrors({ email: "Please enter a valid email address" });
+      return;
+    }
+
+    console.log("Password reset requested for:", formData.email);
+    alert(`Password reset instructions sent to ${formData.email}`);
+  };
+
+  const clearError = (field: keyof FormErrors) => {
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
+  };
+
+  // Demo credentials hint
+  const showDemoHint = formData.email.includes("@varon.ai");
 
   return (
     <div
@@ -119,6 +311,67 @@ export default function LoginPage() {
               : "bg-white border-gray-200 shadow-xl"
           }`}
         >
+          {/* General Error Display */}
+          {errors.general && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`mb-6 p-4 rounded-lg border flex items-start gap-3 ${
+                isDarkMode
+                  ? "bg-red-500/10 border-red-500/20 text-red-400"
+                  : "bg-red-50 border-red-200 text-red-600"
+              }`}
+            >
+              <FaExclamationTriangle className="text-lg mt-0.5 shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm font-medium">{errors.general}</p>
+                {loginAttempts.count > 0 && !loginAttempts.lockedUntil && (
+                  <p className="text-xs mt-1 opacity-80">
+                    Attempts: {loginAttempts.count}/5
+                  </p>
+                )}
+                {loginAttempts.lockedUntil && (
+                  <button
+                    onClick={handleForgotPassword}
+                    className="text-xs underline mt-1 hover:no-underline"
+                  >
+                    Forgot password?
+                  </button>
+                )}
+              </div>
+              <button
+                onClick={() => clearError("general")}
+                className={`p-1 rounded transition-colors ${
+                  isDarkMode ? "hover:bg-red-500/20" : "hover:bg-red-100"
+                }`}
+              >
+                <FiX className="text-sm" />
+              </button>
+            </motion.div>
+          )}
+
+          {/* Demo Credentials Hint */}
+          {showDemoHint && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className={`mb-6 p-4 rounded-lg border ${
+                isDarkMode
+                  ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                  : "bg-emerald-50 border-emerald-200 text-emerald-600"
+              }`}
+            >
+              <div className="text-sm">
+                <strong>Demo Credentials:</strong>
+                <div className="mt-1 text-xs opacity-80">
+                  <div>• demo@varon.ai / 123456 (Success)</div>
+                  <div>• locked@varon.ai / any (Locked account)</div>
+                  <div>• inactive@varon.ai / any (Inactive account)</div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* Email/Password Form */}
           <form onSubmit={handleEmailLogin} className="space-y-6">
             {/* Email Field */}
@@ -140,19 +393,33 @@ export default function LoginPage() {
                   id="email"
                   name="email"
                   type="email"
-                  required
                   value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormData({ ...formData, email: e.target.value });
+                    if (errors.email) clearError("email");
+                  }}
                   className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-colors duration-300 ${
-                    isDarkMode
+                    errors.email
+                      ? isDarkMode
+                        ? "border-red-500 bg-red-500/10 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                        : "border-red-500 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                      : isDarkMode
                       ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                       : "bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                   }`}
                   placeholder="Enter your email"
                 />
               </div>
+              {errors.email && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-red-500 text-xs mt-1 flex items-center gap-1"
+                >
+                  <FaExclamationTriangle className="text-xs" />
+                  {errors.email}
+                </motion.p>
+              )}
             </div>
 
             {/* Password Field */}
@@ -167,7 +434,7 @@ export default function LoginPage() {
                 </label>
                 <button
                   type="button"
-                  onClick={() => console.log("Forgot password clicked")}
+                  onClick={handleForgotPassword}
                   className={`text-sm font-medium transition-colors duration-300 ${
                     isDarkMode
                       ? "text-emerald-400 hover:text-emerald-300"
@@ -187,13 +454,17 @@ export default function LoginPage() {
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  required
                   value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormData({ ...formData, password: e.target.value });
+                    if (errors.password) clearError("password");
+                  }}
                   className={`w-full pl-10 pr-12 py-3 rounded-lg border transition-colors duration-300 ${
-                    isDarkMode
+                    errors.password
+                      ? isDarkMode
+                        ? "border-red-500 bg-red-500/10 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                        : "border-red-500 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                      : isDarkMode
                       ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                       : "bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                   }`}
@@ -215,6 +486,16 @@ export default function LoginPage() {
                   )}
                 </button>
               </div>
+              {errors.password && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-red-500 text-xs mt-1 flex items-center gap-1"
+                >
+                  <FaExclamationTriangle className="text-xs" />
+                  {errors.password}
+                </motion.p>
+              )}
             </div>
 
             {/* Remember Me Checkbox */}
@@ -222,6 +503,8 @@ export default function LoginPage() {
               <input
                 type="checkbox"
                 id="remember"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
                 className={`w-4 h-4 rounded transition-colors duration-300 ${
                   isDarkMode
                     ? "bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500/20"
@@ -241,11 +524,21 @@ export default function LoginPage() {
             {/* Sign In Button */}
             <motion.button
               type="submit"
-              disabled={isLoading}
+              disabled={
+                isLoading ||
+                !!(
+                  loginAttempts.lockedUntil &&
+                  Date.now() < loginAttempts.lockedUntil
+                )
+              }
               whileHover={{ scale: isLoading ? 1 : 1.02 }}
               whileTap={{ scale: isLoading ? 1 : 0.98 }}
               className={`w-full py-4 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 ${
-                isLoading ? "opacity-70 cursor-not-allowed" : "cursor-pointer"
+                isLoading ||
+                (loginAttempts.lockedUntil &&
+                  Date.now() < loginAttempts.lockedUntil)
+                  ? "opacity-70 cursor-not-allowed"
+                  : "cursor-pointer"
               } ${
                 isDarkMode
                   ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
@@ -256,6 +549,12 @@ export default function LoginPage() {
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   Signing In...
+                </>
+              ) : loginAttempts.lockedUntil &&
+                Date.now() < loginAttempts.lockedUntil ? (
+                <>
+                  <FiKey className="text-xl" />
+                  Account Locked
                 </>
               ) : (
                 <>
