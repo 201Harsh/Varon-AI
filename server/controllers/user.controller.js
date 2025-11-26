@@ -1,6 +1,6 @@
 import TempUserModel from "../models/tempuser.model.js";
 import UserModel from "../models/user.model.js";
-import { CreateTempUser } from "../services/user.service.js";
+import { CreateTempUser, VerifyUserOtp } from "../services/user.service.js";
 
 export const RegisterUser = async (req, res) => {
   try {
@@ -70,12 +70,53 @@ export const RegisterUser = async (req, res) => {
       otpExpiry,
     });
 
+    if (!tempUser) {
+      return res.status(500).json({
+        error: "Could Not Create User. Please Try Again !",
+      });
+    }
+
     return res.status(201).json({
       message: "Verify Your Email via OTP. To Register.",
-      tempUser,
     });
   } catch (error) {
     res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+export const VerifyUser = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (typeof email !== "string" || typeof otp !== "string") {
+      return res.status(406).json({
+        error: "Invalid request data. Please Only String Data is allowed!",
+      });
+    }
+
+    const ifUserExists = await UserModel.findOne({ email });
+
+    if (ifUserExists) {
+      return res.status(400).json({
+        error: "User Already Exists. Login Instead !",
+      });
+    }
+
+    const User = await VerifyUserOtp({ email, otp });
+
+    if (!User) {
+      return res.status(404).json({
+        error: "Could Not Verify User. Please Try Again !",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Account Verified & Created Successfully.",
+    });
+  } catch (error) {
+    return res.status(500).json({
       error: error.message,
     });
   }

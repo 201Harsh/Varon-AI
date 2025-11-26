@@ -1,5 +1,5 @@
 import express from "express";
-import { RegisterUser } from "../controllers/user.controller.js";
+import { RegisterUser, VerifyUser } from "../controllers/user.controller.js";
 import { body } from "express-validator";
 import ValidateData from "../middlewares/validated.middleware.js";
 
@@ -20,6 +20,16 @@ UserRouter.post(
   ],
   ValidateData,
   RegisterUser
+);
+
+UserRouter.post(
+  "/verify",
+  [
+    body("email").trim().isEmail().withMessage("Invalid email!"),
+    body("otp").trim().isNumeric().withMessage("Invalid OTP!"),
+  ],
+  ValidateData,
+  VerifyUser
 );
 
 export default UserRouter;
