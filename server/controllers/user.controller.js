@@ -1,6 +1,10 @@
 import TempUserModel from "../models/tempuser.model.js";
 import UserModel from "../models/user.model.js";
-import { CreateTempUser, LoginUserCheck, VerifyUserOtp } from "../services/user.service.js";
+import {
+  CreateTempUser,
+  LoginUserCheck,
+  VerifyUserOtp,
+} from "../services/user.service.js";
 
 export const RegisterUser = async (req, res) => {
   try {
@@ -112,8 +116,18 @@ export const VerifyUser = async (req, res) => {
       });
     }
 
+    const token = User.JwtGenToken();
+
+    res.cookie("token_id_user", token, {
+      expires: new Date(Date.now() + 5 * 60 * 1000),
+      httpOnly: true,
+      samesite: "none",
+      secure: true,
+    });
+
     return res.status(200).json({
       message: "Account Verified & Created Successfully.",
+      token,
     });
   } catch (error) {
     return res.status(500).json({
@@ -132,17 +146,26 @@ export const LoginUser = async (req, res) => {
       });
     }
 
-    const CheckLoginUser = await LoginUserCheck({ email, password });
+    const User = await LoginUserCheck({ email, password });
 
-    if (!CheckLoginUser) {
+    if (!User) {
       return res.status(404).json({
         error: "Could Not Login User. Please Try Again !",
       });
     }
 
+    const token = User.JwtGenToken();
+
+    res.cookie("token_id_user", token, {
+      expires: new Date(Date.now() + 5 * 60 * 1000),
+      httpOnly: true,
+      samesite: "none",
+      secure: true,
+    });
+
     return res.status(200).json({
       message: "Login Successful.",
-      data: CheckLoginUser,
+      token,
     });
   } catch (error) {
     return res.status(500).json({
