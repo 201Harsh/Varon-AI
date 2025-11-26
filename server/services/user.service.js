@@ -51,3 +51,23 @@ export const VerifyUserOtp = async ({ email, otp }) => {
 
   return user;
 };
+
+export const LoginUserCheck = async ({ email, password }) => {
+  if (!email || !password) {
+    throw new Error("Proper Values are required to login a user.");
+  }
+
+  const user = await UserModel.findOne({ email }).select("+password");
+
+  if (!user) {
+    throw new Error("Invalid Credentials.");
+  }
+
+  const isPasswordMatch = await user.ComparePassword(password);
+
+  if (!isPasswordMatch) {
+    throw new Error("Invalid Credentials.");
+  }
+
+  return user;
+};

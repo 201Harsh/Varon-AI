@@ -1,5 +1,9 @@
 import express from "express";
-import { RegisterUser, VerifyUser } from "../controllers/user.controller.js";
+import {
+  LoginUser,
+  RegisterUser,
+  VerifyUser,
+} from "../controllers/user.controller.js";
 import { body } from "express-validator";
 import ValidateData from "../middlewares/validated.middleware.js";
 
@@ -30,6 +34,19 @@ UserRouter.post(
   ],
   ValidateData,
   VerifyUser
+);
+
+UserRouter.post(
+  "/login",
+  [
+    body("email").trim().isEmail().withMessage("Invalid email!"),
+    body("password")
+      .trim()
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters long!"),
+  ],
+  ValidateData,
+  LoginUser
 );
 
 export default UserRouter;

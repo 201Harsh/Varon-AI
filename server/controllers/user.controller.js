@@ -1,6 +1,6 @@
 import TempUserModel from "../models/tempuser.model.js";
 import UserModel from "../models/user.model.js";
-import { CreateTempUser, VerifyUserOtp } from "../services/user.service.js";
+import { CreateTempUser, LoginUserCheck, VerifyUserOtp } from "../services/user.service.js";
 
 export const RegisterUser = async (req, res) => {
   try {
@@ -114,6 +114,35 @@ export const VerifyUser = async (req, res) => {
 
     return res.status(200).json({
       message: "Account Verified & Created Successfully.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+export const LoginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (typeof email !== "string" || typeof password !== "string") {
+      return res.status(406).json({
+        error: "Invalid request data. Please Only String Data is allowed!",
+      });
+    }
+
+    const CheckLoginUser = await LoginUserCheck({ email, password });
+
+    if (!CheckLoginUser) {
+      return res.status(404).json({
+        error: "Could Not Login User. Please Try Again !",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Login Successful.",
+      data: CheckLoginUser,
     });
   } catch (error) {
     return res.status(500).json({
