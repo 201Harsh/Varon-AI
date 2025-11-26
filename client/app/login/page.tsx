@@ -20,6 +20,8 @@ import {
 } from "react-icons/fi";
 import { useTheme } from "../theme/ThemeToogle";
 import Link from "next/link";
+import AxiosProxyInstance from "@/config/AxiosProxyInstance";
+import { useRouter } from "next/navigation";
 
 interface FormErrors {
   email?: string;
@@ -48,6 +50,8 @@ export default function LoginPage() {
     count: 0,
     lastAttempt: 0,
   });
+
+  const router = useRouter();
 
   // Validation functions
   const validateEmail = (email: string): boolean => {
@@ -105,13 +109,10 @@ export default function LoginPage() {
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Clear previous errors
     setErrors({});
 
-    // Reset lock if expired
     resetLockIfExpired();
 
-    // Check if account is locked
     if (isAccountLocked()) {
       return;
     }
@@ -123,89 +124,26 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // Fake API call simulation
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const res = await AxiosProxyInstance.post("/api/login", formData);
 
-      console.log("Email login attempted:", {
-        email: formData.email,
-        password: formData.password,
-        rememberMe,
-      });
-
-      // Fake authentication logic with different scenarios
-      if (
-        formData.email === "demo@varon.ai" &&
-        formData.password === "123456"
-      ) {
-        // Success case
-        console.log("Login successful!");
+      if (res.status === 200) {
+        console.log(res.data);
         setLoginAttempts({ count: 0, lastAttempt: 0 });
-
-        if (rememberMe) {
-          console.log("Remember me enabled - storing session");
-          // In real app, set longer-lasting token
-        }
-
-        alert("Welcome back to Varon AI!");
-        // Here you would typically redirect to dashboard
-      } else if (formData.email === "locked@varon.ai") {
-        // Simulate locked account
-        const newAttempts = loginAttempts.count + 1;
-        if (newAttempts >= 3) {
-          const lockedUntil = Date.now() + 15 * 60 * 1000; // 15 minutes
-          setLoginAttempts({
-            count: newAttempts,
-            lastAttempt: Date.now(),
-            lockedUntil,
-          });
-          setErrors({
-            general:
-              "Too many failed attempts. Your account has been temporarily locked for 15 minutes.",
-          });
-        } else {
-          setLoginAttempts({
-            count: newAttempts,
-            lastAttempt: Date.now(),
-          });
-          setErrors({
-            general: `Invalid credentials. ${
-              3 - newAttempts
-            } attempts remaining.`,
-          });
-        }
-      } else if (formData.email === "inactive@varon.ai") {
-        // Simulate inactive account
-        setErrors({
-          general:
-            "This account has been inactive. Please check your email to reactivate.",
-        });
-      } else {
-        // General invalid credentials
-        const newAttempts = loginAttempts.count + 1;
-        if (newAttempts >= 5) {
-          const lockedUntil = Date.now() + 30 * 60 * 1000; // 30 minutes
-          setLoginAttempts({
-            count: newAttempts,
-            lastAttempt: Date.now(),
-            lockedUntil,
-          });
-          setErrors({
-            general:
-              "Too many failed attempts. Please try again in 30 minutes or reset your password.",
-          });
-        } else {
-          setLoginAttempts({
-            count: newAttempts,
-            lastAttempt: Date.now(),
-          });
-          setErrors({
-            general: "Invalid email or password. Please try again.",
-          });
-        }
+        setErrors({});
+        router.push("/varon");
       }
-    } catch (error) {
+    } catch (error: any) {
+      setLoginAttempts((prev) => ({
+        ...prev,
+        count: prev.count + 1,
+        lastAttempt: Date.now(),
+        lockedUntil:
+          prev.count + 1 >= 5 ? Date.now() + 2 * 60 * 1000 : undefined,
+      }));
       setErrors({
-        general: "Login failed. Please check your connection and try again.",
+        general:
+          error?.response?.data?.error ||
+          "Login failed. Please check your connection and try again.",
       });
     } finally {
       setIsLoading(false);
@@ -250,9 +188,6 @@ export default function LoginPage() {
   const clearError = (field: keyof FormErrors) => {
     setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
-
-  // Demo credentials hint
-  const showDemoHint = formData.email.includes("@varon.ai");
 
   return (
     <div
@@ -347,28 +282,6 @@ export default function LoginPage() {
               >
                 <FiX className="text-sm" />
               </button>
-            </motion.div>
-          )}
-
-          {/* Demo Credentials Hint */}
-          {showDemoHint && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className={`mb-6 p-4 rounded-lg border ${
-                isDarkMode
-                  ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                  : "bg-emerald-50 border-emerald-200 text-emerald-600"
-              }`}
-            >
-              <div className="text-sm">
-                <strong>Demo Credentials:</strong>
-                <div className="mt-1 text-xs opacity-80">
-                  <div>• demo@varon.ai / 123456 (Success)</div>
-                  <div>• locked@varon.ai / any (Locked account)</div>
-                  <div>• inactive@varon.ai / any (Inactive account)</div>
-                </div>
-              </div>
             </motion.div>
           )}
 
