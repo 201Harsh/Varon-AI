@@ -1,11 +1,13 @@
 import express from "express";
 import {
   LoginUser,
+  LogoutUser,
   RegisterUser,
   VerifyUser,
 } from "../controllers/user.controller.js";
 import { body } from "express-validator";
 import ValidateData from "../middlewares/validated.middleware.js";
+import AuthUser from "../middlewares/auth.middleware.js";
 
 const UserRouter = express.Router();
 
@@ -48,5 +50,7 @@ UserRouter.post(
   ValidateData,
   LoginUser
 );
+
+UserRouter.post("/logout", AuthUser, LogoutUser);
 
 export default UserRouter;

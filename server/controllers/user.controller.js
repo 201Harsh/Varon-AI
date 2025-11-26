@@ -119,7 +119,7 @@ export const VerifyUser = async (req, res) => {
     const token = User.JwtGenToken();
 
     res.cookie("token_id_user", token, {
-      expires: new Date(Date.now() + 5 * 60 * 1000),
+      expires: new Date(Date.now() + 10 * 60 * 1000),
       httpOnly: true,
       samesite: "none",
       secure: true,
@@ -157,7 +157,7 @@ export const LoginUser = async (req, res) => {
     const token = User.JwtGenToken();
 
     res.cookie("token_id_user", token, {
-      expires: new Date(Date.now() + 5 * 60 * 1000),
+      expires: new Date(Date.now() + 10 * 60 * 1000),
       httpOnly: true,
       samesite: "none",
       secure: true,
@@ -169,6 +169,20 @@ export const LoginUser = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+export const LogoutUser = async (req, res) => {
+  try {
+    res.clearCookie("token_id_user");
+
+    return res.status(200).json({
+      message: "Logout Successful.",
+    });
+  } catch (error) {
+    res.status(500).json({
       error: error.message,
     });
   }
