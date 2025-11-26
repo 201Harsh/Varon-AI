@@ -197,12 +197,8 @@ export default function RegisterPage() {
     setErrors({});
 
     try {
-      // Fake Google auth simulation
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      console.log("Google authentication initiated");
-      // Here you would typically redirect to Google OAuth
-      alert("Google authentication would be implemented here.");
+      setErrors({ general: "Google authentication failed. Please try again." });
     } catch (error) {
       setErrors({ general: "Google authentication failed. Please try again." });
     } finally {
