@@ -23,8 +23,16 @@ import {
 } from "react-icons/fi";
 import { useTheme } from "../theme/ThemeToogle";
 import Link from "next/link";
+import AxiosInstance from "@/config/AxiosInstance";
 
 interface FormErrors {
+  name?: string;
+  email?: string;
+  password?: string;
+  otp?: string;
+  general?: string;
+}
+interface FormMessages {
   name?: string;
   email?: string;
   password?: string;
@@ -50,6 +58,7 @@ export default function RegisterPage() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [messages, setMessages] = useState<FormMessages>({});
   const [otpErrors, setOtpErrors] = useState<OTPErrors>({});
   const [showOtpPopup, setShowOtpPopup] = useState(false);
 
@@ -64,7 +73,7 @@ export default function RegisterPage() {
   };
 
   const validateName = (name: string): boolean => {
-    return name.trim().length >= 2;
+    return name.trim().length >= 3;
   };
 
   const validateForm = (): boolean => {
@@ -74,7 +83,7 @@ export default function RegisterPage() {
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
     } else if (!validateName(formData.name)) {
-      newErrors.name = "Name must be at least 2 characters long";
+      newErrors.name = "Name must be at least 3 characters long";
     }
 
     // Email validation
@@ -116,7 +125,6 @@ export default function RegisterPage() {
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Clear previous errors
     setErrors({});
 
     if (!validateForm()) {
@@ -126,19 +134,30 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      // Fake API call simulation
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const res = await AxiosInstance.post("/users/register", formData);
 
-      console.log("Credentials submitted:", formData);
+      if (res.status === 201) {
+        setStep("otp");
+        setShowOtpPopup(true);
+        setMessages({
+          general:
+            res.data.message || "Verification code has already been sent.",
+        });
+      }
 
-      // Simulate successful submission
-      setStep("otp");
-      setShowOtpPopup(true);
-
-      // In real app, this would trigger OTP sending to email
-      console.log("OTP sent to:", formData.email);
-    } catch (error) {
-      setErrors({ general: "Failed to create account. Please try again." });
+      if (res.status === 202) {
+        setStep("otp");
+        setMessages({
+          general: res.data.error || "Verification code has already been sent.",
+        });
+      }
+    } catch (error: any) {
+      console.log(error);
+      setErrors({
+        general:
+          error.response?.data?.error ||
+          "Failed to create account. Please try again.",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -267,6 +286,10 @@ export default function RegisterPage() {
     if (field === "otp") {
       setOtpErrors({});
     }
+    setMessages((prev) => ({ ...prev, [field]: undefined }));
+    if (field === "otp") {
+      setOtpErrors({});
+    }
   };
 
   return (
@@ -326,7 +349,34 @@ export default function RegisterPage() {
               : "bg-white border-gray-200 shadow-xl"
           }`}
         >
-          {/* General Error Display */}
+          {/* General Errors and Success Display */}
+          {messages.general && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`mb-6 p-4 rounded-lg border flex items-start gap-3 ${
+                isDarkMode
+                  ? "bg-emerald-500/10 border-green-500/20 text-emerald-400"
+                  : "bg-emerald-50 border-green-200 text-emerald-600"
+              }`}
+            >
+              <FaCheck className="text-lg mt-0.5 shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm font-medium">{messages.general}</p>
+              </div>
+              <button
+                onClick={() => clearError("general")}
+                className={`p-1 rounded transition-colors ${
+                  isDarkMode
+                    ? "hover:bg-emerald-500/20"
+                    : "hover:bg-emerald-100"
+                }`}
+              >
+                <FiX className="text-sm" />
+              </button>
+            </motion.div>
+          )}
+
           {errors.general && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -643,6 +693,7 @@ export default function RegisterPage() {
                     setStep("credentials");
                     setErrors({});
                     setOtpErrors({});
+                    setMessages({});
                   }}
                   className={`flex items-center gap-2 mb-6 transition-colors duration-300 ${
                     isDarkMode
@@ -651,7 +702,7 @@ export default function RegisterPage() {
                   }`}
                 >
                   <FaArrowLeft className="text-sm" />
-                  Back to credentials
+                  Change Credentials
                 </button>
 
                 <div className="text-center mb-2">
@@ -762,21 +813,6 @@ export default function RegisterPage() {
                       resend
                     </button>
                   </p>
-
-                  {/* Demo OTP Hint */}
-                  <div
-                    className={`text-center text-xs p-3 rounded-lg transition-colors duration-300 ${
-                      isDarkMode
-                        ? "bg-emerald-500/10 text-emerald-400"
-                        : "bg-emerald-500/5 text-emerald-600"
-                    }`}
-                  >
-                    💡 Demo: Use <strong>123456</strong> as OTP
-                    <br />
-                    <span className="text-xs opacity-80">
-                      Try 000000 for expired, 111111 for too many attempts
-                    </span>
-                  </div>
 
                   {/* Verify Button */}
                   <motion.button
