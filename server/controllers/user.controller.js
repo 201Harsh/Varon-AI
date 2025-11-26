@@ -130,7 +130,7 @@ export const VerifyUser = async (req, res) => {
       token,
     });
   } catch (error) {
-    return res.status(500).json({
+    return res.status(error.statusCode || 500).json({
       error: error.message,
     });
   }

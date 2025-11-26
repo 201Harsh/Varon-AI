@@ -1,6 +1,12 @@
 import TempUserModel from "../models/tempuser.model.js";
 import UserModel from "../models/user.model.js";
 
+const createError = (message, statusCode) => {
+  const err = new Error(message); // ✅ correct — no recursion
+  err.statusCode = statusCode;
+  return err;
+};
+
 export const CreateTempUser = async ({
   name,
   email,
@@ -9,7 +15,7 @@ export const CreateTempUser = async ({
   otpExpiry,
 }) => {
   if (!name || !email || !password || !otp || !otpExpiry) {
-    throw new Error("All Values are required to create a user.");
+    throw createError("All Values are required to create a user.", 406);
   }
 
   const tempuser = await TempUserModel.create({
@@ -24,21 +30,21 @@ export const CreateTempUser = async ({
 
 export const VerifyUserOtp = async ({ email, otp }) => {
   if (!email || !otp) {
-    throw new Error("Proper Values are required to verify a user.");
+    throw createError("Proper Values are required to verify a user.", 406);
   }
 
   const tempuser = await TempUserModel.findOne({ email }).select("+password");
 
   if (!tempuser) {
-    throw new Error("User not found.");
+    throw createError("User not found.", 404);
   }
 
   if (tempuser.otp !== otp) {
-    throw new Error("Invalid OTP.");
+    throw createError("Invalid OTP.", 400);
   }
 
   if (tempuser.otpExpiry < Date.now()) {
-    throw new Error("OTP Expired.");
+    throw createError("OTP Expired.", 404);
   }
 
   const user = await UserModel.create({
@@ -54,19 +60,19 @@ export const VerifyUserOtp = async ({ email, otp }) => {
 
 export const LoginUserCheck = async ({ email, password }) => {
   if (!email || !password) {
-    throw new Error("Proper Values are required to login a user.");
+    throw createError("Proper Values are required to login a user.", 406);
   }
 
   const user = await UserModel.findOne({ email }).select("+password");
 
   if (!user) {
-    throw new Error("Invalid Credentials.");
+    throw createError("Invalid Credentials.", 404);
   }
 
   const isPasswordMatch = await user.ComparePassword(password);
 
   if (!isPasswordMatch) {
-    throw new Error("Invalid Credentials.");
+    throw createError("Invalid Credentials.", 404);
   }
 
   return user;

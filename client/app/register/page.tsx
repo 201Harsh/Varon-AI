@@ -6,7 +6,6 @@ import {
   FaUser,
   FaEnvelope,
   FaLock,
-  FaGoogle,
   FaArrowLeft,
   FaCheck,
   FaExclamationTriangle,
@@ -24,6 +23,8 @@ import {
 import { useTheme } from "../theme/ThemeToogle";
 import Link from "next/link";
 import AxiosInstance from "@/config/AxiosInstance";
+import AxiosProxyInstance from "@/config/AxiosProxyInstance";
+import { useRouter } from "next/navigation";
 
 interface FormErrors {
   name?: string;
@@ -61,6 +62,8 @@ export default function RegisterPage() {
   const [messages, setMessages] = useState<FormMessages>({});
   const [otpErrors, setOtpErrors] = useState<OTPErrors>({});
   const [showOtpPopup, setShowOtpPopup] = useState(false);
+
+  const router = useRouter();
 
   // Validation functions
   const validateEmail = (email: string): boolean => {
@@ -173,38 +176,40 @@ export default function RegisterPage() {
 
     setIsLoading(true);
     setOtpErrors({});
+    setErrors({});
+    setMessages({});
 
     try {
-      // Fake API call simulation
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
       const enteredOtp = otp.join("");
-      console.log("OTP submitted:", enteredOtp);
 
-      // Fake OTP verification with different error scenarios
-      if (enteredOtp === "123456") {
-        // Hardcoded for demo - success case
-        console.log("OTP verified successfully!");
+      const res = await AxiosProxyInstance.post("/api/verify", {
+        email: formData.email,
+        otp: enteredOtp,
+      });
+
+      if (res.status === 200) {
+        console.log(res.data);
         setShowOtpPopup(false);
-        // Here you would typically redirect to dashboard
-        alert("Registration successful! Welcome to Varon AI.");
-      } else if (enteredOtp === "000000") {
-        // Simulate expired OTP
-        setOtpErrors({ expired: true });
-        setErrors({ otp: "OTP has expired. Please request a new one." });
-      } else if (enteredOtp === "111111") {
-        // Simulate too many attempts
-        setOtpErrors({ attempts: true });
-        setErrors({
-          otp: "Too many failed attempts. Please try again in 5 minutes.",
+        setMessages({
+          general: res.data?.message || "OTP verified successfully.",
         });
-      } else {
-        // Invalid OTP
-        setOtpErrors({ invalid: true });
-        setErrors({ otp: "Invalid OTP. Please try again." });
+        router.push("/varon");
       }
-    } catch (error) {
-      setErrors({ general: "Failed to verify OTP. Please try again." });
+    } catch (error: any) {
+      console.log(error.response.status);
+      if (error.response.status === 400) {
+        setErrors({
+          otp:
+            error.response?.data?.error ||
+            "Failed to verify OTP. Please try again.",
+        });
+        return;
+      }
+      setErrors({
+        general:
+          error.response?.data?.error ||
+          "Failed to verify OTP. Please try again.",
+      });
     } finally {
       setIsLoading(false);
     }
