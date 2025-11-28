@@ -57,7 +57,7 @@ export const RegisterUser = async (req, res) => {
 
     if (ifUserExists) {
       return res.status(400).json({
-        error: "User Already Exists.",
+        error: "User Already Exists. Please Login !",
       });
     }
 
