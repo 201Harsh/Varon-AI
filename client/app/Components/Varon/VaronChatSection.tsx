@@ -175,6 +175,7 @@ const VaronChatSection = ({
         <div className="max-w-3xl mx-auto w-full">
           <form onSubmit={handleSendMessage} className="relative group">
             <input
+              autoFocus
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
