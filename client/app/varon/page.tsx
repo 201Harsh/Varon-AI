@@ -19,6 +19,7 @@ import ConnectionAnimation from "../Components/Varon/ConnectionAnimation";
 import VaronHeader from "../Components/Varon/VaronHeader";
 import VaronConnectionSection from "../Components/Varon/VaronConnectionSection";
 import VaronChatSection from "../Components/Varon/VaronChatSection";
+import { getSocket } from "@/utils/socketInstance";
 
 export default function VaronAIPage() {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -40,12 +41,14 @@ export default function VaronAIPage() {
   const simulateConnection = () => {
     setIsConnecting(true);
 
-    // Simulate connection process
-    setTimeout(() => {
+    const socket = getSocket();
+    socket.connect();
+
+    socket.on("connect", () => {
+      console.log("Connected to server");
       setIsConnecting(false);
       setIsConnected(true);
 
-      // Add welcome message
       setMessages([
         {
           id: 1,
@@ -54,12 +57,27 @@ export default function VaronAIPage() {
           timestamp: new Date(),
         },
       ]);
-    }, 11300000);
+    });
+
+    socket.on("server-reply", (msg : string) => {
+      setIsTyping(false);
+
+      const varonMessage = {
+        id: Date.now(),
+        text: msg,
+        sender: "varon",
+        timestamp: new Date(),
+      };
+
+      setMessages((prev) => [...prev, varonMessage]);
+    });
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputMessage.trim()) return;
+
+    const socket = getSocket();
 
     const userMessage = {
       id: Date.now(),
@@ -69,24 +87,10 @@ export default function VaronAIPage() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    socket.emit("client-message", inputMessage);
+
     setInputMessage("");
     setIsTyping(true);
-
-    // Simulate AI thinking and response
-    setTimeout(() => {
-      setIsTyping(false);
-      const aiResponse = generateAIResponse(inputMessage);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now() + 1,
-          text: aiResponse,
-          sender: "varon",
-          timestamp: new Date(),
-          specialists: getRandomSpecialists(),
-        },
-      ]);
-    }, 2500);
   };
 
   const generateAIResponse = (userMessage: string) => {
