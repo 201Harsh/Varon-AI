@@ -178,6 +178,7 @@ const VaronChatSection = ({
               autoFocus
               type="text"
               value={inputMessage}
+              disabled={isTyping}
               onChange={(e) => setInputMessage(e.target.value)}
               placeholder="Message Varon AI..."
               className={`w-full pl-5 pr-14 py-5 outline-none rounded-full shadow-lg transition-all duration-300 border ${
@@ -189,18 +190,21 @@ const VaronChatSection = ({
 
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.05 }}
+              whileHover={{
+                scale: 1.05,
+              }}
               whileTap={{ scale: 0.95 }}
               disabled={!inputMessage.trim()}
-              className={`absolute right-4 top-2 p-2 h-12 w-12 rounded-full transition-all flex items-center justify-center ${
-                inputMessage.trim()
-                  ? isDarkMode
-                    ? " text-white hover:bg-emerald-400"
-                    : " text-black hover:bg-emerald-600"
-                  : isDarkMode
-                  ? "bg-transparent text-gray-600"
-                  : "bg-transparent text-gray-300"
-              }`}
+              className={`absolute right-4 top-2 p-2 h-12 w-12 rounded-full flex items-center justify-center
+                 ${
+                   inputMessage.trim()
+                     ? isDarkMode
+                       ? " text-white"
+                       : " text-black"
+                     : isDarkMode
+                     ? "bg-transparent text-gray-600"
+                     : "bg-transparent text-gray-300"
+                 }`}
             >
               <AnimatePresence mode="wait">
                 {inputMessage.trim() ? (
