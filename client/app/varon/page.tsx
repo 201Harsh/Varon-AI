@@ -154,13 +154,13 @@ export default function VaronAIPage() {
       />
 
       {/* Main Content */}
-      <main className="pt-24">
+      <main className="pt-20">
         {!isConnected ? (
           <div
-            className={`rounded-2xl p-8 border transition-colors duration-300 ${
+            className={`rounded-2xl transition-colors duration-300 ${
               isDarkMode
-                ? "bg-gray-900 border-emerald-500/20"
-                : "bg-gray-50 border-emerald-500/30"
+                ? "bg-black"
+                : "bg-gray-50"
             }`}
           >
             {isConnecting ? (

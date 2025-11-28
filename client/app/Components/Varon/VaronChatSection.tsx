@@ -26,7 +26,7 @@ const VaronChatSection = ({
 
   return (
     <div
-      className={`h-full relative flex flex-col transition-colors duration-300 ${
+      className={`h-full relative flex flex-col transition-colors duration-300 mt-8 ${
         isDarkMode ? "bg-black text-gray-100" : "bg-white text-gray-800"
       }`}
     >
