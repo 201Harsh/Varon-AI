@@ -54,7 +54,7 @@ export default function VaronAIPage() {
           timestamp: new Date(),
         },
       ]);
-    }, 3000);
+    }, 11300000);
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -86,7 +86,7 @@ export default function VaronAIPage() {
           specialists: getRandomSpecialists(),
         },
       ]);
-    }, 1500);
+    }, 2500);
   };
 
   const generateAIResponse = (userMessage: string) => {
@@ -141,7 +141,9 @@ export default function VaronAIPage() {
   return (
     <div
       className={`min-h-screen transition-colors duration-300 ${
-        isDarkMode ? "bg-black text-white" : "bg-white text-gray-900"
+        isDarkMode
+          ? "bg-linear-to-br from-black bg-black via-emerald-400/5 to-green-400/10 text-white"
+          : "bg-white text-gray-900"
       }`}
     >
       {/* Header */}
@@ -158,9 +160,7 @@ export default function VaronAIPage() {
         {!isConnected ? (
           <div
             className={`rounded-2xl transition-colors duration-300 ${
-              isDarkMode
-                ? "bg-black"
-                : "bg-gray-50"
+              isDarkMode ? "bg-black/50" : "bg-gray-50"
             }`}
           >
             {isConnecting ? (
