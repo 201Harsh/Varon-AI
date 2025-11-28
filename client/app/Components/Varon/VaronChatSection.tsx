@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { FaTeamspeak } from "react-icons/fa";
-import { FiSend, FiUser } from "react-icons/fi";
+import { FaPaperPlane, FaTeamspeak } from "react-icons/fa";
+import { FiCloud, FiUser } from "react-icons/fi";
 import { useEffect } from "react";
 
 const VaronChatSection = ({
@@ -179,7 +179,7 @@ const VaronChatSection = ({
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               placeholder="Message Varon AI..."
-              className={`w-full pl-5 pr-14 py-4 outline-none rounded-[26px] shadow-lg transition-all duration-300 border ${
+              className={`w-full pl-5 pr-14 py-5 outline-none rounded-full shadow-lg transition-all duration-300 border ${
                 isDarkMode
                   ? "bg-gray-900 border-gray-700 text-white placeholder-gray-500 focus:border-emerald-500/50"
                   : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-emerald-400"
@@ -191,19 +191,40 @@ const VaronChatSection = ({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               disabled={!inputMessage.trim()}
-              className={`absolute right-2 top-2 p-2 rounded-full transition-all flex items-center justify-center ${
+              className={`absolute right-4 top-2 p-2 h-12 w-12 rounded-full transition-all flex items-center justify-center ${
                 inputMessage.trim()
                   ? isDarkMode
-                    ? "bg-emerald-500 text-white hover:bg-emerald-400"
-                    : "bg-emerald-500 text-white hover:bg-emerald-600"
+                    ? " text-white hover:bg-emerald-400"
+                    : " text-black hover:bg-emerald-600"
                   : isDarkMode
                   ? "bg-transparent text-gray-600"
                   : "bg-transparent text-gray-300"
               }`}
             >
-              <FiSend
-                className={`text-xl ${!inputMessage.trim() && "opacity-50"}`}
-              />
+              <AnimatePresence mode="wait">
+                {inputMessage.trim() ? (
+                  <motion.div
+                    key="send"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  >
+                    <FaPaperPlane className="text-2xl" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    title="🟢 Live Connect to Varon AI"
+                    key="cloud"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  >
+                    <FiCloud className="text-2xl text-emerald-400" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.button>
           </form>
 

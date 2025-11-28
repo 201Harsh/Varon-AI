@@ -154,7 +154,7 @@ export default function VaronAIPage() {
       />
 
       {/* Main Content */}
-      <main className="px-10 py-4 pt-24">
+      <main className="pt-24">
         {!isConnected ? (
           <div
             className={`rounded-2xl p-8 border transition-colors duration-300 ${
