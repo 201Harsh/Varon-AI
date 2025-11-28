@@ -155,7 +155,14 @@ export default function RegisterPage() {
         });
       }
     } catch (error: any) {
-      console.log(error);
+      if (error.response.status === 400) {
+        setErrors({
+          general: error.response?.data?.error || "Please Login!!",
+        });
+        router.push("/login");
+        return;
+      }
+
       setErrors({
         general:
           error.response?.data?.error ||
