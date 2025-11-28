@@ -47,7 +47,7 @@ const LandingHeader = () => {
                 className="flex items-center space-x-2"
               >
                 <div
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-300 ${
+                  className={`w-10 h-10 pointer-events-none rounded-lg flex items-center justify-center transition-colors duration-300 ${
                     isDarkMode
                       ? "bg-linear-to-r from-emerald-950 via-teal-950 to-black/30"
                       : "bg-linear-to-r from-black to-black"
