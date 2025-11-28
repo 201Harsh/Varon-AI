@@ -20,7 +20,6 @@ const VaronChatSection = ({
   handleSendMessage: any;
   setInputMessage: (message: string) => void;
 }) => {
-  // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping, messagesEndRef]);
@@ -32,7 +31,6 @@ const VaronChatSection = ({
       }`}
     >
       <div className="flex-1 overflow-y-auto custom-scrollbar">
-        {/* Centered Container for Messages (ChatGPT Style) */}
         <div className="max-w-3xl mx-auto w-full px-4 md:px-6 py-6 pb-40">
           <AnimatePresence mode="popLayout">
             {messages.map((message: any) => (
@@ -42,7 +40,7 @@ const VaronChatSection = ({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 layout
-                className={`flex w-full mb-6 ${
+                className={`flex w-full mb-12 ${
                   message.sender === "user" ? "justify-end" : "justify-start"
                 }`}
               >
@@ -78,29 +76,26 @@ const VaronChatSection = ({
                     )}
                   </div>
 
-                  {/* Message Bubble/Content */}
                   <div
                     className={`flex flex-col ${
                       message.sender === "user" ? "items-end" : "items-start"
                     }`}
                   >
-                    {/* Name Label */}
-                    <span className="text-xs font-medium opacity-50 mb-1 px-1">
+                    <span className="text-xs font-medium mb-1 px-1">
                       {message.sender === "varon" ? "Varon AI" : "You"}
                     </span>
 
                     <div
-                      className={`rounded-2xl px-5 py-3.5 text-[15px] leading-relaxed shadow-xs ${
+                      className={`rounded-2xl px-5 py-3.5 text-[15px] leading-relaxed ${
                         message.sender === "user"
                           ? isDarkMode
                             ? "bg-gray-800 text-white"
                             : "bg-gray-100 text-gray-900"
-                          : "bg-transparent px-0 py-0 shadow-none" // AI text blends with background like ChatGPT
+                          : "bg-transparent px-0 py-0 shadow-none"
                       }`}
                     >
                       <div className="whitespace-pre-wrap">{message.text}</div>
 
-                      {/* Specialists Badge */}
                       {message.specialists && (
                         <div className="mt-4 pt-3 border-t border-gray-500/20 w-full">
                           <p className="text-xs text-gray-500 mb-2">
@@ -128,7 +123,6 @@ const VaronChatSection = ({
             ))}
           </AnimatePresence>
 
-          {/* Typing Indicator */}
           {isTyping && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -213,7 +207,6 @@ const VaronChatSection = ({
             </motion.button>
           </form>
 
-          {/* Disclaimer Text */}
           <div className="mt-3 text-center">
             <p
               className={`text-[11px] md:text-xs font-normal ${
