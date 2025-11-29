@@ -59,7 +59,7 @@ export default function VaronAIPage() {
       ]);
     });
 
-    socket.on("server-reply", (msg : string) => {
+    socket.on("server-reply", (msg: string) => {
       setIsTyping(false);
 
       const varonMessage = {
@@ -71,6 +71,16 @@ export default function VaronAIPage() {
 
       setMessages((prev) => [...prev, varonMessage]);
     });
+
+  };
+
+  const disconnect = () => {
+    const socket = getSocket();
+    socket.disconnect();
+    setIsConnected(false);
+    setMessages([]);
+    setInputMessage("");
+    setIsTyping(false);
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -157,6 +167,7 @@ export default function VaronAIPage() {
         simulateConnection={simulateConnection}
         toggleTheme={toggleTheme}
         isDarkMode={isDarkMode}
+        disconnect={disconnect}
       />
 
       {/* Main Content */}

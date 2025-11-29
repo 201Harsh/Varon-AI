@@ -4,3 +4,8 @@ body {
   height: 100%;
   width: 100%;
 }
+
+.scrollbar-small {
+  scrollbar-color: #9b9b9b transparent;
+  scrollbar-width: auto;
+}

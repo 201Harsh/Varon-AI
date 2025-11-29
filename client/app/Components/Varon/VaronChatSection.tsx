@@ -26,11 +26,13 @@ const VaronChatSection = ({
 
   return (
     <div
-      className={`h-full relative flex flex-col transition-colors duration-300 mt-8 ${
-        isDarkMode ? "bg-black text-gray-100" : "bg-white text-gray-800"
+      className={`h-[calc(100vh-150px)] max-h-[calc(100vh-150px)] relative flex flex-col transition-colors duration-300 pt-2 ${
+        isDarkMode
+          ? "bg-linear-to-br from-black via-emerald-400/5 to-green-800/15 bg-black/70 text-gray-100"
+          : "bg-white text-gray-800"
       }`}
     >
-      <div className="flex-1 overflow-y-auto custom-scrollbar">
+      <div className="flex-1 overflow-y-auto scrollbar-small">
         <div className="max-w-3xl mx-auto w-full px-4 md:px-6 py-6 pb-40">
           <AnimatePresence mode="popLayout">
             {messages.map((message: any) => (
@@ -166,11 +168,7 @@ const VaronChatSection = ({
       </div>
 
       <div
-        className={`fixed bottom-0 left-0 right-0 z-50 pt-10 pb-6 px-4 md:px-6 transition-colors duration-300 ${
-          isDarkMode
-            ? "bg-linear-to-t from-black via-black to-transparent"
-            : "bg-linear-to-t from-white via-white to-transparent"
-        }`}
+        className={`fixed bottom-0 left-0 right-0 z-50 pt-10 pb-6 px-4 md:px-6 transition-colors duration-300`}
       >
         <div className="max-w-3xl mx-auto w-full">
           <form onSubmit={handleSendMessage} className="relative group">
@@ -183,7 +181,7 @@ const VaronChatSection = ({
               placeholder="Message Varon AI..."
               className={`w-full pl-5 pr-14 py-5 outline-none rounded-full shadow-lg transition-all duration-300 border ${
                 isDarkMode
-                  ? "bg-gray-900 border-gray-700 text-white placeholder-gray-500 focus:border-emerald-500/50"
+                  ? "bg-[#131314] border-gray-700 text-white placeholder-gray-500 focus:border-emerald-500/50"
                   : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-emerald-400"
               }`}
             />
@@ -239,7 +237,8 @@ const VaronChatSection = ({
                 isDarkMode ? "text-gray-500" : "text-gray-400"
               }`}
             >
-              Varon AI can make mistakes. Please check important information.
+              <span className="text-emerald-500 font-bold">Varon AI</span> can
+              make mistakes. Please check important information.
             </p>
           </div>
         </div>
