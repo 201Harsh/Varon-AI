@@ -1,25 +1,15 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  FiSend,
-  FiUser,
-  FiArrowRight,
-  FiZap,
-  FiCpu,
-  FiShield,
-  FiSun,
-  FiMoon,
-} from "react-icons/fi";
-import { FaTeamspeak, FaRobot, FaCheckCircle } from "react-icons/fa";
+import { FiZap, FiCpu, FiShield } from "react-icons/fi";
+import { FaRobot } from "react-icons/fa";
 import { useTheme } from "../theme/ThemeToogle";
-import Image from "next/image";
 import ConnectionAnimation from "../Components/Varon/ConnectionAnimation";
 import VaronHeader from "../Components/Varon/VaronHeader";
 import VaronConnectionSection from "../Components/Varon/VaronConnectionSection";
 import VaronChatSection from "../Components/Varon/VaronChatSection";
 import { getSocket } from "@/utils/socketInstance";
+import { useAuth } from "@/hooks/UserContext";
 
 export default function VaronAIPage() {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -38,10 +28,12 @@ export default function VaronAIPage() {
     scrollToBottom();
   }, [messages]);
 
+  const token: string = useAuth();
+
   const simulateConnection = () => {
     setIsConnecting(true);
 
-    const socket = getSocket();
+    const socket = getSocket(token);
     socket.connect();
 
     socket.on("connect", () => {
@@ -71,11 +63,10 @@ export default function VaronAIPage() {
 
       setMessages((prev) => [...prev, varonMessage]);
     });
-
   };
 
   const disconnect = () => {
-    const socket = getSocket();
+    const socket = getSocket(token);
     socket.disconnect();
     setIsConnected(false);
     setMessages([]);
@@ -87,7 +78,7 @@ export default function VaronAIPage() {
     e.preventDefault();
     if (!inputMessage.trim()) return;
 
-    const socket = getSocket();
+    const socket = getSocket(token);
 
     const userMessage = {
       id: Date.now(),
@@ -101,55 +92,6 @@ export default function VaronAIPage() {
 
     setInputMessage("");
     setIsTyping(true);
-  };
-
-  const generateAIResponse = (userMessage: string) => {
-    const responses = [
-      "I've analyzed your request and coordinated with my specialist team. Here's what we've prepared for you...",
-      "Based on your query, I've deployed the most suitable AI specialists. Here are the results of our collaboration...",
-      "I've processed your request through multiple expert systems. Here's the comprehensive solution we've developed...",
-      "My team of AI specialists has worked together to provide you with the following solution...",
-      "I've coordinated with relevant experts to address your request. Here's our combined response...",
-    ];
-
-    const actions = [
-      "✅ Code analysis completed",
-      "🔍 Research findings compiled",
-      "📊 Data processed and visualized",
-      "📝 Documentation generated",
-      "🎯 Solution optimized",
-    ];
-
-    const randomResponse =
-      responses[Math.floor(Math.random() * responses.length)];
-    const randomActions = [...actions]
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 3)
-      .join("\n");
-
-    return `${randomResponse}\n\n${randomActions}\n\nIs there anything specific you'd like me to elaborate on or modify?`;
-  };
-
-  const getRandomSpecialists = () => {
-    const specialists = [
-      { name: "Code AI", icon: FiCpu, color: "from-blue-500 to-cyan-500" },
-      {
-        name: "Research AI",
-        icon: FiZap,
-        color: "from-purple-500 to-pink-500",
-      },
-      {
-        name: "Analysis AI",
-        icon: FaRobot,
-        color: "from-orange-500 to-red-500",
-      },
-      {
-        name: "Design AI",
-        icon: FiShield,
-        color: "from-green-500 to-emerald-500",
-      },
-    ];
-    return [...specialists].sort(() => 0.5 - Math.random()).slice(0, 2);
   };
 
   return (
