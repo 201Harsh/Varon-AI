@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { io } from "socket.io-client";
 
 let socket: any;
@@ -12,5 +13,14 @@ export const getSocket = (SocketToken: string) => {
       },
     });
   }
+
+  socket.on("connect_error", (err: any) => {
+    console.log("Connection failed:", err.message);
+
+    if (err.message === "AUTH_REQUIRED") {
+      redirect("/login");
+    }
+  });
+
   return socket;
 };

@@ -21,10 +21,8 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en">
-      <body>
-        <UserCheckAuth token={token}>{children}</UserCheckAuth>
-      </body>
-    </html>
+    <div>
+      <UserCheckAuth token={token}>{children}</UserCheckAuth>
+    </div>
   );
 }
