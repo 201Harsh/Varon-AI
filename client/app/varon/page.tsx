@@ -10,6 +10,7 @@ import VaronConnectionSection from "../Components/Varon/VaronConnectionSection";
 import VaronChatSection from "../Components/Varon/VaronChatSection";
 import { getSocket } from "@/utils/socketInstance";
 import { useAuth } from "@/hooks/UserContext";
+import AxiosProxyInstance from "@/config/AxiosProxyInstance";
 
 export default function VaronAIPage() {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -18,6 +19,7 @@ export default function VaronAIPage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [inputMessage, setInputMessage] = useState<string>("");
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [userData, setuserData] = useState([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -94,6 +96,20 @@ export default function VaronAIPage() {
     setIsTyping(true);
   };
 
+  const FetchUserInfo = async () => {
+    try {
+      const res = await AxiosProxyInstance.get("/api/profile");
+
+      if (res.status === 200) {
+        setuserData(res.data.user);
+      }
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    FetchUserInfo();
+  }, []);
+
   return (
     <div
       className={`min-h-screen transition-colors duration-300 ${
@@ -110,6 +126,7 @@ export default function VaronAIPage() {
         toggleTheme={toggleTheme}
         isDarkMode={isDarkMode}
         disconnect={disconnect}
+        userData={userData}
       />
 
       {/* Main Content */}
@@ -117,7 +134,7 @@ export default function VaronAIPage() {
         {!isConnected ? (
           <div
             className={`rounded-2xl transition-colors duration-300 ${
-              isDarkMode ? "bg-black/50" : "bg-gray-50"
+              isDarkMode ? "bg-black/5" : "bg-gray-50"
             }`}
           >
             {isConnecting ? (

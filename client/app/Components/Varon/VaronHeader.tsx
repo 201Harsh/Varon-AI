@@ -20,6 +20,7 @@ interface VaronHeaderProps {
   simulateConnection: () => void;
   disconnect: () => void;
   toggleTheme: () => void;
+  userData: any;
 }
 
 const VaronHeader = ({
@@ -29,6 +30,7 @@ const VaronHeader = ({
   disconnect,
   toggleTheme,
   isDarkMode,
+  userData,
 }: VaronHeaderProps) => {
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const accountRef = useRef<HTMLDivElement>(null);
@@ -210,14 +212,14 @@ const VaronHeader = ({
                             isDarkMode ? "text-white" : "text-gray-900"
                           }`}
                         >
-                          Admin User
+                          {userData?.name || "Varon User"}
                         </p>
                         <p
                           className={`text-xs ${
                             isDarkMode ? "text-gray-400" : "text-gray-500"
                           }`}
                         >
-                          admin@varon.ai
+                          {userData?.email || "N/A"}
                         </p>
                       </div>
 

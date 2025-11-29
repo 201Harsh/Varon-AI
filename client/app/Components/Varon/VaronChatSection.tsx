@@ -168,7 +168,7 @@ const VaronChatSection = ({
       </div>
 
       <div
-        className={`fixed bottom-0 left-0 right-0 z-50 pt-10 pb-6 px-4 md:px-6 transition-colors duration-300`}
+        className={`fixed bottom-0 left-0 right-0 z-50 pt-10 pb-6 px-4 md:px-6 duration-300`}
       >
         <div className="max-w-3xl mx-auto w-full">
           <form onSubmit={handleSendMessage} className="relative group">
@@ -234,7 +234,7 @@ const VaronChatSection = ({
           <div className="mt-3 text-center">
             <p
               className={`text-[11px] md:text-xs font-normal ${
-                isDarkMode ? "text-gray-500" : "text-gray-400"
+                isDarkMode ? "text-gray-300" : "text-gray-950"
               }`}
             >
               <span className="text-emerald-500 font-bold">Varon AI</span> can
