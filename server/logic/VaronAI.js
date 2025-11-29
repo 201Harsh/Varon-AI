@@ -1,8 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({});
+const ai = new GoogleGenAI({apiKey: process.env.VARON_AI_API_KEY});
 
-async function main({ prompt }) {
+async function ModelVaronAI({ prompt }) {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: prompt,
@@ -14,4 +14,4 @@ async function main({ prompt }) {
   return VaronAIResponse;
 }
 
-export default main;
+export default ModelVaronAI;
