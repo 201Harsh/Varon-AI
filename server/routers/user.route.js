@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  GetUser,
   LoginUser,
   LogoutUser,
   RegisterUser,
@@ -52,5 +53,7 @@ UserRouter.post(
 );
 
 UserRouter.post("/logout", AuthUser, LogoutUser);
+
+UserRouter.get("/get", AuthUser, GetUser);
 
 export default UserRouter;

@@ -5,6 +5,15 @@ const socketVaron = ({ io }) => {
     console.log("a user connected", socket.id);
 
     socket.on("client-message", (msg) => {
+      
+      if (!socket.user) {
+        console.log("User not Authneticated")
+        return socket.emit(
+          "server-reply",
+          "Please login or register first for Live Chat with Varon AI."
+        );
+      }
+
       ModelVaronAI({ prompt: msg }).then((res) => {
         socket.emit("server-reply", res);
       });

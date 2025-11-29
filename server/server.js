@@ -4,6 +4,7 @@ import http from "http";
 import { Server } from "socket.io";
 import ConnectToDB from "./config/db.js";
 import socketVaron from "./connections/socketVaron.js";
+import { socketAuth } from "./middlewares/socketAuth.middleware.js";
 
 const server = http.createServer(app);
 
@@ -16,6 +17,8 @@ const io = new Server(server, {
     credentials: true,
   },
 });
+
+io.use(socketAuth);
 
 socketVaron({ io });
 

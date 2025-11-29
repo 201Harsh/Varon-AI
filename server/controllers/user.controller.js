@@ -187,3 +187,25 @@ export const LogoutUser = async (req, res) => {
     });
   }
 };
+
+export const GetUser = async (req, res) => {
+  try {
+    const UserId = req.user.id;
+
+    const User = await UserModel.findById(UserId);
+
+    if (!User) {
+      return res.status(404).json({
+        error: "User Not Found.",
+      });
+    }
+
+    return res.status(200).json({
+      user: User,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
