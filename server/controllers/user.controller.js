@@ -119,7 +119,7 @@ export const VerifyUser = async (req, res) => {
     const token = User.JwtGenToken();
 
     res.cookie("token_id_user", token, {
-      expires: new Date(Date.now() + 10 * 60 * 1000),
+      expires: new Date(Date.now() + 30 * 60 * 1000),
       httpOnly: true,
       samesite: "none",
       secure: true,
@@ -157,7 +157,7 @@ export const LoginUser = async (req, res) => {
     const token = User.JwtGenToken();
 
     res.cookie("token_id_user", token, {
-      expires: new Date(Date.now() + 10 * 60 * 1000),
+      expires: new Date(Date.now() + 30 * 60 * 1000),
       httpOnly: true,
       samesite: "none",
       secure: true,
