@@ -5,7 +5,6 @@ const socketVaron = ({ io }) => {
     console.log("a user connected", socket.id);
 
     socket.on("client-message", (msg) => {
-      console.log("Client says:", msg);
       ModelVaronAI({ prompt: msg }).then((res) => {
         socket.emit("server-reply", res);
       });
