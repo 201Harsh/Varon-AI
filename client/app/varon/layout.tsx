@@ -1,7 +1,6 @@
 import UserCheckAuth from "@/hooks/UserContext";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Varon AI",
@@ -14,11 +13,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const token = cookieStore.get("token_id_user")?.value;
-
-  if (!token) {
-    redirect("/login");
-  }
+  const token = cookieStore.get("token_id_user")?.value || "";
 
   return (
     <div>
