@@ -1,9 +1,16 @@
+const socketVaron = ({ io }) => {
+  return io.on("connection", (socket) => {
+    console.log("a user connected", socket.id);
 
+    socket.on("client-message", (msg) => {
+      console.log("Client says:", msg);
+      socket.emit("server-reply", `Varon AI received: ${msg}`);
+    });
 
-const socketVaron = () => {
-  return (
-    <div>socketVaron</div>
-  )
-}
+    socket.on("disconnect", () => {
+      console.log("a user disconnected", socket.id);
+    });
+  });
+};
 
-export default socketVaron
+export default socketVaron;
