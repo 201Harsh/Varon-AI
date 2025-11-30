@@ -85,7 +85,6 @@ const MessageItem = ({
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(message.text);
       utterance.onend = () => setIsReading(false);
-      // You can customize voice/pitch/rate here if needed
       window.speechSynthesis.speak(utterance);
       setIsReading(true);
     }
@@ -156,9 +155,12 @@ const MessageItem = ({
           {/* ACTIONS TOOLBAR (Only for AI) */}
           {!isUser && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
+              initial={{ opacity: 0, y: 20, scale: 0.4 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{
+                delay: 0.5,
+                duration: 0.3,
+              }}
               className="flex items-center gap-1 mt-2 ml-1 relative"
             >
               {/* Copy Button */}
@@ -188,7 +190,7 @@ const MessageItem = ({
                     ? "hover:bg-gray-800 text-gray-400 hover:text-gray-200"
                     : "hover:bg-gray-100 text-gray-500 hover:text-gray-700"
                 }`}
-                title="Like"
+                title="Good Response"
               >
                 <FiThumbsUp className="text-sm" />
               </button>
@@ -203,7 +205,7 @@ const MessageItem = ({
                     ? "hover:bg-gray-800 text-gray-400 hover:text-gray-200"
                     : "hover:bg-gray-100 text-gray-500 hover:text-gray-700"
                 }`}
-                title="Dislike"
+                title="Bad Response"
               >
                 <FiThumbsDown className="text-sm" />
               </button>
@@ -216,7 +218,7 @@ const MessageItem = ({
                     ? "hover:bg-gray-800 text-gray-400 hover:text-gray-200"
                     : "hover:bg-gray-100 text-gray-500 hover:text-gray-700"
                 }`}
-                title="Share"
+                title="Share Response"
               >
                 <FiShare2 className="text-sm" />
               </button>
@@ -337,9 +339,31 @@ const VaronChatSection = ({
   handleSendMessage: any;
   setInputMessage: (message: string) => void;
 }) => {
+  const [inputHeight, setInputHeight] = useState<number>(52);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping, messagesEndRef]);
+
+  // Logic to Auto-Resize Textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+
+      const newHeight = Math.min(textareaRef.current.scrollHeight, 180);
+      textareaRef.current.style.height = `${newHeight}px`;
+
+      setInputHeight(newHeight); // ← update height in state
+    }
+  }, [inputMessage]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage(e);
+    }
+  };
 
   return (
     <div
@@ -407,69 +431,87 @@ const VaronChatSection = ({
 
       {/* Floating Input Area */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-50 pt-10 pb-6 px-4 md:px-8 duration-300 ${
-          isDarkMode
-            ? "bg-linear-to-t from-black via-black/90 to-transparent"
-            : "bg-linear-to-t from-white via-white/90 to-transparent"
-        }`}
+        className={`fixed bottom-0 left-0 right-0 z-50 pt-10 pb-6 px-4 md:px-8 duration-300`}
       >
         <div className="max-w-3xl mx-auto w-full">
           <form onSubmit={handleSendMessage} className="relative group">
-            <input
-              autoFocus
-              type="text"
-              value={inputMessage}
-              disabled={isTyping}
-              onChange={(e) => setInputMessage(e.target.value)}
-              placeholder="Message Varon AI..."
-              className={`w-full pl-6 pr-16 py-4 outline-none rounded-full shadow-lg transition-all duration-300 border ${
+            {/* Input Container */}
+            <div
+              className={`relative flex items-end w-full p-2  shadow-lg transition-all duration-300 border ${
                 isDarkMode
-                  ? "bg-[#1e1e1f] border-gray-700 text-white placeholder-gray-500 focus:border-emerald-500/50 shadow-black/50"
-                  : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-emerald-400 shadow-emerald-100/50"
+                  ? "bg-[#1e1e1f] border-gray-700 shadow-black/50 focus-within:border-emerald-500/50"
+                  : "bg-white border-gray-200 shadow-emerald-100/50 focus-within:border-emerald-400"
               }`}
-            />
-
-            <motion.button
-              type="submit"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              disabled={!inputMessage.trim()}
-              className={`absolute right-3 top-2 p-2 h-10 w-10 rounded-full flex items-center justify-center transition-colors
-                 ${
-                   inputMessage.trim()
-                     ? isDarkMode
-                       ? "bg-white text-black"
-                       : "bg-black text-white"
-                     : isDarkMode
-                     ? "bg-transparent text-gray-600"
-                     : "bg-transparent text-gray-300"
-                 }`}
+              style={{
+                borderRadius:
+                  inputHeight > 80
+                    ? "25px"
+                    : inputHeight > 60
+                    ? "36px"
+                    : "9999px",
+              }}
             >
-              <AnimatePresence mode="wait">
-                {inputMessage.trim() ? (
-                  <motion.div
-                    key="send"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <FaPaperPlane className="text-sm" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    title="Live Connect to Varon AI"
-                    key="cloud"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <FiCloud className="text-lg text-emerald-500" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.button>
+              <textarea
+                ref={textareaRef}
+                rows={1}
+                autoFocus
+                value={inputMessage}
+                disabled={isTyping}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Message Varon AI..."
+                className={`w-[95%] bg-transparent max-h-[200px] py-3 pl-4 pr-12 outline-none resize-none scrollbar-small leading-relaxed ${
+                  isDarkMode
+                    ? "text-white placeholder-gray-500"
+                    : "text-gray-900 placeholder-gray-400"
+                }`}
+                style={{
+                  minHeight: "52px", // Ensures it matches the button height initially
+                }}
+              />
+
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                disabled={!inputMessage.trim()}
+                className={`absolute right-2 bottom-3 p-2 h-10 w-10 rounded-full flex items-center justify-center transition-colors cursor-pointer
+                  ${
+                    inputMessage.trim()
+                      ? isDarkMode
+                        ? "text-white"
+                        : "text-black"
+                      : isDarkMode
+                      ? "bg-transparent text-gray-600"
+                      : "bg-transparent text-gray-300"
+                  }`}
+              >
+                <AnimatePresence mode="wait">
+                  {inputMessage.trim() ? (
+                    <motion.div
+                      key="send"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <FaPaperPlane className="text-2xl" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      title="Live Connect to Varon AI"
+                      key="cloud"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <FiCloud className="text-2xl text-emerald-500" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+            </div>
           </form>
 
           <div className="mt-3 text-center">
