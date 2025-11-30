@@ -368,9 +368,7 @@ const VaronChatSection = ({
   return (
     <div
       className={`h-[calc(100vh-150px)] max-h-[calc(100vh-150px)] relative flex flex-col transition-colors duration-300 pt-2 ${
-        isDarkMode
-          ? "bg-linear-to-br from-black via-emerald-950/20 to-green-900/10 bg-black/90 text-gray-100"
-          : "bg-white text-gray-800"
+        isDarkMode ? "text-gray-100" : " text-gray-800"
       }`}
     >
       {/* Messages Scroll Area */}

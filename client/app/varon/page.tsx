@@ -53,7 +53,7 @@ export default function VaronAIPage() {
         transition: Flip,
       });
       setIsConnecting(false);
-      setIsConnected(true)
+      setIsConnected(true);
     });
 
     socket.on("connect_error", (err: any) => {
@@ -145,7 +145,7 @@ export default function VaronAIPage() {
     <div
       className={`min-h-screen transition-colors duration-300 ${
         isDarkMode
-          ? "bg-linear-to-br from-black bg-black via-emerald-400/5 to-green-400/10 text-white"
+          ? "bg-linear-to-br from-black bg-black via-emerald-400/5 to-black/3 text-white"
           : "bg-white text-gray-900"
       }`}
     >
