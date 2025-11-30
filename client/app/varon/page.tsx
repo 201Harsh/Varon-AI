@@ -43,7 +43,7 @@ export default function VaronAIPage() {
     socket.on("connect", () => {
       toast.success("Connected to Varon AI.", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -59,7 +59,7 @@ export default function VaronAIPage() {
     socket.on("connect_error", (err: any) => {
       toast.success("Failed to connect to Varon AI.", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -92,7 +92,7 @@ export default function VaronAIPage() {
     socket.disconnect();
     toast.success("Disconnected from Varon AI.", {
       position: "top-right",
-      autoClose: 3000,
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
