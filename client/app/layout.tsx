@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "./theme/ThemeToogle";
+import { Slide, ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Varon AI",
@@ -13,10 +14,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        <ThemeProvider>{children}</ThemeProvider>
-      </body>
-    </html>
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Slide}
+      />
+      <html lang="en">
+        <body>
+          <ThemeProvider>{children}</ThemeProvider>
+        </body>
+      </html>
+    </>
   );
 }

@@ -11,6 +11,8 @@ import VaronChatSection from "../Components/Varon/VaronChatSection";
 import { getSocket } from "@/utils/socketInstance";
 import { useAuth } from "@/hooks/UserContext";
 import AxiosProxyInstance from "@/config/AxiosProxyInstance";
+import { redirect } from "next/navigation";
+import { Flip, Slide, toast } from "react-toastify";
 
 export default function VaronAIPage() {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -39,7 +41,17 @@ export default function VaronAIPage() {
     socket.connect();
 
     socket.on("connect", () => {
-      console.log("Connected to server");
+      toast.success("Connected to Varon AI.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: isDarkMode ? "dark" : "light",
+        transition: Flip,
+      });
       setIsConnecting(false);
       setIsConnected(true);
 
@@ -51,6 +63,23 @@ export default function VaronAIPage() {
           timestamp: new Date(),
         },
       ]);
+    });
+
+    socket.on("connect_error", (err: any) => {
+      toast.success("Failed to connect to Varon AI.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: isDarkMode ? "dark" : "light",
+        transition: Slide,
+      });
+      if (err.message === "AUTH_REQUIRED") {
+        redirect("/login");
+      }
     });
 
     socket.on("server-reply", (msg: string) => {
@@ -70,6 +99,17 @@ export default function VaronAIPage() {
   const disconnect = () => {
     const socket = getSocket(token);
     socket.disconnect();
+    toast.success("Disconnected from Varon AI.", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: isDarkMode ? "dark" : "light",
+      transition: Flip,
+    });
     setIsConnected(false);
     setMessages([]);
     setInputMessage("");
