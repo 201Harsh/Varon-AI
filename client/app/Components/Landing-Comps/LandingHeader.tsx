@@ -75,12 +75,11 @@ const LandingHeader = () => {
 
             {/* Desktop Actions */}
             <div className="flex items-center space-x-4">
-              {/* Theme Toggle (Visible on Desktop) */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={toggleTheme}
-                className={`hidden lg:block p-2 rounded-lg transition-colors duration-300 ${
+                className={`hidden lg:block p-2 rounded-lg transition-colors duration-300 cursor-pointer ${
                   isDarkMode
                     ? "bg-gray-800 hover:bg-gray-700 text-gray-200"
                     : "bg-gray-100 hover:bg-gray-200 text-gray-700"
@@ -113,7 +112,7 @@ const LandingHeader = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`px-6 py-2 rounded-full font-semibold transition-all text-white ${
+                  className={`px-6 py-2 rounded-full font-semibold transition-all text-white cursor-pointer ${
                     isDarkMode
                       ? "bg-linear-to-r from-emerald-500 to-teal-500 hover:shadow-lg hover:shadow-emerald-500/25"
                       : "bg-linear-to-r from-emerald-400 to-teal-400 hover:shadow-lg hover:shadow-emerald-400/25"

@@ -50,9 +50,8 @@ const VaronHeader = ({
   }, []);
 
   const menuItems = [
-    { icon: FiUser, label: "Personal Details" },
-    { icon: FiCpu, label: "Customize AI Model" },
-    { icon: FiSettings, label: "Account Settings" },
+    { icon: FiCpu, label: "Customize Varon AI" },
+    { icon: FiSettings, label: "Settings" },
     { icon: FiCreditCard, label: "Subscription" },
     { icon: FiHelpCircle, label: "Help & Support" },
   ];
@@ -121,7 +120,7 @@ const VaronHeader = ({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={toggleTheme}
-              className={`p-2.5 rounded-full transition-colors border ${
+              className={`p-2.5 rounded-full transition-colors border cursor-pointer ${
                 isDarkMode
                   ? "bg-gray-800 border-gray-700 text-yellow-400 hover:bg-gray-700"
                   : "bg-gray-100 border-gray-200 text-gray-600 hover:bg-gray-200"
@@ -140,7 +139,7 @@ const VaronHeader = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={simulateConnection}
-                className={`px-5 py-2.5 rounded-full font-semibold text-sm transition-all flex items-center gap-2 shadow-lg ${
+                className={`px-5 py-2.5 rounded-full font-semibold text-sm transition-all flex items-center gap-2 shadow-lg cursor-pointer ${
                   isDarkMode
                     ? "bg-linear-to-r from-emerald-600 to-teal-600 text-white shadow-emerald-900/20 hover:shadow-emerald-500/20"
                     : "bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-emerald-200 hover:shadow-emerald-300"
@@ -158,7 +157,7 @@ const VaronHeader = ({
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={disconnect}
-                  className={`hidden sm:flex px-4 py-2.5 rounded-full font-medium text-sm transition-all items-center gap-2 border ${
+                  className={`hidden sm:flex px-4 py-2.5 rounded-full font-medium text-sm transition-all items-center gap-2 border cursor-pointer ${
                     isDarkMode
                       ? "border-red-500/30 text-red-400 hover:bg-red-500/10"
                       : "border-red-200 text-red-600 hover:bg-red-50"
@@ -200,10 +199,10 @@ const VaronHeader = ({
                       animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className={`absolute top-14 right-0 w-64 rounded-2xl shadow-2xl border backdrop-blur-xl overflow-hidden ${
+                      className={`absolute top-14 right-0 w-64 rounded-2xl shadow-2xl border backdrop-blur-2xl overflow-hidden ${
                         isDarkMode
-                          ? "bg-gray-900/95 border-gray-700"
-                          : "bg-white/95 border-gray-200"
+                          ? "bg-gray-900 border-gray-700"
+                          : "bg-white border-gray-200"
                       }`}
                     >
                       <div className="p-4 border-b border-gray-500/10">
@@ -227,7 +226,7 @@ const VaronHeader = ({
                         {menuItems.map((item, index) => (
                           <button
                             key={index}
-                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer ${
                               isDarkMode
                                 ? "text-gray-300 hover:bg-gray-800 hover:text-white"
                                 : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
@@ -237,12 +236,22 @@ const VaronHeader = ({
                             {item.label}
                           </button>
                         ))}
+                        <button
+                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm relative transition-colors cursor-pointer ${
+                            isDarkMode
+                              ? "bg-red-800 text-gray-300 hover:bg-red-600 hover:text-white"
+                              : "bg-red-300 text-gray-700 hover:bg-red-500 hover:text-gray-950"
+                          }`}
+                        >
+                          Logout{" "}
+                          <FiPower className="text-lg absolute right-5" />
+                        </button>
                       </div>
 
                       <div className="p-2 border-t border-gray-500/10 sm:hidden">
                         <button
                           onClick={disconnect}
-                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors text-red-500 hover:bg-red-500/10`}
+                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors text-red-500 hover:bg-red-500/10 cursor-pointer`}
                         >
                           <FiPower className="text-lg" />
                           Disconnect
