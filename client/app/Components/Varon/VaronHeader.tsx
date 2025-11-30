@@ -196,7 +196,6 @@ const VaronHeader = ({
         </div>
       </header>
 
-      {/* User Menu Component */}
       <UserMenu
         isOpen={isUserMenuOpen}
         onClose={() => setIsUserMenuOpen(false)}
