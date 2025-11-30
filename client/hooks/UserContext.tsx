@@ -14,7 +14,6 @@ export default function UserCheckAuth({
   return <AuthContext.Provider value={token}>{children}</AuthContext.Provider>;
 }
 
-// 3. Helper hook to use the token in any page
 export function useAuth() {
   return useContext(AuthContext);
 }

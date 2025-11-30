@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
 import { io } from "socket.io-client";
+import { redirect } from "next/navigation";
 
 let socket: any;
 
