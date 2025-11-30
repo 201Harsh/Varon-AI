@@ -53,16 +53,7 @@ export default function VaronAIPage() {
         transition: Flip,
       });
       setIsConnecting(false);
-      setIsConnected(true);
-
-      setMessages([
-        {
-          id: 1,
-          text: "Hello! I'm Varon AI, your intelligent assistant. I coordinate multiple expert AIs to help you with any task. What would you like to accomplish today?",
-          sender: "varon",
-          timestamp: new Date(),
-        },
-      ]);
+      setIsConnected(true)
     });
 
     socket.on("connect_error", (err: any) => {
