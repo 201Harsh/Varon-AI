@@ -22,6 +22,8 @@ export default function VaronAIPage() {
   const [inputMessage, setInputMessage] = useState<string>("");
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [userData, setuserData] = useState([]);
+  const [ThinkingResponse, setThinkingResponse] = useState("");
+  const [ThinkingStatus, setThinkingStatus] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -84,6 +86,14 @@ export default function VaronAIPage() {
       };
 
       setMessages((prev) => [...prev, varonMessage]);
+    });
+
+    socket.on("thinking-status", (msg: string) => {
+      setThinkingStatus(msg);
+    });
+
+    socket.on("thinking-response", (msg: string) => {
+      setThinkingResponse(msg);
     });
   };
 
@@ -188,6 +198,8 @@ export default function VaronAIPage() {
               setInputMessage={setInputMessage}
               handleSendMessage={handleSendMessage}
               isTyping={isTyping}
+              ThinkingResponse={ThinkingResponse}
+              ThinkingStatus={ThinkingStatus}
             />
           </div>
         )}

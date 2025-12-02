@@ -26,7 +26,7 @@ const socketVaron = ({ io }) => {
         );
       }
 
-      ModelVaronAI({ prompt: msg }).then((res) => {
+      ModelVaronAI({ prompt: msg , socket }).then((res) => {
         socket.emit("server-reply", res);
       });
     });

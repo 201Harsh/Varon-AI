@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: process.env.VARON_AI_API_KEY });
 
-async function ModelVaronAI({ prompt }) {
+async function ModelVaronAI({ prompt, socket }) {
   const systemInstruction = `
 # ⚡ Varon AI — Intelligent Multi-Agent Personal Assistant
 
@@ -145,15 +145,32 @@ Deliver powerful, accurate, and actionable responses. Always leverage the AI tea
 --- END OF SYSTEM INSTRUCTION ---
 Use this as your core operating instruction for all Varon AI interactions.`;
 
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: prompt,
-    config: {
-      systemInstruction: systemInstruction,
-    },
-  });
-  const VaronAIResponse = response.text;
-  return VaronAIResponse;
+  try {
+    socket.emit("thinking-status", "🧠 Varon AI is analyzing your request...");
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+      config: {
+        systemInstruction: systemInstruction,
+        thinkingConfig: {
+          thinkingBudget: -1,
+          includeThoughts: true,
+        },
+      },
+    });
+
+    const thoughtResult = response.candidates[0].content.parts[0].text;
+
+    if (thoughtResult) {
+      socket.emit("thinking-response", thoughtResult);
+    }
+
+    const VaronAIResponse = response.text;
+    return VaronAIResponse;
+  } catch (error) {
+    const Varonerror = `Varon AI Error: ${error.message}`;
+    return Varonerror;
+  }
 }
 
 export default ModelVaronAI;

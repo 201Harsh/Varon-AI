@@ -330,6 +330,8 @@ const VaronChatSection = ({
   messagesEndRef,
   isTyping,
   isDarkMode,
+  ThinkingResponse,
+  ThinkingStatus,
 }: {
   isTyping: boolean;
   isDarkMode: boolean;
@@ -338,6 +340,8 @@ const VaronChatSection = ({
   inputMessage: string;
   handleSendMessage: any;
   setInputMessage: (message: string) => void;
+  ThinkingResponse: string;
+  ThinkingStatus: string;
 }) => {
   const [inputHeight, setInputHeight] = useState<number>(52);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
