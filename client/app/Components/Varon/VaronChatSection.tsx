@@ -13,8 +13,149 @@ import {
   FiStopCircle,
   FiRefreshCw,
   FiFlag,
+  FiChevronDown,
 } from "react-icons/fi";
+import { HiSparkles } from "react-icons/hi2";
 import { useEffect, useState, useRef } from "react";
+
+const parseThinkingContent = (text: string) => {
+  const match = text?.match(/^\*\*(.*?)\*\*\s*([\s\S]*)$/);
+  if (match) {
+    return { title: match[1], body: match[2] };
+  }
+  return { title: null, body: text };
+};
+
+// --- Helper: Typing Text Animation ---
+const TypingStatus = ({ text }: { text: string }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="flex items-center gap-2"
+    >
+      <span className="text-sm font-medium animate-pulse bg-linear-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">
+        {text || "Thinking"}
+      </span>
+      <div className="flex gap-0.5">
+        {[0, 1, 2].map((i) => (
+          <motion.span
+            key={i}
+            className="w-1 h-1 rounded-full bg-emerald-500"
+            animate={{ y: [0, -3, 0] }}
+            transition={{
+              duration: 0.6,
+              repeat: Infinity,
+              delay: i * 0.15,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+    </motion.div>
+  );
+};
+
+// --- Helper: Thinking Process Dropdown (Gemini Style) ---
+const ThinkingProcess = ({
+  response,
+  status,
+  isDarkMode,
+  isLive = false,
+}: {
+  response: string;
+  status: string;
+  isDarkMode: boolean;
+  isLive?: boolean;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const { title, body } = parseThinkingContent(response);
+  const displayTitle = title || status || "Thinking Process";
+
+  return (
+    <div className="w-full mb-3 max-w-full">
+      <div
+        className={`rounded-xl border overflow-hidden transition-all duration-300 ${
+          isDarkMode
+            ? "bg-[#1e1e1f] border-gray-800"
+            : "bg-gray-50 border-gray-200"
+        }`}
+      >
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors ${
+            isDarkMode
+              ? "hover:bg-white/5 text-gray-300"
+              : "hover:bg-black/5 text-gray-700"
+          }`}
+        >
+          <div className="flex items-center gap-2.5">
+            {isLive ? (
+              <div className="relative">
+                <HiSparkles className="text-emerald-500 text-lg animate-pulse" />
+              </div>
+            ) : (
+              <HiSparkles
+                className={`text-lg ${
+                  isDarkMode ? "text-gray-500" : "text-gray-400"
+                }`}
+              />
+            )}
+
+            <span
+              className={`font-medium ${
+                isLive
+                  ? "bg-linear-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent"
+                  : ""
+              }`}
+            >
+              {displayTitle}
+            </span>
+          </div>
+
+          <FiChevronDown
+            className={`text-lg transition-transform duration-300 ${
+              isOpen ? "rotate-180" : ""
+            } ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
+          />
+        </button>
+
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="overflow-hidden"
+            >
+              <div
+                className={`px-4 pb-4 pt-0 text-xs md:text-[13px] font-mono leading-relaxed whitespace-pre-wrap ${
+                  isDarkMode ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
+                <div
+                  className={`pl-3 border-l-2 py-1 ${
+                    isDarkMode ? "border-gray-700" : "border-gray-300"
+                  }`}
+                >
+                  {body}
+                  {isLive && (
+                    <motion.span
+                      animate={{ opacity: [0, 1, 0] }}
+                      transition={{ repeat: Infinity, duration: 0.8 }}
+                      className="inline-block w-1.5 h-3.5 bg-emerald-500 ml-1 align-middle rounded-sm"
+                    />
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
 
 // --- Sub-Component for Individual Messages ---
 const MessageItem = ({
@@ -32,7 +173,6 @@ const MessageItem = ({
   const [isReading, setIsReading] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Handle Click Outside Menu to Close it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -43,7 +183,6 @@ const MessageItem = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Handle Copy
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(message.text);
@@ -54,12 +193,10 @@ const MessageItem = ({
     }
   };
 
-  // Handle Like/Dislike
   const handleFeedback = (type: "liked" | "disliked") => {
     setFeedback((prev) => (prev === type ? "none" : type));
   };
 
-  // Handle Share
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -75,13 +212,11 @@ const MessageItem = ({
     }
   };
 
-  // Handle Read Aloud
   const handleReadAloud = () => {
     if (isReading) {
       window.speechSynthesis.cancel();
       setIsReading(false);
     } else {
-      // Cancel any currently speaking audio first
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(message.text);
       utterance.onend = () => setIsReading(false);
@@ -134,14 +269,26 @@ const MessageItem = ({
 
         {/* Message Content & Actions Column */}
         <div
-          className={`flex flex-col ${isUser ? "items-end" : "items-start"}`}
+          className={`flex flex-col w-full ${
+            isUser ? "items-end" : "items-start"
+          }`}
         >
           <span className="text-sm font-medium mb-1 px-1 opacity-70">
             {message.sender === "varon" ? "Varon AI" : "You"}
           </span>
 
+          {/* Render Saved Thinking Process (If exists on message) */}
+          {!isUser && message.thinking && (
+            <ThinkingProcess
+              response={message.thinking.response}
+              status={message.thinking.status}
+              isDarkMode={isDarkMode}
+              isLive={false}
+            />
+          )}
+
           <div
-            className={`rounded-2xl px-5 py-3.5 text-[15px] leading-relaxed relative group ${
+            className={`rounded-2xl px-5 py-3.5 text-[15px] leading-relaxed relative group max-w-full ${
               isUser
                 ? isDarkMode
                   ? "bg-gray-800 text-white"
@@ -157,13 +304,9 @@ const MessageItem = ({
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.4 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                delay: 0.5,
-                duration: 0.3,
-              }}
+              transition={{ delay: 0.5, duration: 0.3 }}
               className="flex items-center gap-1 mt-2 ml-1 relative"
             >
-              {/* Copy Button */}
               <button
                 onClick={handleCopy}
                 className={`p-1.5 rounded-md transition-all duration-200 ${
@@ -180,7 +323,6 @@ const MessageItem = ({
                 )}
               </button>
 
-              {/* Like Button */}
               <button
                 onClick={() => handleFeedback("liked")}
                 className={`p-1.5 rounded-md transition-all duration-200 ${
@@ -190,12 +332,10 @@ const MessageItem = ({
                     ? "hover:bg-gray-800 text-gray-400 hover:text-gray-200"
                     : "hover:bg-gray-100 text-gray-500 hover:text-gray-700"
                 }`}
-                title="Good Response"
               >
                 <FiThumbsUp className="text-sm" />
               </button>
 
-              {/* Dislike Button */}
               <button
                 onClick={() => handleFeedback("disliked")}
                 className={`p-1.5 rounded-md transition-all duration-200 ${
@@ -205,12 +345,10 @@ const MessageItem = ({
                     ? "hover:bg-gray-800 text-gray-400 hover:text-gray-200"
                     : "hover:bg-gray-100 text-gray-500 hover:text-gray-700"
                 }`}
-                title="Bad Response"
               >
                 <FiThumbsDown className="text-sm" />
               </button>
 
-              {/* Share Button */}
               <button
                 onClick={handleShare}
                 className={`p-1.5 rounded-md transition-all duration-200 ${
@@ -218,12 +356,10 @@ const MessageItem = ({
                     ? "hover:bg-gray-800 text-gray-400 hover:text-gray-200"
                     : "hover:bg-gray-100 text-gray-500 hover:text-gray-700"
                 }`}
-                title="Share Response"
               >
                 <FiShare2 className="text-sm" />
               </button>
 
-              {/* MORE OPTIONS MENU (3-Dots) */}
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -236,7 +372,6 @@ const MessageItem = ({
                       ? "hover:bg-gray-800 text-gray-400 hover:text-gray-200"
                       : "hover:bg-gray-100 text-gray-500 hover:text-gray-700"
                   }`}
-                  title="More options"
                 >
                   <FiMoreHorizontal className="text-sm" />
                 </button>
@@ -255,7 +390,6 @@ const MessageItem = ({
                       }`}
                     >
                       <div className="p-1">
-                        {/* Read Aloud Option */}
                         <button
                           onClick={() => {
                             handleReadAloud();
@@ -276,37 +410,25 @@ const MessageItem = ({
                           )}
                           {isReading ? "Stop Reading" : "Read Aloud"}
                         </button>
-
-                        {/* Regenerate Option */}
                         <button
-                          onClick={() => {
-                            /* Add regenerate logic here */ setIsMenuOpen(
-                              false
-                            );
-                          }}
+                          onClick={() => setIsMenuOpen(false)}
                           className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm transition-colors ${
                             isDarkMode
                               ? "hover:bg-gray-800 text-gray-200"
                               : "hover:bg-gray-100 text-gray-700"
                           }`}
                         >
-                          <FiRefreshCw className="text-lg" />
-                          Regenerate
+                          <FiRefreshCw className="text-lg" /> Regenerate
                         </button>
-
-                        {/* Report Option */}
                         <button
-                          onClick={() => {
-                            /* Add report logic here */ setIsMenuOpen(false);
-                          }}
+                          onClick={() => setIsMenuOpen(false)}
                           className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm transition-colors text-red-500 ${
                             isDarkMode
                               ? "hover:bg-red-900/20"
                               : "hover:bg-red-50"
                           }`}
                         >
-                          <FiFlag className="text-lg" />
-                          Report Issue
+                          <FiFlag className="text-lg" /> Report Issue
                         </button>
                       </div>
                     </motion.div>
@@ -348,17 +470,15 @@ const VaronChatSection = ({
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping, messagesEndRef]);
+  }, [messages, isTyping, ThinkingResponse, messagesEndRef]);
 
   // Logic to Auto-Resize Textarea
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
-
       const newHeight = Math.min(textareaRef.current.scrollHeight, 180);
       textareaRef.current.style.height = `${newHeight}px`;
-
-      setInputHeight(newHeight); // ← update height in state
+      setInputHeight(newHeight);
     }
   }, [inputMessage]);
 
@@ -388,41 +508,45 @@ const VaronChatSection = ({
             ))}
           </AnimatePresence>
 
-          {/* Typing Indicator */}
+          {/* Typing & Thinking Indicator (LIVE) */}
           {isTyping && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex justify-start w-full mb-6"
             >
-              <div className="flex gap-4 max-w-[85%]">
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                    isDarkMode
-                      ? "bg-linear-to-r from-emerald-500 to-teal-500"
-                      : "bg-linear-to-r from-emerald-400 to-teal-400"
-                  }`}
-                >
-                  <FaTeamspeak className="text-sm text-white" />
+              <div className="flex gap-4 max-w-[85%] w-full">
+                {/* Avatar */}
+                <div className="shrink-0 mt-1">
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                      isDarkMode
+                        ? "bg-linear-to-r from-emerald-500 to-teal-500"
+                        : "bg-linear-to-r from-emerald-400 to-teal-400"
+                    }`}
+                  >
+                    <FaTeamspeak className="text-sm text-white" />
+                  </div>
                 </div>
-                <div className="flex items-center gap-1 mt-2">
-                  {[0, 1, 2].map((i) => (
-                    <motion.div
-                      key={i}
-                      className={`w-2 h-2 rounded-full ${
-                        isDarkMode ? "bg-emerald-400" : "bg-emerald-500"
-                      }`}
-                      animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.5, 1, 0.5],
-                      }}
-                      transition={{
-                        duration: 1,
-                        repeat: Infinity,
-                        delay: i * 0.2,
-                      }}
+
+                {/* Content Area */}
+                <div className="flex flex-col flex-1 min-w-0">
+                  {/* LIVE THINKING PROCESS */}
+                  {(ThinkingResponse || ThinkingStatus) && (
+                    <ThinkingProcess
+                      response={ThinkingResponse}
+                      status={ThinkingStatus}
+                      isDarkMode={isDarkMode}
+                      isLive={true}
                     />
-                  ))}
+                  )}
+
+                  {/* Fallback Typing Dots (Only if no thinking data is coming through yet) */}
+                  {!ThinkingResponse && !ThinkingStatus && (
+                    <div className="flex items-center gap-3 mt-1">
+                      <TypingStatus text="Thinking" />
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -437,9 +561,8 @@ const VaronChatSection = ({
       >
         <div className="max-w-3xl mx-auto w-full">
           <form onSubmit={handleSendMessage} className="relative group">
-            {/* Input Container */}
             <div
-              className={`relative flex items-end w-full p-2  shadow-lg transition-all duration-300 border ${
+              className={`relative flex items-end w-full p-2 shadow-lg transition-all duration-300 border ${
                 isDarkMode
                   ? "bg-[#1e1e1f] border-gray-700 shadow-black/50 focus-within:border-emerald-500/50"
                   : "bg-white border-gray-200 shadow-emerald-100/50 focus-within:border-emerald-400"
@@ -467,9 +590,7 @@ const VaronChatSection = ({
                     ? "text-white placeholder-gray-500"
                     : "text-gray-900 placeholder-gray-400"
                 }`}
-                style={{
-                  minHeight: "52px", // Ensures it matches the button height initially
-                }}
+                style={{ minHeight: "52px" }}
               />
 
               <motion.button
@@ -477,16 +598,15 @@ const VaronChatSection = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 disabled={!inputMessage.trim()}
-                className={`absolute right-2 bottom-3 p-2 h-10 w-10 rounded-full flex items-center justify-center transition-colors cursor-pointer
-                  ${
-                    inputMessage.trim()
-                      ? isDarkMode
-                        ? "text-white"
-                        : "text-black"
-                      : isDarkMode
-                      ? "bg-transparent text-gray-600"
-                      : "bg-transparent text-gray-300"
-                  }`}
+                className={`absolute right-2 bottom-3 p-2 h-10 w-10 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
+                  inputMessage.trim()
+                    ? isDarkMode
+                      ? "text-white"
+                      : "text-black"
+                    : isDarkMode
+                    ? "bg-transparent text-gray-600"
+                    : "bg-transparent text-gray-300"
+                }`}
               >
                 <AnimatePresence mode="wait">
                   {inputMessage.trim() ? (

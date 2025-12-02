@@ -22,8 +22,14 @@ export default function VaronAIPage() {
   const [inputMessage, setInputMessage] = useState<string>("");
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [userData, setuserData] = useState([]);
+
+  // State for rendering live updates
   const [ThinkingResponse, setThinkingResponse] = useState("");
   const [ThinkingStatus, setThinkingStatus] = useState("");
+
+  // Refs for access inside socket listeners (MANDATORY FIX)
+  const thinkingResponseRef = useRef("");
+  const thinkingStatusRef = useRef("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -32,7 +38,7 @@ export default function VaronAIPage() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, ThinkingResponse]);
 
   const token: string = useAuth();
 
@@ -75,25 +81,40 @@ export default function VaronAIPage() {
       }
     });
 
+    socket.on("thinking-status", (msg: string) => {
+      setThinkingStatus(msg);
+      thinkingStatusRef.current = msg; // Update ref
+    });
+
+    socket.on("thinking-response", (msg: string) => {
+      setThinkingResponse(msg);
+      thinkingResponseRef.current = msg; // Update ref
+    });
+
     socket.on("server-reply", (msg: string) => {
       setIsTyping(false);
 
+      // Create message object WITH captured thinking data from Refs
       const varonMessage = {
         id: Date.now(),
         text: msg,
         sender: "varon",
         timestamp: new Date(),
+        thinking: thinkingResponseRef.current
+          ? {
+              response: thinkingResponseRef.current,
+              status: thinkingStatusRef.current || "Thought Process",
+            }
+          : null,
       };
 
       setMessages((prev) => [...prev, varonMessage]);
-    });
 
-    socket.on("thinking-status", (msg: string) => {
-      setThinkingStatus(msg);
-    });
-
-    socket.on("thinking-response", (msg: string) => {
-      setThinkingResponse(msg);
+      // Reset State & Refs
+      setThinkingResponse("");
+      setThinkingStatus("");
+      thinkingResponseRef.current = "";
+      thinkingStatusRef.current = "";
     });
   };
 
@@ -115,6 +136,10 @@ export default function VaronAIPage() {
     setMessages([]);
     setInputMessage("");
     setIsTyping(false);
+    setThinkingResponse("");
+    setThinkingStatus("");
+    thinkingResponseRef.current = "";
+    thinkingStatusRef.current = "";
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -135,6 +160,11 @@ export default function VaronAIPage() {
 
     setInputMessage("");
     setIsTyping(true);
+    // Reset thinking logic for new message
+    setThinkingResponse("");
+    setThinkingStatus("");
+    thinkingResponseRef.current = "";
+    thinkingStatusRef.current = "";
   };
 
   const FetchUserInfo = async () => {
