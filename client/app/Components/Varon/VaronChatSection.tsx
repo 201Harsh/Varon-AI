@@ -26,7 +26,6 @@ const parseThinkingContent = (text: string) => {
   return { title: null, body: text };
 };
 
-// --- Helper: Typing Text Animation ---
 const TypingStatus = ({ text }: { text: string }) => {
   return (
     <motion.div
@@ -56,7 +55,6 @@ const TypingStatus = ({ text }: { text: string }) => {
   );
 };
 
-// --- Helper: Thinking Process Dropdown (Gemini Style) ---
 const ThinkingProcess = ({
   response,
   status,
@@ -82,8 +80,9 @@ const ThinkingProcess = ({
         }`}
       >
         <button
+          title="Show Thinking"
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors ${
+          className={`w-full cursor-pointer flex items-center justify-between px-4 py-3 text-sm transition-colors ${
             isDarkMode
               ? "hover:bg-white/5 text-gray-300"
               : "hover:bg-black/5 text-gray-700"
@@ -101,6 +100,8 @@ const ThinkingProcess = ({
                 }`}
               />
             )}
+
+            <span className="text-emerald-500">Varon Thoughts —</span>
 
             <span
               className={`font-medium ${
@@ -139,6 +140,8 @@ const ThinkingProcess = ({
                     isDarkMode ? "border-gray-700" : "border-gray-300"
                   }`}
                 >
+                  <span className="text-emerald-400"># {displayTitle}</span>
+                  <br />
                   {body}
                   {isLive && (
                     <motion.span
@@ -157,7 +160,6 @@ const ThinkingProcess = ({
   );
 };
 
-// --- Sub-Component for Individual Messages ---
 const MessageItem = ({
   message,
   isDarkMode,
@@ -243,15 +245,7 @@ const MessageItem = ({
         {/* Avatar Icon */}
         <div className="shrink-0 mt-1">
           {message.sender === "varon" ? (
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center shadow-sm ${
-                isDarkMode
-                  ? "bg-linear-to-r from-emerald-500 to-teal-500"
-                  : "bg-linear-to-r from-emerald-400 to-teal-400"
-              }`}
-            >
-              <FaTeamspeak className="text-sm text-white" />
-            </div>
+            <></>
           ) : (
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center ${
@@ -267,17 +261,15 @@ const MessageItem = ({
           )}
         </div>
 
-        {/* Message Content & Actions Column */}
         <div
           className={`flex flex-col w-full ${
             isUser ? "items-end" : "items-start"
           }`}
         >
-          <span className="text-sm font-medium mb-1 px-1 opacity-70">
-            {message.sender === "varon" ? "Varon AI" : "You"}
+          <span className="text-sm ml-2 font-medium mb-1 px-1 opacity-75">
+            {message.sender === "varon" ? "See Varon AI Thinking" : "You"}
           </span>
 
-          {/* Render Saved Thinking Process (If exists on message) */}
           {!isUser && message.thinking && (
             <ThinkingProcess
               response={message.thinking.response}
@@ -299,7 +291,6 @@ const MessageItem = ({
             <div className="whitespace-pre-wrap">{message.text}</div>
           </div>
 
-          {/* ACTIONS TOOLBAR (Only for AI) */}
           {!isUser && (
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.4 }}
@@ -443,7 +434,6 @@ const MessageItem = ({
   );
 };
 
-// --- Main Chat Component ---
 const VaronChatSection = ({
   messages,
   inputMessage,
@@ -472,7 +462,6 @@ const VaronChatSection = ({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping, ThinkingResponse, messagesEndRef]);
 
-  // Logic to Auto-Resize Textarea
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -508,7 +497,6 @@ const VaronChatSection = ({
             ))}
           </AnimatePresence>
 
-          {/* Typing & Thinking Indicator (LIVE) */}
           {isTyping && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -529,9 +517,7 @@ const VaronChatSection = ({
                   </div>
                 </div>
 
-                {/* Content Area */}
                 <div className="flex flex-col flex-1 min-w-0">
-                  {/* LIVE THINKING PROCESS */}
                   {(ThinkingResponse || ThinkingStatus) && (
                     <ThinkingProcess
                       response={ThinkingResponse}
@@ -541,7 +527,6 @@ const VaronChatSection = ({
                     />
                   )}
 
-                  {/* Fallback Typing Dots (Only if no thinking data is coming through yet) */}
                   {!ThinkingResponse && !ThinkingStatus && (
                     <div className="flex items-center gap-3 mt-1">
                       <TypingStatus text="Thinking" />
@@ -555,7 +540,6 @@ const VaronChatSection = ({
         </div>
       </div>
 
-      {/* Floating Input Area */}
       <div
         className={`fixed bottom-0 left-0 right-0 z-50 pt-10 pb-6 px-4 md:px-8 duration-300`}
       >
