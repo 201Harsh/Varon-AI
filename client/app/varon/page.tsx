@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { FiZap, FiCpu, FiShield } from "react-icons/fi";
-import { FaRobot } from "react-icons/fa";
 import { useTheme } from "../theme/ThemeToogle";
 import ConnectionAnimation from "../Components/Varon/ConnectionAnimation";
 import VaronHeader from "../Components/Varon/VaronHeader";
@@ -23,11 +21,9 @@ export default function VaronAIPage() {
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [userData, setuserData] = useState([]);
 
-  // State for rendering live updates
   const [ThinkingResponse, setThinkingResponse] = useState("");
   const [ThinkingStatus, setThinkingStatus] = useState("");
 
-  // Refs for access inside socket listeners (MANDATORY FIX)
   const thinkingResponseRef = useRef("");
   const thinkingStatusRef = useRef("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -65,9 +61,9 @@ export default function VaronAIPage() {
     });
 
     socket.on("connect_error", (err: any) => {
-      toast.success("Failed to connect to Varon AI.", {
+      toast.success(err.message, {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -83,18 +79,17 @@ export default function VaronAIPage() {
 
     socket.on("thinking-status", (msg: string) => {
       setThinkingStatus(msg);
-      thinkingStatusRef.current = msg; // Update ref
+      thinkingStatusRef.current = msg;
     });
 
     socket.on("thinking-response", (msg: string) => {
       setThinkingResponse(msg);
-      thinkingResponseRef.current = msg; // Update ref
+      thinkingResponseRef.current = msg; 
     });
 
     socket.on("server-reply", (msg: string) => {
       setIsTyping(false);
 
-      // Create message object WITH captured thinking data from Refs
       const varonMessage = {
         id: Date.now(),
         text: msg,
@@ -160,7 +155,7 @@ export default function VaronAIPage() {
 
     setInputMessage("");
     setIsTyping(true);
-    // Reset thinking logic for new message
+
     setThinkingResponse("");
     setThinkingStatus("");
     thinkingResponseRef.current = "";
