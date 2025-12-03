@@ -10,7 +10,7 @@ import { getSocket } from "@/utils/socketInstance";
 import { useAuth } from "@/hooks/UserContext";
 import AxiosProxyInstance from "@/config/AxiosProxyInstance";
 import { redirect } from "next/navigation";
-import { Flip, Slide, toast } from "react-toastify";
+import { Flip, toast } from "react-toastify";
 
 export default function VaronAIPage() {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -21,11 +21,15 @@ export default function VaronAIPage() {
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [userData, setuserData] = useState([]);
 
+  // State for rendering live updates
   const [ThinkingResponse, setThinkingResponse] = useState("");
   const [ThinkingStatus, setThinkingStatus] = useState("");
+  const [ThinkingTools, setThinkingTools] = useState<string[]>([]); // New state for live tools
 
+  // Refs for tracking accumulated state inside listeners
   const thinkingResponseRef = useRef("");
   const thinkingStatusRef = useRef("");
+  const thinkingToolsRef = useRef<string[]>([]); // New ref for tools
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -34,7 +38,7 @@ export default function VaronAIPage() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, ThinkingResponse]);
+  }, [messages, ThinkingResponse, ThinkingTools]);
 
   const token: string = useAuth();
 
@@ -48,11 +52,6 @@ export default function VaronAIPage() {
       toast.success("Connected to Varon AI.", {
         position: "top-right",
         autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: isDarkMode ? "dark" : "light",
         transition: Flip,
       });
@@ -61,20 +60,15 @@ export default function VaronAIPage() {
     });
 
     socket.on("connect_error", (err: any) => {
-      toast.success(err.message, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: isDarkMode ? "dark" : "light",
-        transition: Slide,
-      });
-      if (err.message === "AUTH_REQUIRED") {
-        redirect("/login");
-      }
+      toast.error(err.message, { theme: isDarkMode ? "dark" : "light" });
+      redirect("/login");
+    });
+
+    // Handle Tool Calls
+    socket.on("tool-call", (msg: string) => {
+      // Accumulate tool calls in array
+      thinkingToolsRef.current = [...thinkingToolsRef.current, msg];
+      setThinkingTools(thinkingToolsRef.current);
     });
 
     socket.on("thinking-status", (msg: string) => {
@@ -82,14 +76,15 @@ export default function VaronAIPage() {
       thinkingStatusRef.current = msg;
     });
 
-    socket.on("thinking-response", (msg: string) => {
-      setThinkingResponse(msg);
-      thinkingResponseRef.current = msg; 
+    socket.on("thinking-response", (chunk: string) => {
+      setThinkingResponse((prev) => prev + chunk);
+      thinkingResponseRef.current += chunk;
     });
 
     socket.on("server-reply", (msg: string) => {
       setIsTyping(false);
 
+      // Create message with attached full thinking log AND tools
       const varonMessage = {
         id: Date.now(),
         text: msg,
@@ -101,15 +96,19 @@ export default function VaronAIPage() {
               status: thinkingStatusRef.current || "Thought Process",
             }
           : null,
+        tools:
+          thinkingToolsRef.current.length > 0 ? thinkingToolsRef.current : null,
       };
 
       setMessages((prev) => [...prev, varonMessage]);
 
-      // Reset State & Refs
+      // Reset state for next message
       setThinkingResponse("");
       setThinkingStatus("");
+      setThinkingTools([]);
       thinkingResponseRef.current = "";
       thinkingStatusRef.current = "";
+      thinkingToolsRef.current = [];
     });
   };
 
@@ -119,11 +118,6 @@ export default function VaronAIPage() {
     toast.success("Disconnected from Varon AI.", {
       position: "top-right",
       autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
       theme: isDarkMode ? "dark" : "light",
       transition: Flip,
     });
@@ -133,8 +127,10 @@ export default function VaronAIPage() {
     setIsTyping(false);
     setThinkingResponse("");
     setThinkingStatus("");
+    setThinkingTools([]);
     thinkingResponseRef.current = "";
     thinkingStatusRef.current = "";
+    thinkingToolsRef.current = [];
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -156,19 +152,19 @@ export default function VaronAIPage() {
     setInputMessage("");
     setIsTyping(true);
 
+    // Reset thinking logic for new question
     setThinkingResponse("");
     setThinkingStatus("");
+    setThinkingTools([]);
     thinkingResponseRef.current = "";
     thinkingStatusRef.current = "";
+    thinkingToolsRef.current = [];
   };
 
   const FetchUserInfo = async () => {
     try {
       const res = await AxiosProxyInstance.get("/api/profile");
-
-      if (res.status === 200) {
-        setuserData(res.data.user);
-      }
+      if (res.status === 200) setuserData(res.data.user);
     } catch (error) {}
   };
 
@@ -184,7 +180,6 @@ export default function VaronAIPage() {
           : "bg-white text-gray-900"
       }`}
     >
-      {/* Header */}
       <VaronHeader
         isConnected={isConnected}
         isConnecting={isConnecting}
@@ -195,7 +190,6 @@ export default function VaronAIPage() {
         userData={userData}
       />
 
-      {/* Main Content */}
       <main className="pt-20">
         {!isConnected ? (
           <div
@@ -213,20 +207,18 @@ export default function VaronAIPage() {
             )}
           </div>
         ) : (
-          <div>
-            {/* Chat Area */}
-            <VaronChatSection
-              messages={messages}
-              isDarkMode={isDarkMode}
-              messagesEndRef={messagesEndRef}
-              inputMessage={inputMessage}
-              setInputMessage={setInputMessage}
-              handleSendMessage={handleSendMessage}
-              isTyping={isTyping}
-              ThinkingResponse={ThinkingResponse}
-              ThinkingStatus={ThinkingStatus}
-            />
-          </div>
+          <VaronChatSection
+            messages={messages}
+            isDarkMode={isDarkMode}
+            messagesEndRef={messagesEndRef}
+            inputMessage={inputMessage}
+            setInputMessage={setInputMessage}
+            handleSendMessage={handleSendMessage}
+            isTyping={isTyping}
+            ThinkingResponse={ThinkingResponse}
+            ThinkingStatus={ThinkingStatus}
+            ThinkingTools={ThinkingTools} // Pass new prop
+          />
         )}
       </main>
     </div>

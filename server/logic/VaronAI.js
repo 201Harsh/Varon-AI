@@ -161,33 +161,69 @@ Deliver powerful, accurate, and actionable responses. Always leverage the AI tea
 Use this as your core operating instruction for all Varon AI interactions.`;
 
   try {
-    socket.emit("thinking-status", "🧠 Varon AI is analyzing your request...");
-    const response = await ai.models.generateContent({
+    socket.emit(
+      "thinking-status",
+      `Varon is analyzing - ${prompt.slice(0, 15)}...`
+    );
+
+    const response = await ai.models.generateContentStream({
       model: "gemini-2.5-flash",
       contents: prompt,
       config: {
         systemInstruction: systemInstruction,
         thinkingConfig: {
-          thinkingBudget: -1,
+          thinkingBudget: 4096,
           includeThoughts: true,
         },
         tools: toolsConfiguration,
       },
     });
 
-    const thoughtResult = response.candidates[0].content.parts[0].text;
-    console.log(response.candidates[0].content.parts);
+    const streamIterable = response.stream || response;
 
-    if (thoughtResult) {
-      socket.emit("thinking-response", thoughtResult);
+    if (!streamIterable[Symbol.asyncIterator]) {
+      throw new Error(
+        "Varon AI Error: The response is not an async iterable stream."
+      );
     }
 
-    const VaronAIResponse = response.text;
-    return VaronAIResponse;
+    let fullResponseText = "";
+
+    for await (const chunk of streamIterable) {
+      if (!chunk.candidates || !chunk.candidates[0].content.parts) continue;
+
+      const parts = chunk.candidates[0].content.parts;
+
+      for (const part of parts) {
+        if (part.thought) {
+          const thoughtContent =
+            typeof part.thought === "string" ? part.thought : part.text;
+
+          if (thoughtContent) {
+            socket.emit("thinking-response", thoughtContent);
+          }
+
+          continue;
+        }
+
+        if (part.functionCall) {
+          socket.emit("tool-call", `Calling Tool: ${part.functionCall.name}`);
+          continue;
+        }
+
+        if (part.text) {
+          fullResponseText += part.text;
+        }
+      }
+    }
+
+    return fullResponseText;
   } catch (error) {
     const Varonerror =
-      "Varon AI is unable to process your request. Please try again later.";
-    console.log(error);
+      "Varon is unable to process your request. Please try again later." +
+      error.message;
+    socket.emit("thinking-status", "Varon ERROR: AI_Response_Error");
+    socket.emit("thinking-response", `\n\nVaron AI Error:-\n${Varonerror}`);
     return Varonerror;
   }
 }

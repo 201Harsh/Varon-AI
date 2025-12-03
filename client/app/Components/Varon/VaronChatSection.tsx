@@ -15,15 +15,20 @@ import {
   FiFlag,
   FiChevronDown,
 } from "react-icons/fi";
-import { HiSparkles } from "react-icons/hi2";
+import { HiSparkles, HiWrenchScrewdriver } from "react-icons/hi2";
 import { useEffect, useState, useRef } from "react";
 
-const parseThinkingContent = (text: string) => {
-  const match = text?.match(/^\*\*(.*?)\*\*\s*([\s\S]*)$/);
+const parseThinkingContent = (text: any) => {
+  const safeText = typeof text === "string" ? text : "";
+  if (!safeText) return { title: null, body: "" };
+
+  const match = safeText.match(/^\s*\*\*(.*?)\*\*\s*([\s\S]*)$/);
+
   if (match) {
-    return { title: match[1], body: match[2] };
+    return { title: match[1].trim(), body: match[2].trim() };
   }
-  return { title: null, body: text };
+
+  return { title: null, body: safeText };
 };
 
 const TypingStatus = ({ text }: { text: string }) => {
@@ -55,6 +60,37 @@ const TypingStatus = ({ text }: { text: string }) => {
   );
 };
 
+const ToolInvocation = ({
+  tools,
+  isDarkMode,
+}: {
+  tools: string[];
+  isDarkMode: boolean;
+}) => {
+  if (!tools || tools.length === 0) return null;
+
+  return (
+    <div className="w-full mb-2 max-w-[95%] md:max-w-[85%]">
+      {tools.map((tool, idx) => (
+        <motion.div
+          key={idx}
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`flex items-center gap-2 text-xs font-mono py-2 px-3 rounded-lg mb-1 border ${
+            isDarkMode
+              ? "bg-blue-900/10 border-blue-800 text-blue-300"
+              : "bg-blue-50 border-blue-100 text-blue-600"
+          }`}
+        >
+          <HiWrenchScrewdriver className="text-sm" />
+          <span>{tool.replace("Calling Tool:", "Using tool:")}</span>
+          <span className="ml-auto text-[10px] opacity-60">Completed</span>
+        </motion.div>
+      ))}
+    </div>
+  );
+};
+
 const ThinkingProcess = ({
   response,
   status,
@@ -66,9 +102,17 @@ const ThinkingProcess = ({
   isDarkMode: boolean;
   isLive?: boolean;
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(isLive);
   const { title, body } = parseThinkingContent(response);
   const displayTitle = title || status || "Thinking Process";
+
+  const bodyRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isLive && isOpen && bodyRef.current) {
+      bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
+    }
+  }, [response, isLive, isOpen]);
 
   return (
     <div className="w-full mb-3 max-w-full">
@@ -80,22 +124,22 @@ const ThinkingProcess = ({
         }`}
       >
         <button
-          title="Show Thinking"
+          title="Show Varon Thinking"
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-full cursor-pointer flex items-center justify-between px-4 py-3 text-sm transition-colors ${
+          className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors cursor-pointer ${
             isDarkMode
               ? "hover:bg-white/5 text-gray-300"
               : "hover:bg-black/5 text-gray-700"
           }`}
         >
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 overflow-hidden whitespace-nowrap">
             {isLive ? (
-              <div className="relative">
+              <div className="relative shrink-0">
                 <HiSparkles className="text-emerald-500 text-lg animate-pulse" />
               </div>
             ) : (
               <HiSparkles
-                className={`text-lg ${
+                className={`text-lg shrink-0 ${
                   isDarkMode ? "text-gray-500" : "text-gray-400"
                 }`}
               />
@@ -104,7 +148,7 @@ const ThinkingProcess = ({
             <span className="text-emerald-500">Varon Thoughts —</span>
 
             <span
-              className={`font-medium ${
+              className={`font-medium truncate ${
                 isLive
                   ? "bg-linear-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent"
                   : ""
@@ -115,13 +159,13 @@ const ThinkingProcess = ({
           </div>
 
           <FiChevronDown
-            className={`text-lg transition-transform duration-300 ${
+            className={`text-lg shrink-0 transition-transform duration-300 ${
               isOpen ? "rotate-180" : ""
             } ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
           />
         </button>
 
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {isOpen && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
@@ -131,7 +175,8 @@ const ThinkingProcess = ({
               className="overflow-hidden"
             >
               <div
-                className={`px-4 pb-4 pt-0 text-xs md:text-[13px] font-mono leading-relaxed whitespace-pre-wrap ${
+                ref={bodyRef}
+                className={`px-4 pb-4 pt-0 text-xs md:text-[13px] font-mono leading-relaxed whitespace-pre-wrap max-h-[300px] overflow-y-auto custom-scrollbar ${
                   isDarkMode ? "text-gray-400" : "text-gray-600"
                 }`}
               >
@@ -142,7 +187,11 @@ const ThinkingProcess = ({
                 >
                   <span className="text-emerald-400"># {displayTitle}</span>
                   <br />
-                  {body}
+                  {body || (
+                    <span className="opacity-50 italic">
+                      Initializing thinking process...
+                    </span>
+                  )}
                   {isLive && (
                     <motion.span
                       animate={{ opacity: [0, 1, 0] }}
@@ -242,7 +291,6 @@ const MessageItem = ({
           isUser ? "flex-row-reverse" : "flex-row"
         }`}
       >
-        {/* Avatar Icon */}
         <div className="shrink-0 mt-1">
           {message.sender === "varon" ? (
             <></>
@@ -266,9 +314,13 @@ const MessageItem = ({
             isUser ? "items-end" : "items-start"
           }`}
         >
-          <span className="text-sm ml-2 font-medium mb-1 px-1 opacity-75">
-            {message.sender === "varon" ? "See Varon AI Thinking" : "You"}
+          <span className="text-sm ml-2 font-medium mb-1 px-1 opacity-70">
+            {message.sender === "varon" ? "" : "You"}
           </span>
+
+          {!isUser && message.tools && (
+            <ToolInvocation tools={message.tools} isDarkMode={isDarkMode} />
+          )}
 
           {!isUser && message.thinking && (
             <ThinkingProcess
@@ -444,6 +496,7 @@ const VaronChatSection = ({
   isDarkMode,
   ThinkingResponse,
   ThinkingStatus,
+  ThinkingTools,
 }: {
   isTyping: boolean;
   isDarkMode: boolean;
@@ -454,13 +507,14 @@ const VaronChatSection = ({
   setInputMessage: (message: string) => void;
   ThinkingResponse: string;
   ThinkingStatus: string;
+  ThinkingTools?: string[];
 }) => {
   const [inputHeight, setInputHeight] = useState<number>(52);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping, ThinkingResponse, messagesEndRef]);
+  }, [messages, isTyping, ThinkingResponse, ThinkingTools, messagesEndRef]);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -518,6 +572,13 @@ const VaronChatSection = ({
                 </div>
 
                 <div className="flex flex-col flex-1 min-w-0">
+                  {ThinkingTools && ThinkingTools.length > 0 && (
+                    <ToolInvocation
+                      tools={ThinkingTools}
+                      isDarkMode={isDarkMode}
+                    />
+                  )}
+
                   {(ThinkingResponse || ThinkingStatus) && (
                     <ThinkingProcess
                       response={ThinkingResponse}
@@ -527,11 +588,13 @@ const VaronChatSection = ({
                     />
                   )}
 
-                  {!ThinkingResponse && !ThinkingStatus && (
-                    <div className="flex items-center gap-3 mt-1">
-                      <TypingStatus text="Thinking" />
-                    </div>
-                  )}
+                  {!ThinkingResponse &&
+                    !ThinkingStatus &&
+                    !ThinkingTools?.length && (
+                      <div className="flex items-center gap-3 mt-1">
+                        <TypingStatus text="Thinking" />
+                      </div>
+                    )}
                 </div>
               </div>
             </motion.div>
