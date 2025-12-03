@@ -1,8 +1,23 @@
 import { GoogleGenAI } from "@google/genai";
+import VaronMcpServer from "../connections/VaronMcpServer.js";
 
 const ai = new GoogleGenAI({ apiKey: process.env.VARON_AI_API_KEY });
 
 async function ModelVaronAI({ prompt, socket }) {
+  const mcpTools = VaronMcpServer.getVaronRegisteredTools();
+
+  const toolsConfiguration = [
+    {
+      functionDeclarations: mcpTools.map((tool) => {
+        return {
+          name: tool.name,
+          description: tool.description,
+          parameters: tool.parameters,
+        };
+      }),
+    },
+  ];
+
   const systemInstruction = `
 # ⚡ Varon AI — Intelligent Multi-Agent Personal Assistant
 
@@ -156,10 +171,12 @@ Use this as your core operating instruction for all Varon AI interactions.`;
           thinkingBudget: -1,
           includeThoughts: true,
         },
+        tools: toolsConfiguration,
       },
     });
 
     const thoughtResult = response.candidates[0].content.parts[0].text;
+    console.log(response.candidates[0].content.parts);
 
     if (thoughtResult) {
       socket.emit("thinking-response", thoughtResult);
@@ -168,7 +185,9 @@ Use this as your core operating instruction for all Varon AI interactions.`;
     const VaronAIResponse = response.text;
     return VaronAIResponse;
   } catch (error) {
-    const Varonerror = `Varon AI Error: ${error.message}`;
+    const Varonerror =
+      "Varon AI is unable to process your request. Please try again later.";
+    console.log(error);
     return Varonerror;
   }
 }
