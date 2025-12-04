@@ -39,6 +39,7 @@ export default function VaronAIPage() {
   }, [messages, ThinkingResponse, ThinkingTools]);
 
   const token: string = useAuth();
+  const socket = getSocket(token);
 
   const generateId = () => {
     return typeof crypto !== "undefined" && crypto.randomUUID
@@ -46,13 +47,10 @@ export default function VaronAIPage() {
       : `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   };
 
-  const simulateConnection = () => {
-    setIsConnecting(true);
+  useEffect(() => {
+    if (!socket) return;
 
-    const socket = getSocket(token);
-    socket.connect();
-
-    socket.on("connect", () => {
+    const onConnect = () => {
       toast.success("Connected to Varon AI.", {
         position: "top-right",
         autoClose: 2500,
@@ -62,29 +60,30 @@ export default function VaronAIPage() {
       });
       setIsConnecting(false);
       setIsConnected(true);
-    });
+    };
 
-    socket.on("connect_error", (err: any) => {
+    const onConnectError = (err: any) => {
       toast.error(err.message, { theme: isDarkMode ? "dark" : "light" });
-      redirect("/login");
-    });
+      setIsConnecting(false);
+      if (err.message === "AUTH_REQUIRED") redirect("/login");
+    };
 
-    socket.on("tool-call", (msg: string) => {
+    const onToolCall = (msg: string) => {
       thinkingToolsRef.current = [...thinkingToolsRef.current, msg];
-      setThinkingTools(thinkingToolsRef.current);
-    });
+      setThinkingTools([...thinkingToolsRef.current]);
+    };
 
-    socket.on("thinking-status", (msg: string) => {
+    const onThinkingStatus = (msg: string) => {
       setThinkingStatus(msg);
       thinkingStatusRef.current = msg;
-    });
+    };
 
-    socket.on("thinking-response", (chunk: string) => {
+    const onThinkingResponse = (chunk: string) => {
       setThinkingResponse((prev) => prev + chunk);
       thinkingResponseRef.current += chunk;
-    });
+    };
 
-    socket.on("server-reply", (msg: string) => {
+    const onServerReply = (msg: string) => {
       setIsTyping(false);
 
       const varonMessage = {
@@ -99,7 +98,9 @@ export default function VaronAIPage() {
             }
           : null,
         tools:
-          thinkingToolsRef.current.length > 0 ? thinkingToolsRef.current : null,
+          thinkingToolsRef.current.length > 0
+            ? [...thinkingToolsRef.current]
+            : null,
       };
 
       setMessages((prev) => [...prev, varonMessage]);
@@ -110,11 +111,31 @@ export default function VaronAIPage() {
       thinkingResponseRef.current = "";
       thinkingStatusRef.current = "";
       thinkingToolsRef.current = [];
-    });
+    };
+
+    socket.on("connect", onConnect);
+    socket.on("connect_error", onConnectError);
+    socket.on("tool-call", onToolCall);
+    socket.on("thinking-status", onThinkingStatus);
+    socket.on("thinking-response", onThinkingResponse);
+    socket.on("server-reply", onServerReply);
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("connect_error", onConnectError);
+      socket.off("tool-call", onToolCall);
+      socket.off("thinking-status", onThinkingStatus);
+      socket.off("thinking-response", onThinkingResponse);
+      socket.off("server-reply", onServerReply);
+    };
+  }, [socket, isDarkMode]);
+
+  const simulateConnection = () => {
+    setIsConnecting(true);
+    socket.connect();
   };
 
   const disconnect = () => {
-    const socket = getSocket(token);
     socket.disconnect();
     toast.success("Disconnected from Varon AI.", {
       position: "top-right",
@@ -138,8 +159,6 @@ export default function VaronAIPage() {
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputMessage.trim()) return;
-
-    const socket = getSocket(token);
 
     const userMessage = {
       id: generateId(),
