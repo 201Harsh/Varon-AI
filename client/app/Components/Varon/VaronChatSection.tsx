@@ -14,10 +14,15 @@ import {
   FiRefreshCw,
   FiFlag,
   FiChevronDown,
+  FiDownload,
 } from "react-icons/fi";
 import { HiSparkles, HiWrenchScrewdriver } from "react-icons/hi2";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const parseThinkingContent = (text: any) => {
   const safeText = typeof text === "string" ? text : "";
@@ -58,6 +63,85 @@ const TypingStatus = ({ text }: { text: string }) => {
         ))}
       </div>
     </motion.div>
+  );
+};
+
+const CodeBlock = ({
+  language,
+  value,
+  isDarkMode,
+}: {
+  language: string;
+  value: string;
+  isDarkMode: boolean;
+}) => {
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(value);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  const handleDownload = () => {
+    const blob = new Blob([value], { type: "text/plain" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `code-snippet.${language || "txt"}`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  };
+
+  return (
+    <div className="relative w-full max-w-[85vw] md:max-w-full my-4 rounded-xl overflow-hidden border border-gray-700 bg-[#1e1e1f] shadow-lg">
+      <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-2 bg-[#2d2d2d] border-b border-gray-700">
+        <span className="text-xs font-mono text-gray-300 lowercase">
+          {language || "code"}
+        </span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleCopy}
+            className="flex items-center gap-1.5 px-2 py-1 text-[10px] font-medium text-gray-300 hover:text-white hover:bg-white/10 rounded transition-colors"
+          >
+            {isCopied ? <FiCheck className="text-emerald-400" /> : <FiCopy />}
+            {isCopied ? "Copied!" : "Copy"}
+          </button>
+          <button
+            onClick={handleDownload}
+            className="flex items-center gap-1.5 px-2 py-1 text-[10px] font-medium text-gray-300 hover:text-white hover:bg-white/10 rounded transition-colors"
+          >
+            <FiDownload />
+            Download
+          </button>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto custom-scrollbar">
+        <SyntaxHighlighter
+          language={language}
+          style={vscDarkPlus}
+          customStyle={{
+            margin: 0,
+            padding: "1.5rem",
+            background: "transparent",
+            fontSize: "0.8rem",
+            lineHeight: "1.5",
+          }}
+          wrapLines={false}
+          showLineNumbers={true}
+          lineNumberStyle={{
+            minWidth: "1.5em",
+            paddingRight: "1em",
+            color: "#6e7681",
+          }}
+        >
+          {value}
+        </SyntaxHighlighter>
+      </div>
+    </div>
   );
 };
 
@@ -146,7 +230,7 @@ const ThinkingProcess = ({
               />
             )}
 
-            <span className="text-emerald-500">Varon Thoughts —</span>
+            <span className="text-emerald-500 ">Varon Thoughts —</span>
 
             <span
               className={`font-medium truncate ${
@@ -186,8 +270,9 @@ const ThinkingProcess = ({
                     isDarkMode ? "border-gray-700" : "border-gray-300"
                   }`}
                 >
-                  <span className="text-emerald-400"># {displayTitle}</span>
-                  <br />
+                  <span className="text-emerald-400 font-bold block mb-1">
+                    # {displayTitle}
+                  </span>
                   {body || (
                     <span className="opacity-50 italic">
                       Initializing thinking process...
@@ -213,9 +298,13 @@ const ThinkingProcess = ({
 const MessageItem = ({
   message,
   isDarkMode,
+  isLastMessage,
+  isTyping,
 }: {
   message: any;
   isDarkMode: boolean;
+  isLastMessage: boolean;
+  isTyping: boolean;
 }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [feedback, setFeedback] = useState<"none" | "liked" | "disliked">(
@@ -292,7 +381,7 @@ const MessageItem = ({
           isUser ? "flex-row-reverse" : "flex-row"
         }`}
       >
-        <div className="shrink-0 mt-1">
+        <div className="shrink-0 mt-1 ml-2">
           {message.sender === "varon" ? (
             <>
               <div
@@ -325,7 +414,7 @@ const MessageItem = ({
         </div>
 
         <div
-          className={`flex flex-col w-full ${
+          className={`flex flex-col w-full min-w-0 ${
             isUser ? "items-end" : "items-start"
           }`}
         >
@@ -347,7 +436,7 @@ const MessageItem = ({
           )}
 
           <div
-            className={`rounded-2xl px-5 py-3.5 text-[15px] leading-relaxed relative group max-w-full ${
+            className={`rounded-2xl px-5 py-3.5 text-[15px] leading-relaxed relative group max-w-full overflow-hidden ${
               isUser
                 ? isDarkMode
                   ? "bg-gray-800 text-white"
@@ -355,10 +444,123 @@ const MessageItem = ({
                 : "bg-transparent px-0 py-0 shadow-none"
             }`}
           >
-            <div className="whitespace-pre-wrap">{message.text}</div>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                code({ node, inline, className, children, ...props }: any) {
+                  const match = /language-(\w+)/.exec(className || "");
+                  const codeString = String(children).replace(/\n$/, "");
+
+                  if (!inline && match) {
+                    return (
+                      <CodeBlock
+                        language={match[1]}
+                        value={codeString}
+                        isDarkMode={isDarkMode}
+                      />
+                    );
+                  }
+                  return (
+                    <code
+                      className={`${
+                        isDarkMode
+                          ? "bg-gray-800 text-emerald-300 border-gray-700"
+                          : "bg-gray-200 text-emerald-700 border-gray-300"
+                      } px-1.5 py-0.5 rounded text-sm font-mono border wrap-break-word`}
+                      {...props}
+                    >
+                      {children}
+                    </code>
+                  );
+                },
+                // Headings
+                h1: ({ children }) => (
+                  <h1 className="text-2xl font-bold mb-4 mt-6 border-b pb-2 border-gray-500/20">
+                    {children}
+                  </h1>
+                ),
+                h2: ({ children }) => (
+                  <h2 className="text-xl font-bold mb-3 mt-5">{children}</h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="text-lg font-bold mb-2 mt-4">{children}</h3>
+                ),
+                strong: ({ children }) => (
+                  <strong className="font-bold text-emerald-500 dark:text-emerald-400">
+                    {children}
+                  </strong>
+                ),
+                a: ({ href, children }) => (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:text-blue-400 hover:underline transition-colors cursor-pointer break-all"
+                  >
+                    {children}
+                  </a>
+                ),
+                ul: ({ children }) => (
+                  <ul className="list-disc pl-5 mb-4 space-y-1 marker:text-gray-500">
+                    {children}
+                  </ul>
+                ),
+                ol: ({ children }) => (
+                  <ol className="list-decimal pl-5 mb-4 space-y-1 marker:text-gray-500">
+                    {children}
+                  </ol>
+                ),
+                p: ({ children }) => (
+                  <p className="mb-4 last:mb-0 wrap-break-word">{children}</p>
+                ),
+                blockquote: ({ children }) => (
+                  <blockquote
+                    className={`border-l-4 pl-4 py-1 mb-4 italic ${
+                      isDarkMode
+                        ? "border-gray-600 bg-gray-800/50"
+                        : "border-gray-300 bg-gray-50"
+                    }`}
+                  >
+                    {children}
+                  </blockquote>
+                ),
+                table: ({ children }) => (
+                  <div className="overflow-x-auto mb-4 border rounded-lg border-gray-700 block max-w-full">
+                    <table className="min-w-full divide-y divide-gray-700">
+                      {children}
+                    </table>
+                  </div>
+                ),
+                thead: ({ children }) => (
+                  <thead className={isDarkMode ? "bg-gray-800" : "bg-gray-100"}>
+                    {children}
+                  </thead>
+                ),
+                th: ({ children }) => (
+                  <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider">
+                    {children}
+                  </th>
+                ),
+                td: ({ children }) => (
+                  <td className="px-3 py-2 whitespace-nowrap text-sm border-t border-gray-700/50">
+                    {children}
+                  </td>
+                ),
+              }}
+            >
+              {message.text}
+            </ReactMarkdown>
+
+            {!isUser && isLastMessage && isTyping && (
+              <motion.span
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ repeat: Infinity, duration: 0.8 }}
+                className="inline-block w-2 h-5 bg-emerald-500 align-sub ml-1"
+              />
+            )}
           </div>
 
-          {!isUser && (
+          {!isUser && !isTyping && (
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.4 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -553,15 +755,16 @@ const VaronChatSection = ({
         isDarkMode ? "text-gray-100" : " text-gray-800"
       }`}
     >
-      {/* Messages Scroll Area */}
       <div className="flex-1 overflow-y-auto scrollbar-small">
         <div className="max-w-3xl mx-auto w-full px-4 md:px-6 py-6 pb-40">
           <AnimatePresence mode="popLayout">
-            {messages.map((message: any) => (
+            {messages.map((message: any, index: number) => (
               <MessageItem
                 key={message.id}
                 message={message}
                 isDarkMode={isDarkMode}
+                isLastMessage={index === messages.length - 1}
+                isTyping={isTyping}
               />
             ))}
           </AnimatePresence>
