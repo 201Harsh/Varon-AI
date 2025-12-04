@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { FaTeamspeak, FaBrain } from "react-icons/fa";
+import {FaBrain } from "react-icons/fa";
 import { FiCpu, FiZap, FiShield } from "react-icons/fi";
 
 const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
@@ -40,14 +40,12 @@ const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
 
   return (
     <div className="flex flex-col items-center justify-center py-16 h-[calc(100vh-80px)]">
-      {/* Main Orb with Holographic Effect */}
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.8, type: "spring" }}
         className="relative mb-12"
       >
-        {/* Outer Glow */}
         <motion.div
           animate={{
             scale: [1, 1.1, 1],
@@ -61,7 +59,6 @@ const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
           className="absolute inset-0 rounded-full bg-linear-to-r from-emerald-400/30 to-teal-400/30 blur-xl"
         />
 
-        {/* Main Orb Container */}
         <motion.div
           animate={{
             scale: [1, 1.05, 1],
@@ -82,7 +79,6 @@ const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
               : "bg-linear-to-br from-white via-emerald-50 to-teal-50 border border-emerald-400/60"
           } backdrop-blur-sm`}
         >
-          {/* Animated Grid Pattern */}
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -96,7 +92,6 @@ const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
             }}
           />
 
-          {/* Central Icon with Pulse */}
           <motion.div
             animate={{
               scale: [1, 1.2, 1],
@@ -118,7 +113,6 @@ const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
             />
           </motion.div>
 
-          {/* Inner Ring */}
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
@@ -126,7 +120,6 @@ const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
           />
         </motion.div>
 
-        {/* Floating Specialist Orbs */}
         {floatingOrbs.map((orb, index) => (
           <motion.div
             key={index}
@@ -154,7 +147,6 @@ const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
               <orb.icon className="text-white text-xs" />
             </motion.div>
 
-            {/* Connection Lines */}
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
@@ -168,7 +160,6 @@ const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
           </motion.div>
         ))}
 
-        {/* Pulsing Rings */}
         {[0, 1, 2].map((ring) => (
           <motion.div
             key={ring}
@@ -187,7 +178,6 @@ const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
         ))}
       </motion.div>
 
-      {/* Animated Connection Steps */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -244,7 +234,6 @@ const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
         </div>
       </motion.div>
 
-      {/* Progress Bar */}
       <motion.div
         initial={{ opacity: 0, width: 0 }}
         animate={{ opacity: 1, width: "300px" }}
@@ -261,7 +250,6 @@ const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
         />
       </motion.div>
 
-      {/* Network Activity Dots */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -288,7 +276,6 @@ const ConnectionAnimation = ({ isDarkMode }: { isDarkMode: boolean }) => {
         ))}
       </motion.div>
 
-      {/* Status Text */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

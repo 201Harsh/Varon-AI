@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FiArrowRight, FiActivity } from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
 import Image from "next/image";
 
 const VaronConnectionSection = ({
@@ -11,7 +11,6 @@ const VaronConnectionSection = ({
 }) => {
   return (
     <div className="min-h-[calc(100vh-80px)] flex items-center justify-center relative overflow-hidden p-10">
-      {/* Background Ambient Glows */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" />
 
       <motion.div
@@ -20,7 +19,6 @@ const VaronConnectionSection = ({
         transition={{ duration: 0.5 }}
         className="relative z-10 text-center max-w-4xl mx-auto"
       >
-        {/* LOGO SECTION with Pulse Effect */}
         <div className="relative w-40 h-40 mx-auto mb-8 group">
           <div
             className={`absolute inset-0 rounded-3xl blur-xl opacity-40 transition-all duration-500 ${
@@ -43,7 +41,6 @@ const VaronConnectionSection = ({
               className="w-[80%] h-[80%] object-contain drop-shadow-lg"
             />
           </div>
-          {/* Status Dot */}
           <div className="absolute -top-2 -right-2">
             <span className="relative flex h-5 w-5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -52,7 +49,6 @@ const VaronConnectionSection = ({
           </div>
         </div>
 
-        {/* HEADINGS */}
         <h2 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight">
           Welcome to{" "}
           <span

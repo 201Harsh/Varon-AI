@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { FiArrowRight, FiSun, FiMoon, FiPower, FiUser } from "react-icons/fi";
 import Image from "next/image";
-import UserMenu from "./UserMenu"; // Adjust the import path as needed
+import UserMenu from "./UserMenu";
 
 interface VaronHeaderProps {
   isConnected: boolean;
@@ -28,7 +28,6 @@ const VaronHeader = ({
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const accountRef = useRef<HTMLDivElement>(null);
 
-  // Close popup when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -62,7 +61,6 @@ const VaronHeader = ({
       >
         <div className="container mx-auto px-4 sm:px-6 py-3">
           <div className="flex items-center justify-between">
-            {/* LOGO SECTION */}
             <div className="flex items-center gap-3">
               <div
                 className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300 shadow-lg ${
@@ -109,9 +107,7 @@ const VaronHeader = ({
               </div>
             </div>
 
-            {/* RIGHT SIDE ACTIONS */}
             <div className="flex gap-3 items-center justify-center">
-              {/* Theme Toggle */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -129,7 +125,6 @@ const VaronHeader = ({
                 )}
               </motion.button>
 
-              {/* Connection States */}
               {!isConnected && !isConnecting ? (
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -148,7 +143,6 @@ const VaronHeader = ({
                   className="flex items-center gap-3 relative"
                   ref={accountRef}
                 >
-                  {/* Disconnect Button - Desktop Only */}
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -162,7 +156,6 @@ const VaronHeader = ({
                     <FiPower /> Disconnect
                   </motion.button>
 
-                  {/* User Avatar Button */}
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
