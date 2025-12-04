@@ -17,6 +17,7 @@ import {
 } from "react-icons/fi";
 import { HiSparkles, HiWrenchScrewdriver } from "react-icons/hi2";
 import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 
 const parseThinkingContent = (text: any) => {
   const safeText = typeof text === "string" ? text : "";
@@ -293,7 +294,21 @@ const MessageItem = ({
       >
         <div className="shrink-0 mt-1">
           {message.sender === "varon" ? (
-            <></>
+            <>
+              <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                  isDarkMode ? "bg-black" : "bg-gray-900"
+                }`}
+              >
+                <Image
+                  width={100}
+                  height={100}
+                  src="/img/logo.png"
+                  alt="Varon AI"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </>
           ) : (
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center ${
