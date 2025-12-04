@@ -21,15 +21,13 @@ export default function VaronAIPage() {
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [userData, setuserData] = useState([]);
 
-  // State for rendering live updates
   const [ThinkingResponse, setThinkingResponse] = useState("");
   const [ThinkingStatus, setThinkingStatus] = useState("");
-  const [ThinkingTools, setThinkingTools] = useState<string[]>([]); // New state for live tools
+  const [ThinkingTools, setThinkingTools] = useState<string[]>([]);
 
-  // Refs for tracking accumulated state inside listeners
   const thinkingResponseRef = useRef("");
   const thinkingStatusRef = useRef("");
-  const thinkingToolsRef = useRef<string[]>([]); // New ref for tools
+  const thinkingToolsRef = useRef<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -42,6 +40,12 @@ export default function VaronAIPage() {
 
   const token: string = useAuth();
 
+  const generateId = () => {
+    return typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  };
+
   const simulateConnection = () => {
     setIsConnecting(true);
 
@@ -52,6 +56,7 @@ export default function VaronAIPage() {
       toast.success("Connected to Varon AI.", {
         position: "top-right",
         autoClose: 2500,
+        closeOnClick: true,
         theme: isDarkMode ? "dark" : "light",
         transition: Flip,
       });
@@ -64,9 +69,7 @@ export default function VaronAIPage() {
       redirect("/login");
     });
 
-    // Handle Tool Calls
     socket.on("tool-call", (msg: string) => {
-      // Accumulate tool calls in array
       thinkingToolsRef.current = [...thinkingToolsRef.current, msg];
       setThinkingTools(thinkingToolsRef.current);
     });
@@ -84,9 +87,8 @@ export default function VaronAIPage() {
     socket.on("server-reply", (msg: string) => {
       setIsTyping(false);
 
-      // Create message with attached full thinking log AND tools
       const varonMessage = {
-        id: Date.now(),
+        id: generateId(),
         text: msg,
         sender: "varon",
         timestamp: new Date(),
@@ -102,7 +104,6 @@ export default function VaronAIPage() {
 
       setMessages((prev) => [...prev, varonMessage]);
 
-      // Reset state for next message
       setThinkingResponse("");
       setThinkingStatus("");
       setThinkingTools([]);
@@ -118,6 +119,7 @@ export default function VaronAIPage() {
     toast.success("Disconnected from Varon AI.", {
       position: "top-right",
       autoClose: 2000,
+      closeOnClick: true,
       theme: isDarkMode ? "dark" : "light",
       transition: Flip,
     });
@@ -140,7 +142,7 @@ export default function VaronAIPage() {
     const socket = getSocket(token);
 
     const userMessage = {
-      id: Date.now(),
+      id: generateId(),
       text: inputMessage,
       sender: "user",
       timestamp: new Date(),
@@ -152,7 +154,6 @@ export default function VaronAIPage() {
     setInputMessage("");
     setIsTyping(true);
 
-    // Reset thinking logic for new question
     setThinkingResponse("");
     setThinkingStatus("");
     setThinkingTools([]);
@@ -217,7 +218,7 @@ export default function VaronAIPage() {
             isTyping={isTyping}
             ThinkingResponse={ThinkingResponse}
             ThinkingStatus={ThinkingStatus}
-            ThinkingTools={ThinkingTools} // Pass new prop
+            ThinkingTools={ThinkingTools}
           />
         )}
       </main>
