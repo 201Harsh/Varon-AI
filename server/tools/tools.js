@@ -1,4 +1,4 @@
-import CobraAITool from "./team/CobraAI.js";
+import CobraAITool from "../utils/CobraAI";
 
 export const cobraAITool = {
   name: "CobraAI_Website_Builder",
