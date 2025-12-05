@@ -21,7 +21,7 @@ export async function scrapeDuckDuckGo(query) {
         "Sec-Fetch-User": "?1",
       },
     });
-
+    
     const $ = cheerio.load(response.data);
     const results = [];
 
