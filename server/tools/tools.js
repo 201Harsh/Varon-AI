@@ -23,7 +23,9 @@ export const addTool = {
     const sum = a + b;
 
     return {
-      content: [{ type: "text", text: `The sum of ${a} and ${b} is ${sum}` }],
+      content: [
+        { type: "text", text: `**The sum of ${a} and ${b} is ${sum} 🎉**` },
+      ],
       structuredContent: { result: sum },
     };
   },

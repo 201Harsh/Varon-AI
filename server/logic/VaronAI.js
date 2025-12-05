@@ -451,12 +451,15 @@ Use this as your core operating instruction for all Varon AI interactions.`;
           if (thoughtContent) {
             socket.emit("thinking-response", thoughtContent);
           }
-
           continue;
         }
 
         if (part.functionCall) {
-          socket.emit("tool-call", `Calling Tool: ${part.functionCall.name}`);
+          const ToolCall = part.functionCall;
+          socket.emit("tool-call", `Calling Tool: ${ToolCall.name}`);
+          const executor = VaronMcpServer.getExecutor(ToolCall.name);
+          const ToolResult = await executor(ToolCall.args);
+          fullResponseText += ToolResult.content[0].text;
           continue;
         }
 
