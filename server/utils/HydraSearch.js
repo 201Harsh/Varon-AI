@@ -39,8 +39,6 @@ export async function scrapeDuckDuckGo(query) {
       }
     });
 
-    console.log(results);
-
     return results.slice(0, 10);
   } catch (error) {
     console.error("Search Error:", error.message);
