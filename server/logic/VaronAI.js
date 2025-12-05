@@ -461,6 +461,7 @@ Use this as your core operating instruction for all Varon AI interactions.`;
           socket.emit("tool-call", `Calling Tool: ${ToolCall.name}`);
           const executor = VaronMcpServer.getExecutor(ToolCall.name);
           const ToolResult = await executor(ToolCall.args);
+          // console.log(ToolResult);
           fullResponseText += ToolResult.content[0].text;
           continue;
         }

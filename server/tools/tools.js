@@ -1,4 +1,5 @@
-import CobraAITool from "../utils/CobraAI";
+import CobraAITool from "../utils/CobraAI.js";
+import { scrapeDuckDuckGo } from "../utils/HydraSearch.js";
 
 export const cobraAITool = {
   name: "CobraAI_Website_Builder",
@@ -55,5 +56,66 @@ export const cobraAITool = {
         result: cobraOutput,
       },
     };
+  },
+};
+
+export const hydraSearchTool = {
+  name: "HydraSearch",
+
+  config: {
+    title: "HydraSearch — Web Research Engine",
+    description:
+      "Perform fast and reliable web research using Hydra Search Created for Varon AI. Returns top 10 results including title, link, and snippet.",
+
+    parameters: {
+      type: "object",
+      properties: {
+        query: {
+          type: "string",
+          description: "The search query HydraSearch should research.",
+        },
+      },
+      required: ["query"],
+    },
+  },
+
+  execute: async ({ query }) => {
+    try {
+      const results = await scrapeDuckDuckGo(query);
+
+      const formattedText =
+        `🟣 **HydraSearch — Results for:** \`${query}\`\n\n` +
+        results
+          .map((r, i) => `**${i + 1}. ${r.title}**\n${r.link}\n${r.snippet}\n`)
+          .join("\n");
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: formattedText,
+          },
+        ],
+
+        structuredContent: {
+          query,
+          results,
+        },
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `❌ HydraSearch Error: Unable to fetch results for "${query}".`,
+          },
+        ],
+        structuredContent: {
+          query,
+          results: [],
+          error: error.message,
+        },
+      };
+    }
   },
 };

@@ -63,9 +63,14 @@ export default function VaronAIPage() {
     };
 
     const onConnectError = (err: any) => {
-      toast.error(err.message, { theme: isDarkMode ? "dark" : "light" });
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 2500,
+        closeOnClick: true,
+        theme: isDarkMode ? "dark" : "light",
+      });
       setIsConnecting(false);
-      if (err.message === "AUTH_REQUIRED") redirect("/login");
+      redirect("/login");
     };
 
     const onToolCall = (msg: string) => {
