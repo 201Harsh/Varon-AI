@@ -119,3 +119,93 @@ export const hydraSearchTool = {
     }
   },
 };
+
+export const viperCartTool = {
+  name: "ViperCart",
+
+  config: {
+    title: "ViperCart — E-commerce Product Search",
+    description:
+      "Search for products on Amazon and other e-commerce sites using ViperCart. Returns top 10 product listings including clean titles, links, and descriptions. Bypasses blocking by using smart search proxies.",
+
+    parameters: {
+      type: "object",
+      properties: {
+        query: {
+          type: "string",
+          description:
+            "The product name to search for (e.g., 'iPhone 15 Case', 'Nike Shoes').",
+        },
+      },
+      required: ["query"],
+    },
+  },
+
+  execute: async ({ query }) => {
+    try {
+      const amazonQuery = `site:amazon.com  ${query}`;
+      const results = await scrapeDuckDuckGo(amazonQuery);
+
+      if (results.length === 0) {
+        return {
+          content: [{ type: "text", text: "No products found on Amazon." }],
+          structuredContent: { query, results: [], status: "empty" },
+        };
+      }
+
+      const cleanedResults = results.map((r) => {
+        const cleanTitle = r.title
+          .replace(/^Amazon\.com\s*[:|-]\s*/i, "")
+          .replace(/\s*[:|-]\s*Amazon\.com$/i, "")
+          .trim();
+
+        return {
+          ...r,
+          title: cleanTitle,
+        };
+      });
+
+      const formattedText =
+        `🛒 **ViperCart — E-commerce Results for:** \`${query}\`\n\n` +
+        cleanedResults
+          .map(
+            (r, i) =>
+              `**${i + 1}. ${r.title}**\n🔗 [View Product](${r.link})\n📝 ${
+                r.snippet
+              }\n`
+          )
+          .join("\n");
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: formattedText,
+          },
+        ],
+
+        structuredContent: {
+          query,
+          results: cleanedResults,
+          count: cleanedResults.length,
+          status: "success",
+        },
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `❌ ViperCart Error: Unable to fetch products for "${query}".`,
+          },
+        ],
+        structuredContent: {
+          query,
+          results: [],
+          error: error.message,
+          status: "error",
+        },
+      };
+    }
+  },
+};
