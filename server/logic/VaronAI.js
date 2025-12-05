@@ -18,6 +18,8 @@ async function ModelVaronAI({ prompt, socket }) {
     },
   ];
 
+  // console.log(toolsConfiguration[0].functionDeclarations)
+
   const systemInstruction = `
 # ⚡ Varon AI — Intelligent Multi-Agent Personal Assistant
 

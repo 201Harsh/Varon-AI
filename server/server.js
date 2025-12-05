@@ -5,10 +5,14 @@ import { Server } from "socket.io";
 import ConnectToDB from "./config/db.js";
 import socketVaron from "./connections/socketVaron.js";
 import { socketAuth } from "./middlewares/socketAuth.middleware.js";
-import { addTool } from "./tools/tools.js";
+import { cobraAITool } from "./tools/tools.js";
 import VaronMcpServer from "./connections/VaronMcpServer.js";
 
-VaronMcpServer.registerTool(addTool.name, addTool.config, addTool.execute);
+VaronMcpServer.registerTool(
+  cobraAITool.name,
+  cobraAITool.config,
+  cobraAITool.execute
+);
 
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
