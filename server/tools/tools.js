@@ -86,8 +86,15 @@ export const hydraSearchTool = {
       const formattedText =
         `🟣 **HydraSearch — Results for:** \`${query}\`\n\n` +
         results
-          .map((r, i) => `**${i + 1}. ${r.title}**\n${r.link}\n${r.snippet}\n`)
+          .map(
+            (r, i) =>
+              `**${i + 1}. ${r.title}**\n🔗 [View HydraSearch Page](${
+                r.link
+              })\n📝${r.snippet}\n`
+          )
           .join("\n");
+
+      console.log(formattedText);
 
       return {
         content: [

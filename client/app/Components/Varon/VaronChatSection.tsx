@@ -495,7 +495,7 @@ const MessageItem = ({
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-500 hover:text-blue-400 hover:underline transition-colors cursor-pointer break-all"
+                    className="px-1.5 py-0.5 -mx-1 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 hover:shadow-sm transition-all duration-200 font-medium break-all border border-transparent hover:border-blue-200"
                   >
                     {children}
                   </a>
