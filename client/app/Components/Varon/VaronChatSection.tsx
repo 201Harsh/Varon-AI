@@ -148,9 +148,11 @@ const CodeBlock = ({
 const ToolInvocation = ({
   tools,
   isDarkMode,
+  status,
 }: {
   tools: string[];
   isDarkMode: boolean;
+  status: string;
 }) => {
   if (!tools || tools.length === 0) return null;
 
@@ -168,8 +170,8 @@ const ToolInvocation = ({
           }`}
         >
           <HiWrenchScrewdriver className="text-sm" />
-          <span>{tool.replace("Calling Tool:", "Using tool:")}</span>
-          <span className="ml-auto text-[10px] opacity-60">Completed</span>
+          <span>{tool.replace("Calling Tool:", "Varon tool:")}</span>
+          <span className="ml-auto text-[10px] opacity-60">{status}</span>
         </motion.div>
       ))}
     </div>
@@ -422,10 +424,6 @@ const MessageItem = ({
             {message.sender === "varon" ? "" : "You"}
           </span>
 
-          {!isUser && message.tools && (
-            <ToolInvocation tools={message.tools} isDarkMode={isDarkMode} />
-          )}
-
           {!isUser && message.thinking && (
             <ThinkingProcess
               response={message.thinking.response}
@@ -559,6 +557,14 @@ const MessageItem = ({
               />
             )}
           </div>
+
+          {!isUser && message.tools && (
+            <ToolInvocation
+              tools={message.tools}
+              isDarkMode={isDarkMode}
+              status={"Completed"}
+            />
+          )}
 
           {!isUser && !isTyping && (
             <motion.div
@@ -794,6 +800,7 @@ const VaronChatSection = ({
                     <ToolInvocation
                       tools={ThinkingTools}
                       isDarkMode={isDarkMode}
+                      status={"In Progress"}
                     />
                   )}
 
