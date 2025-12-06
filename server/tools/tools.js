@@ -3,10 +3,10 @@ import { scrapeDuckDuckGo } from "../utils/HydraSearch.js";
 import NovaFlowTool from "../utils/NovaFlow.js";
 
 export const cobraAITool = {
-  name: "CobraAI_Website_Builder",
+  name: "CobraAI",
 
   config: {
-    title: "Cobra AI Frontend Builder",
+    title: "Cobra AI — Frontend Code Generator",
     description:
       "Generate complete frontend components, sections, UI layouts, pages, or full websites using Cobra AI's elite Next.js + React + Tailwind + GSAP + Framer Motion expertise.",
 
@@ -220,7 +220,7 @@ export const viperCartTool = {
 
 
 export const novaFlow = {
-  name: "NovaFlow_Project_Architect",
+  name: "NovaFlow",
 
   config: {
     title: "NovaFlow — Project Architecture & System Blueprinting",
