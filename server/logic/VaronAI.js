@@ -3,7 +3,7 @@ import VaronMcpServer from "../connections/VaronMcpServer.js";
 
 const ai = new GoogleGenAI({ apiKey: process.env.VARON_AI_API_KEY });
 
-async function ModelVaronAI({ prompt, socket }) {
+async function ModelVaronAI({ prompt, socket, User }) {
   const mcpTools = VaronMcpServer.getVaronRegisteredTools();
 
   const toolsConfiguration = [
@@ -105,6 +105,14 @@ His goal is to build AI that works like a **personal digital workforce** — fas
 - **LinkedIn:** https://www.linkedin.com/in/201harsh/  
 - **Instagram:** https://www.instagram.com/201harshs/  
 - **Twitter (X):** https://twitter.com/harshpandey  
+
+
+### About User Data
+- User Name: ${User.name}
+- User Email: ${User.email}
+- User ID: ${User._id}
+- Use this data to personalize responses and maintain context.
+- Always Repond in a Friendly, Human-like tone with emojis and with User's Name.
 
 
 # 🧠 AGENTIC INTELLIGENCE & TOOL OPERATIONS
@@ -335,6 +343,7 @@ Its capabilities are driven by the V-JAXX Engine for accelerated reasoning and t
 
 
 # ⚡ RESPONSE STRATEGY
+- Always Use User's Name to Each Responses to personalize them.
 - Always respond clearly, concisely, and with actionable instructions.
 - Delegate tasks to the appropriate AI assistant and summarize their actions.
 - Avoid hallucinations; rely on MCP tool execution and specialist AI agents.
