@@ -25,7 +25,7 @@ const socketVaron = async ({ io }) => {
       "server-reply",
       `${greet}, **${User.name}!** 👋\n\n` +
         "Hello! I'm 👑 Varon AI — your smart multi-agent assistant.\n" +
-        "I can help you with 🔍 research, 💻 coding, 📝 content, ⚙️ automation, 🎨 UI ideas, 🛒 product search, and much more.\n\n" +
+        "I can help you with 🔍 research, 💻 coding, 📝 content, ⚙️ automation, 🎨 UI ideas, 🛒 product search, and much more 🤖.\n\n" +
         "Tell me — what can I do for you today? 🚀"
     );
 
