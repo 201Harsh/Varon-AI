@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.VARON_AI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.VARON_AI_TEAM_API_KEY });
 
 async function CobraAITool({ prompt }) {
   const systemInstructions = `# ============================================================

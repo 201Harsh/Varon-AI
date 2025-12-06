@@ -5,7 +5,12 @@ import { Server } from "socket.io";
 import ConnectToDB from "./config/db.js";
 import socketVaron from "./connections/socketVaron.js";
 import { socketAuth } from "./middlewares/socketAuth.middleware.js";
-import { cobraAITool, hydraSearchTool, viperCartTool } from "./tools/tools.js";
+import {
+  cobraAITool,
+  hydraSearchTool,
+  novaFlow,
+  viperCartTool,
+} from "./tools/tools.js";
 import VaronMcpServer from "./connections/VaronMcpServer.js";
 
 VaronMcpServer.registerTool(
@@ -25,6 +30,8 @@ VaronMcpServer.registerTool(
   viperCartTool.config,
   viperCartTool.execute
 );
+
+VaronMcpServer.registerTool(novaFlow.name, novaFlow.config, novaFlow.execute);
 
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;

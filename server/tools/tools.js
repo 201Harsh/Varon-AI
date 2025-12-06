@@ -1,5 +1,6 @@
 import CobraAITool from "../utils/CobraAI.js";
 import { scrapeDuckDuckGo } from "../utils/HydraSearch.js";
+import NovaFlowTool from "../utils/NovaFlow.js";
 
 export const cobraAITool = {
   name: "CobraAI_Website_Builder",
@@ -214,5 +215,48 @@ export const viperCartTool = {
         },
       };
     }
+  },
+};
+
+
+export const novaFlow = {
+  name: "NovaFlow_Project_Architect",
+
+  config: {
+    title: "NovaFlow — Project Architecture & System Blueprinting",
+    description:
+      "Generate complete system blueprints, diagrams, workflows, and architecture plans using NovaFlow — the Master Architect of Varon AI.",
+
+    parameters: {
+      type: "object",
+      properties: {
+        plan: {
+          type: "string",
+          description:
+            "Describe what NovaFlow should architect. A project idea, system concept, feature, product, or workflow.",
+        },
+      },
+      required: ["plan"],
+    },
+  },
+
+  execute: async ({ plan }) => {
+    const blueprint = await NovaFlowTool({ plan });
+
+    const output =
+      `NovaFlow successfully generated an advanced multi-layer blueprint.\n\n` +
+      `${blueprint}`;
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: `🧠 **NovaFlow – Architecture Blueprint Generated**\n\n${output}`,
+        },
+      ],
+      structuredContent: {
+        result: blueprint,
+      },
+    };
   },
 };
