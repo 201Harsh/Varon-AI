@@ -356,7 +356,6 @@ const ThinkingProcess = ({
 const MessageItem = ({
   message,
   isDarkMode,
-  isLastMessage,
   isTyping,
 }: {
   message: any;
@@ -490,7 +489,7 @@ const MessageItem = ({
           )}
 
           <div
-            className={`rounded-2xl px-5 py-3.5 text-[15px] leading-relaxed relative group max-w-full overflow-hidden ${
+            className={`rounded-2xl px-5 py-3.5 text-[16px] leading-relaxed relative group max-w-full overflow-hidden ${
               isUser
                 ? isDarkMode
                   ? "bg-gray-800 text-white"
