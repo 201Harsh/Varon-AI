@@ -148,30 +148,86 @@ const CodeBlock = ({
 const ToolInvocation = ({
   tools,
   isDarkMode,
-  status,
+  isLive = false,
 }: {
   tools: string[];
   isDarkMode: boolean;
-  status: string;
+  isLive?: boolean;
 }) => {
   if (!tools || tools.length === 0) return null;
 
   return (
-    <div className="w-full mb-2 max-w-[95%] md:max-w-[85%]">
+    <div className="w-full mb-3 max-w-[95%] md:max-w-full flex flex-col gap-2">
       {tools.map((tool, idx) => (
         <motion.div
           key={idx}
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`flex items-center gap-2 text-xs font-mono py-2 px-3 rounded-lg mb-1 border ${
+          className={`relative flex items-center gap-3 py-3 px-4 rounded-xl border overflow-hidden ${
             isDarkMode
-              ? "bg-blue-900/10 border-blue-800 text-blue-300"
-              : "bg-blue-50 border-blue-100 text-blue-600"
+              ? "bg-[#1e1e1f] border-emerald-800 text-emerald-200"
+              : "bg-white border-emerald-100 text-emerald-700 shadow-sm"
           }`}
         >
-          <HiWrenchScrewdriver className="text-sm" />
-          <span>{tool.replace("Calling Tool:", "Varon tool:")}</span>
-          <span className="ml-auto text-[10px] opacity-60">{status}</span>
+          {isLive && (
+            <motion.div
+              className={`absolute bottom-0 left-0 h-0.5 ${
+                isDarkMode ? "bg-emerald-500" : "bg-emerald-400"
+              }`}
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          )}
+
+          <div
+            className={`p-1.5 rounded-lg shrink-0 ${
+              isLive
+                ? isDarkMode
+                  ? "bg-emerald-500/20 text-emerald-400"
+                  : "bg-emerald-50 text-emerald-600"
+                : isDarkMode
+                ? "bg-emerald-800 text-gray-100"
+                : "bg-emerald-100 text-emerald-500"
+            }`}
+          >
+            {isLive ? (
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+              >
+                <HiWrenchScrewdriver className="text-sm" />
+              </motion.div>
+            ) : (
+              <HiWrenchScrewdriver className="text-sm" />
+            )}
+          </div>
+
+          <div className="flex flex-col min-w-0 flex-1">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono opacity-60 uppercase tracking-wider">
+                {isLive ? "Varon AI System" : "Varon Called Tool :-"}
+              </span>
+              <span
+                className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                  isLive
+                    ? "bg-emerald-500/10 text-emerald-500"
+                    : isDarkMode
+                    ? "bg-emerald-800 text-gray-100"
+                    : "bg-emerald-100 text-emerald-500"
+                }`}
+              >
+                {isLive ? "Running..." : "Completed"}
+              </span>
+            </div>
+            <span className="font-semibold text-sm truncate mt-0.5">
+              {tool.replace("Calling Tool:", "").trim()}
+            </span>
+          </div>
         </motion.div>
       ))}
     </div>
@@ -471,7 +527,6 @@ const MessageItem = ({
                     </code>
                   );
                 },
-                // Headings
                 h1: ({ children }) => (
                   <h1 className="text-2xl font-bold mb-4 mt-6 border-b pb-2 border-gray-500/20">
                     {children}
@@ -548,21 +603,13 @@ const MessageItem = ({
             >
               {message.text}
             </ReactMarkdown>
-
-            {!isUser && isLastMessage && isTyping && (
-              <motion.span
-                animate={{ opacity: [0, 1, 0] }}
-                transition={{ repeat: Infinity, duration: 0.8 }}
-                className="inline-block w-2 h-5 bg-emerald-500 align-sub ml-1"
-              />
-            )}
           </div>
 
           {!isUser && message.tools && (
             <ToolInvocation
               tools={message.tools}
               isDarkMode={isDarkMode}
-              status={"Completed"}
+              isLive={false}
             />
           )}
 
@@ -796,14 +843,6 @@ const VaronChatSection = ({
                 </div>
 
                 <div className="flex flex-col flex-1 min-w-0">
-                  {ThinkingTools && ThinkingTools.length > 0 && (
-                    <ToolInvocation
-                      tools={ThinkingTools}
-                      isDarkMode={isDarkMode}
-                      status={"In Progress"}
-                    />
-                  )}
-
                   {(ThinkingResponse || ThinkingStatus) && (
                     <ThinkingProcess
                       response={ThinkingResponse}
@@ -820,6 +859,14 @@ const VaronChatSection = ({
                         <TypingStatus text="Thinking" />
                       </div>
                     )}
+
+                  {ThinkingTools && ThinkingTools.length > 0 && (
+                    <ToolInvocation
+                      tools={ThinkingTools}
+                      isDarkMode={isDarkMode}
+                      isLive={true}
+                    />
+                  )}
                 </div>
               </div>
             </motion.div>
