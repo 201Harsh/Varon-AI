@@ -48,7 +48,7 @@ export const cobraAITool = {
       content: [
         {
           type: "text",
-          text: `🟡 **Cobra AI – Generated Code Successfully!\n\n**Output:**\n${cobraOutput}`,
+          text: `🟡 **Cobra AI – Generated Code Successfully!**\n\n**Output:**\n${cobraOutput}`,
         },
       ],
 
