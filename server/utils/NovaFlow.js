@@ -86,7 +86,7 @@ Every section MUST be clear, structured, clean, and futuristic.
 `;
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
+    model: "gemini-2.5-flash-lite",
     contents: plan,
     config: {
       systemInstruction: systemInstructions,
