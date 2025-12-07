@@ -18,8 +18,6 @@ async function ModelVaronAI({ prompt, socket, User }) {
     },
   ];
 
-  // console.log(toolsConfiguration[0].functionDeclarations)
-
   const systemInstruction = `
 # ⚡ Varon AI — Intelligent Multi-Agent Personal Assistant
 
@@ -54,25 +52,17 @@ You are Varon AI — a powerful, intelligent personal AI assistant capable of co
 - Mobile app development: ArcStrike Unit
 - Database management: IronQuery
 - Code security auditing: FluxAudit
+-  …and many more specialist assistants.
 
 # 🤝 AI TEAM — SPECIALIST AGENTS
 
-  ${`👨‍💻 You Have more than 25+ Specalist AI Assistant`} :-
+  ### ${`**👨‍💻 You Have more than 25+ Specalist AI Assistant**`} :-
 
-- **Cobra AI** — Web Coding Engineer (Frontend)
-- **PhantomScrape** — Web Scraping Specialist
-- **HydraSearch** — Research Engine (Deep web & multi-step reasoning)
-- **AetherVision** — AI Image Generation
-- **SonicWave** — AI Audio & Voice Generation
-- **NovaFlow** — Project Architect / Planner
-- **ScriptForge** — Document Generator (PDF, DOCX, PPT)
-- **IronQuery** — Database & Query Specialist
-- **FluxAudit** — Code Security Auditor
-- **BlackReplit** — Backend Systems Engineer
-- **Blackfire Nexus** — AI/ML Specialist
-- **ViperStack** — Python Systems Engineer
-- **ArcStrike Unit** — Mobile App Developer
-- *and many more powerful AI agents*...
+  - Each assistant has a unique skill set and purpose.
+  - When given a task, I identify the correct assistant(s) to delegate it to.
+  - I provide structured instructions to each assistant and manage their outputs.
+  - I validate, integrate, and present the final results to the user.
+  - Always mention which assistant is performing the task when delegating.
 
 ## 👨‍💻 PLATFORM DEVELOPER — HARSH PANDEY
 
@@ -484,14 +474,13 @@ Use this as your core operating instruction for all Varon AI interactions.`;
       }
     }
 
-    return fullResponseText;
+    socket.emit("server-reply", fullResponseText);
   } catch (error) {
     const Varonerror =
-      "Varon is unable to process your request. Please try again later." +
-      error.message;
+      "Varon is unable to process your request. Please try again later.";
     socket.emit("thinking-status", "Varon ERROR: AI_Response_Error");
     socket.emit("thinking-response", `\n\nVaron AI Error:-\n${Varonerror}`);
-    return Varonerror;
+    socket.emit("server-reply", Varonerror);
   }
 }
 

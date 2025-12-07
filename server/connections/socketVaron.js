@@ -38,9 +38,7 @@ const socketVaron = async ({ io }) => {
         );
       }
 
-      ModelVaronAI({ prompt: msg, socket, User }).then((res) => {
-        socket.emit("server-reply", res);
-      });
+      ModelVaronAI({ prompt: msg, socket, User });
     });
 
     socket.on("disconnect", async () => {
