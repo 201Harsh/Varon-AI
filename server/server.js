@@ -6,6 +6,7 @@ import ConnectToDB from "./config/db.js";
 import socketVaron from "./connections/socketVaron.js";
 import { socketAuth } from "./middlewares/socketAuth.middleware.js";
 import {
+  blackReplitTool,
   cobraAITool,
   fluxAuditTool,
   hydraSearchTool,
@@ -49,6 +50,12 @@ VaronMcpServer.registerTool(
   fluxAuditTool.name,
   fluxAuditTool.config,
   fluxAuditTool.execute
+);
+
+VaronMcpServer.registerTool(
+  blackReplitTool.name,
+  blackReplitTool.config,
+  blackReplitTool.execute
 );
 
 const server = http.createServer(app);

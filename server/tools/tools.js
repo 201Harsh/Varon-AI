@@ -1,3 +1,4 @@
+import BlackReplit from "../utils/BlackReplit.js";
 import CobraAITool from "../utils/CobraAI.js";
 import FluxAudit from "../utils/FluxAudit.js";
 import { scrapeDuckDuckGo } from "../utils/HydraSearch.js";
@@ -412,6 +413,60 @@ export const fluxAuditTool = {
             `**Language:** ${language || "auto"}\n` +
             `**Depth:** ${depth || "full"}\n\n` +
             `**Audit Output:**\n${outputMessage}`,
+        },
+      ],
+
+      structuredContent: {
+        result: outputMessage,
+      },
+    };
+  },
+};
+
+export const blackReplitTool = {
+  name: "BlackReplit",
+
+  config: {
+    title: "BlackReplit — Backend Systems Engineer",
+    description:
+      "BlackReplit builds, debugs, optimizes, and architects backend systems (Node.js, Express, FastAPI, Go, Rust, PHP, Java, microservices, APIs, authentication, security, deployments). Perfect for API creation, backend debugging, architecture planning, and teaching backend fundamentals.",
+
+    parameters: {
+      type: "object",
+      properties: {
+        task: {
+          type: "string",
+          description:
+            "Type of backend work BlackReplit should perform (API creation, debugging, optimization, architecture, etc.).",
+        },
+
+        language: {
+          type: "string",
+          description:
+            "Backend language/framework (Node.js, Express, FastAPI, Go, Rust, Laravel, Spring Boot, etc.).",
+        },
+      },
+      required: ["task"],
+    },
+  },
+
+  execute: async ({ task, language }) => {
+    const result = await BlackReplit({
+      task,
+      language,
+    });
+
+    const outputMessage = `BlackReplit completed task: ${task}\n\n${result}`;
+
+    return {
+      content: [
+        {
+          type: "text",
+          text:
+            `🟦 **BlackReplit – Backend Task Completed Successfully!**\n\n` +
+            `**Task:** ${task}\n` +
+            `**Language:** ${language || "auto"}\n\n` +
+            `**Output:**\n${outputMessage}`,
         },
       ],
 
