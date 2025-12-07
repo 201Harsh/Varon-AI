@@ -770,7 +770,7 @@ export const chronosTool = {
       const data = await getRealTimeData(location);
 
       const formattedText = `
-🌍 **Chronos Report: ${`location`}**
+🌍 \`Chronos Report: ${location}\`
 
 🕒 **Time:** ${data.time} (${data.timezone})
 -------------------------------------
