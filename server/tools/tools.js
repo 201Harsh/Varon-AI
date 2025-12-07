@@ -3,6 +3,7 @@ import BlackFire from "../utils/BlackFireNexus.js";
 import BlackReplit from "../utils/BlackReplit.js";
 import CobraAITool from "../utils/CobraAI.js";
 import FluxAudit from "../utils/FluxAudit.js";
+import { getRealTimeData } from "../utils/GetRealTimeUpdates.js";
 import { scrapeDuckDuckGo } from "../utils/HydraSearch.js";
 import IronQuery from "../utils/IronQuery.js";
 import NovaFlowTool from "../utils/NovaFlow.js";
@@ -740,5 +741,70 @@ export const arcStrikeUnitTool = {
         result,
       },
     };
+  },
+};
+
+export const chronosTool = {
+  name: "Chronos",
+
+  config: {
+    title: "Chronos — Real-Time Time & Weather",
+    description:
+      "Get the current local time, date, and weather conditions for any city or location in the world.",
+
+    parameters: {
+      type: "object",
+      properties: {
+        location: {
+          type: "string",
+          description:
+            "The city or location name (e.g., 'New York', 'Paris', 'Tokyo').",
+        },
+      },
+      required: ["location"],
+    },
+  },
+
+  execute: async ({ location }) => {
+    try {
+      const data = await getRealTimeData(location);
+
+      const formattedText = `
+🌍 **Chronos Report: ${`location`}**
+
+🕒 **Time:** ${data.time} (${data.timezone})
+-------------------------------------
+🌤 **Weather:** ${data.condition}
+🌡 **Temp:** ${data.temperature} (High: ${data.high} / Low: ${data.low})
+💧 **Humidity:** ${data.humidity}
+💨 **Wind:** ${data.wind}
+`;
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: formattedText,
+          },
+        ],
+        structuredContent: {
+          status: "success",
+          data: data,
+        },
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `❌ Chronos Error: Unable to fetch data for "${location}". Reason: ${error.message}`,
+          },
+        ],
+        structuredContent: {
+          status: "error",
+          error: error.message,
+        },
+      };
+    }
   },
 };

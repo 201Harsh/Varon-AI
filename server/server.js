@@ -9,6 +9,7 @@ import {
   arcStrikeUnitTool,
   blackFireAITool,
   blackReplitTool,
+  chronosTool,
   cobraAITool,
   fluxAuditTool,
   hydraSearchTool,
@@ -84,6 +85,12 @@ VaronMcpServer.registerTool(
   arcStrikeUnitTool.name,
   arcStrikeUnitTool.config,
   arcStrikeUnitTool.execute
+);
+
+VaronMcpServer.registerTool(
+  chronosTool.name,
+  chronosTool.config,
+  chronosTool.execute
 );
 
 const server = http.createServer(app);
