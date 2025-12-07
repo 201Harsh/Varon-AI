@@ -6,6 +6,7 @@ import ConnectToDB from "./config/db.js";
 import socketVaron from "./connections/socketVaron.js";
 import { socketAuth } from "./middlewares/socketAuth.middleware.js";
 import {
+  blackFireAITool,
   blackReplitTool,
   cobraAITool,
   fluxAuditTool,
@@ -63,6 +64,12 @@ VaronMcpServer.registerTool(
   phantomScraperTool.name,
   phantomScraperTool.config,
   phantomScraperTool.execute
+);
+
+VaronMcpServer.registerTool(
+  blackFireAITool.name,
+  blackFireAITool.config,
+  blackFireAITool.execute
 );
 
 const server = http.createServer(app);

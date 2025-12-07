@@ -1,3 +1,4 @@
+import BlackFire from "../utils/BlackFireNexus.js";
 import BlackReplit from "../utils/BlackReplit.js";
 import CobraAITool from "../utils/CobraAI.js";
 import FluxAudit from "../utils/FluxAudit.js";
@@ -535,6 +536,60 @@ export const phantomScraperTool = {
         ],
         structuredContent: {
           url,
+          status: "error",
+          error: error.message,
+        },
+      };
+    }
+  },
+};
+
+export const blackFireAITool = {
+  name: "BlackFireAI",
+
+  config: {
+    title: "BlackFire AI — ML / DL / GenAI Master Instructor",
+    description:
+      "A dedicated teaching engine that explains, guides, and mentors users in Machine Learning, Deep Learning, and Generative AI. Provides structured lessons, concepts, architectures, code examples, intuitions, and step-by-step educational breakdowns.",
+
+    parameters: {
+      type: "object",
+      properties: {
+        input: {
+          type: "string",
+          description:
+            "Raw ML content such as dataset samples, logs, architecture, metrics, training output, stack trace, or any ML-related data.",
+        },
+      },
+      required: ["input"],
+    },
+  },
+
+  execute: async ({ input }) => {
+    try {
+      const result = await BlackFire({ input });
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: result,
+          },
+        ],
+        structuredContent: {
+          status: "success",
+          length: result.length,
+        },
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `❌ BlackFireAI Error: ${error.message}`,
+          },
+        ],
+        structuredContent: {
           status: "error",
           error: error.message,
         },
