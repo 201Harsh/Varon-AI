@@ -7,9 +7,10 @@ import socketVaron from "./connections/socketVaron.js";
 import { socketAuth } from "./middlewares/socketAuth.middleware.js";
 import {
   cobraAITool,
+  fluxAuditTool,
   hydraSearchTool,
-  IronQuery,
-  novaFlow,
+  IronQueryTool,
+  novaFlowTool,
   viperCartTool,
 } from "./tools/tools.js";
 import VaronMcpServer from "./connections/VaronMcpServer.js";
@@ -32,12 +33,22 @@ VaronMcpServer.registerTool(
   viperCartTool.execute
 );
 
-VaronMcpServer.registerTool(novaFlow.name, novaFlow.config, novaFlow.execute);
+VaronMcpServer.registerTool(
+  novaFlowTool.name,
+  novaFlowTool.config,
+  novaFlowTool.execute
+);
 
 VaronMcpServer.registerTool(
-  IronQuery.name,
-  IronQuery.config,
-  IronQuery.execute
+  IronQueryTool.name,
+  IronQueryTool.config,
+  IronQueryTool.execute
+);
+
+VaronMcpServer.registerTool(
+  fluxAuditTool.name,
+  fluxAuditTool.config,
+  fluxAuditTool.execute
 );
 
 const server = http.createServer(app);

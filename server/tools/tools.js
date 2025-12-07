@@ -1,6 +1,7 @@
 import CobraAITool from "../utils/CobraAI.js";
+import FluxAudit from "../utils/FluxAudit.js";
 import { scrapeDuckDuckGo } from "../utils/HydraSearch.js";
-import IronQueryTool from "../utils/IronQuery.js";
+import IronQuery from "../utils/IronQuery.js";
 import NovaFlowTool from "../utils/NovaFlow.js";
 
 export const cobraAITool = {
@@ -219,7 +220,7 @@ export const viperCartTool = {
   },
 };
 
-export const novaFlow = {
+export const novaFlowTool = {
   name: "NovaFlow",
 
   config: {
@@ -261,7 +262,7 @@ export const novaFlow = {
   },
 };
 
-export const IronQuery = {
+export const IronQueryTool = {
   name: "IronQuery",
 
   config: {
@@ -284,7 +285,7 @@ export const IronQuery = {
             "translate_sql_to_nosql",
             "translate_nosql_to_sql",
             "index_strategy",
-            "comparison_sql_vs_nosql"
+            "comparison_sql_vs_nosql",
           ],
           description:
             "Type of task IronQuery should perform (query writing, debugging, schema design, teaching, etc.).",
@@ -302,7 +303,7 @@ export const IronQuery = {
             "cassandra",
             "firebase",
             "redis",
-            "general"
+            "general",
           ],
           description:
             "Database type IronQuery should operate on. Defaults to 'general'.",
@@ -325,7 +326,7 @@ export const IronQuery = {
   },
 
   execute: async ({ task, database, input, context }) => {
-    const result = await IronQueryTool({
+    const result = await IronQuery({
       task,
       database,
       input,
@@ -353,3 +354,70 @@ export const IronQuery = {
   },
 };
 
+export const fluxAuditTool = {
+  name: "FluxAudit",
+
+  config: {
+    title: "FluxAudit — Enterprise-Grade Code Security Auditor",
+    description:
+      "FluxAudit analyzes, detects, explains, and fixes security vulnerabilities in any programming language. Supports JavaScript, TypeScript, Python, SQL, PHP, Java, C++, Rust, Go, Swift, and more. Ideal for full security audits, vulnerability detection, code hardening, and secure refactoring.",
+
+    parameters: {
+      type: "object",
+      properties: {
+        language: {
+          type: "string",
+          description:
+            "The language of the code being analyzed. If unknown, FluxAudit will auto-detect.",
+        },
+
+        depth: {
+          type: "string",
+          enum: ["light", "medium", "full"],
+          description:
+            "How deeply FluxAudit should scan the code. Default is 'full'.",
+        },
+
+        code: {
+          type: "string",
+          description: "The code snippet or full file FluxAudit must audit.",
+        },
+
+        context: {
+          type: "string",
+          description:
+            "Optional: Additional details about environment, frameworks, dependencies, or expected behavior.",
+        },
+      },
+      required: ["code"],
+    },
+  },
+
+  execute: async ({ code, language, depth, context }) => {
+    const result = await FluxAudit({
+      code,
+      language,
+      depth,
+      context,
+    });
+
+    const outputMessage = `FluxAudit completed the audit.\n\n${result}`;
+
+    return {
+      content: [
+        {
+          type: "text",
+          text:
+            `🔻 **FluxAudit – Security Audit Complete**\n\n` +
+            `**Language:** ${language || "auto"}\n` +
+            `**Depth:** ${depth || "full"}\n\n` +
+            `**Audit Output:**\n${outputMessage}`,
+        },
+      ],
+
+      structuredContent: {
+        result: outputMessage,
+      },
+    };
+  },
+};

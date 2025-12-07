@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: process.env.VARON_AI_TEAM_API_KEY });
 
-async function IronQueryTool({
+async function IronQuery({
   task,
   database = "general",
   input,
@@ -174,4 +174,4 @@ It ensures every decision is based on solid database theory, practical industry 
   }
 }
 
-export default IronQueryTool;
+export default IronQuery;
