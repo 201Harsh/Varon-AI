@@ -4,6 +4,15 @@ import VaronMcpServer from "../connections/VaronMcpServer.js";
 const ai = new GoogleGenAI({ apiKey: process.env.VARON_AI_API_KEY1 });
 
 async function ModelVaronAI({ prompt, socket, User }) {
+  if (!prompt) {
+    socket.emit("server-reply", "Please provide a valid prompt.");
+    return;
+  }
+  if (!User) {
+    socket.emit("server-reply", "Please login to use Varon AI.");
+    return;
+  }
+
   const mcpTools = VaronMcpServer.getVaronRegisteredTools();
 
   const toolsConfiguration = [
