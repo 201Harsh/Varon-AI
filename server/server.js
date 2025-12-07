@@ -6,6 +6,7 @@ import ConnectToDB from "./config/db.js";
 import socketVaron from "./connections/socketVaron.js";
 import { socketAuth } from "./middlewares/socketAuth.middleware.js";
 import {
+  arcStrikeUnitTool,
   blackFireAITool,
   blackReplitTool,
   cobraAITool,
@@ -77,6 +78,12 @@ VaronMcpServer.registerTool(
   viperStackTool.name,
   viperStackTool.config,
   viperStackTool.execute
+);
+
+VaronMcpServer.registerTool(
+  arcStrikeUnitTool.name,
+  arcStrikeUnitTool.config,
+  arcStrikeUnitTool.execute
 );
 
 const server = http.createServer(app);

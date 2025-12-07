@@ -1,3 +1,4 @@
+import ArcStrickUnit from "../utils/ArcStrickUnit.js";
 import BlackFire from "../utils/BlackFireNexus.js";
 import BlackReplit from "../utils/BlackReplit.js";
 import CobraAITool from "../utils/CobraAI.js";
@@ -662,6 +663,81 @@ export const viperStackTool = {
       ],
       structuredContent: {
         result: outputText,
+      },
+    };
+  },
+};
+
+export const arcStrikeUnitTool = {
+  name: "ArcStrikeUnit",
+
+  config: {
+    title: "ArcStrike Unit — Mobile App Developer & Cross-Platform Engineer",
+    description:
+      "Build, debug, optimize, and teach mobile development using React Native (default), Expo, Flutter, Android (Kotlin), and iOS (Swift).",
+
+    parameters: {
+      type: "object",
+      properties: {
+        task: {
+          type: "string",
+          enum: [
+            "create_screen",
+            "build_component",
+            "optimize_code",
+            "debug_issue",
+            "teach_mobile",
+            "architecture_design",
+            "write_native_android",
+            "write_native_ios",
+            "write_flutter_widget",
+          ],
+          description: "What ArcStrike Unit should do.",
+        },
+
+        framework: {
+          type: "string",
+          enum: ["react-native", "flutter", "swift", "kotlin", "java"],
+          description: "The framework ArcStrike Unit should use.",
+        },
+
+        input: {
+          type: "string",
+          description:
+            "User-provided code, component description, or issue to debug.",
+        },
+
+        context: {
+          type: "string",
+          description:
+            "Optional details (design requirements, API URLs, navigation type, platform, etc.)",
+        },
+      },
+      required: ["task", "input"],
+    },
+  },
+
+  execute: async ({ task, framework, input, context }) => {
+    const result = await ArcStrickUnit({
+      task,
+      framework,
+      input,
+      context,
+    });
+
+    return {
+      content: [
+        {
+          type: "text",
+          text:
+            `📱 **ArcStrike Unit — Mobile Engineering Complete**\n\n` +
+            `**Task:** ${task}\n\n` +
+            `**Result:**\n${result}`,
+        },
+      ],
+      structuredContent: {
+        task,
+        result,
       },
     };
   },
