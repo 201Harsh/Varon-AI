@@ -8,6 +8,7 @@ import { socketAuth } from "./middlewares/socketAuth.middleware.js";
 import {
   cobraAITool,
   hydraSearchTool,
+  IronQuery,
   novaFlow,
   viperCartTool,
 } from "./tools/tools.js";
@@ -32,6 +33,12 @@ VaronMcpServer.registerTool(
 );
 
 VaronMcpServer.registerTool(novaFlow.name, novaFlow.config, novaFlow.execute);
+
+VaronMcpServer.registerTool(
+  IronQuery.name,
+  IronQuery.config,
+  IronQuery.execute
+);
 
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;

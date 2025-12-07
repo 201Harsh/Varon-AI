@@ -1,5 +1,6 @@
 import CobraAITool from "../utils/CobraAI.js";
 import { scrapeDuckDuckGo } from "../utils/HydraSearch.js";
+import IronQueryTool from "../utils/IronQuery.js";
 import NovaFlowTool from "../utils/NovaFlow.js";
 
 export const cobraAITool = {
@@ -259,3 +260,96 @@ export const novaFlow = {
     };
   },
 };
+
+export const IronQuery = {
+  name: "IronQuery",
+
+  config: {
+    title: "IronQuery — Universal SQL & NoSQL Database Specialist",
+    description:
+      "IronQuery writes, analyzes, optimizes, explains, and teaches SQL & NoSQL queries. Supports MySQL, PostgreSQL, SQLite, MSSQL, MongoDB, Firebase, DynamoDB, Cassandra, and more. Ideal for query debugging, schema design, indexing strategies, and query-to-query translation.",
+
+    parameters: {
+      type: "object",
+      properties: {
+        task: {
+          type: "string",
+          enum: [
+            "write_query",
+            "optimize_query",
+            "debug_query",
+            "schema_design",
+            "schema_optimize",
+            "teach",
+            "translate_sql_to_nosql",
+            "translate_nosql_to_sql",
+            "index_strategy",
+            "comparison_sql_vs_nosql"
+          ],
+          description:
+            "Type of task IronQuery should perform (query writing, debugging, schema design, teaching, etc.).",
+        },
+
+        database: {
+          type: "string",
+          enum: [
+            "mysql",
+            "postgresql",
+            "sqlite",
+            "mssql",
+            "mongodb",
+            "dynamodb",
+            "cassandra",
+            "firebase",
+            "redis",
+            "general"
+          ],
+          description:
+            "Database type IronQuery should operate on. Defaults to 'general'.",
+        },
+
+        input: {
+          type: "string",
+          description:
+            "The query, schema, description, or problem IronQuery should analyze or work on.",
+        },
+
+        context: {
+          type: "string",
+          description:
+            "Optional additional details (tables, relationships, sample documents, error messages, etc.).",
+        },
+      },
+      required: ["task", "input"],
+    },
+  },
+
+  execute: async ({ task, database, input, context }) => {
+    const result = await IronQueryTool({
+      task,
+      database,
+      input,
+      context,
+    });
+
+    const outputMessage = `IronQuery completed the task: ${task}\n\n${result}`;
+
+    return {
+      content: [
+        {
+          type: "text",
+          text:
+            `🟣 **IronQuery – Task Completed Successfully!**\n\n` +
+            `**Task:** ${task}\n` +
+            `**Database:** ${database || "general"}\n\n` +
+            `**Output:**\n${outputMessage}`,
+        },
+      ],
+
+      structuredContent: {
+        result: outputMessage,
+      },
+    };
+  },
+};
+
