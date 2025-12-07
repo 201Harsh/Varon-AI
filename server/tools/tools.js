@@ -4,6 +4,7 @@ import FluxAudit from "../utils/FluxAudit.js";
 import { scrapeDuckDuckGo } from "../utils/HydraSearch.js";
 import IronQuery from "../utils/IronQuery.js";
 import NovaFlowTool from "../utils/NovaFlow.js";
+import { scrapeWebPage } from "../utils/PhantomScraper.js";
 
 export const cobraAITool = {
   name: "CobraAI",
@@ -97,8 +98,6 @@ export const hydraSearchTool = {
               })\n📝${r.snippet}\n`
           )
           .join("\n");
-
-      console.log(formattedText);
 
       return {
         content: [
@@ -474,5 +473,72 @@ export const blackReplitTool = {
         result: outputMessage,
       },
     };
+  },
+};
+
+export const phantomScraperTool = {
+  name: "PhantomScraper",
+
+  config: {
+    title: "PhantomScraper — Stealth Web Reader",
+    description:
+      "Visit a specific URL using a Stealth Browser to bypass anti-bot protections and read content. Use this for scraping websites without being detected, or any protected site.",
+
+    parameters: {
+      type: "object",
+      properties: {
+        url: {
+          type: "string",
+          description:
+            "The full URL starting with http:// or https:// to scrape.",
+        },
+      },
+      required: ["url"],
+    },
+  },
+
+  execute: async ({ url }) => {
+    try {
+      if (!url.startsWith("http")) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "❌ Error: URL must start with http:// or https://",
+            },
+          ],
+        };
+      }
+
+      const pageContent = await scrapeWebPage(url);
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: pageContent,
+          },
+        ],
+        structuredContent: {
+          url,
+          status: "success",
+          length: pageContent.length,
+        },
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `❌ PhantomScraper Error: ${error.message}`,
+          },
+        ],
+        structuredContent: {
+          url,
+          status: "error",
+          error: error.message,
+        },
+      };
+    }
   },
 };

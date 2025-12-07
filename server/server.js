@@ -12,6 +12,7 @@ import {
   hydraSearchTool,
   IronQueryTool,
   novaFlowTool,
+  phantomScraperTool,
   viperCartTool,
 } from "./tools/tools.js";
 import VaronMcpServer from "./connections/VaronMcpServer.js";
@@ -56,6 +57,12 @@ VaronMcpServer.registerTool(
   blackReplitTool.name,
   blackReplitTool.config,
   blackReplitTool.execute
+);
+
+VaronMcpServer.registerTool(
+  phantomScraperTool.name,
+  phantomScraperTool.config,
+  phantomScraperTool.execute
 );
 
 const server = http.createServer(app);
