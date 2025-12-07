@@ -8,6 +8,7 @@ import { scrapeDuckDuckGo } from "../utils/HydraSearch.js";
 import IronQuery from "../utils/IronQuery.js";
 import NovaFlowTool from "../utils/NovaFlow.js";
 import { scrapeWebPage } from "../utils/PhantomScraper.js";
+import { generateDocument } from "../utils/ScriptForge.js";
 import ViperStack from "../utils/ViperStack.js";
 
 export const cobraAITool = {
@@ -798,6 +799,94 @@ export const chronosTool = {
           {
             type: "text",
             text: `❌ Chronos Error: Unable to fetch data for "${location}". Reason: ${error.message}`,
+          },
+        ],
+        structuredContent: {
+          status: "error",
+          error: error.message,
+        },
+      };
+    }
+  },
+};
+
+function getMimeType(format) {
+  switch (format.toLowerCase()) {
+    case "pdf":
+      return "application/pdf";
+    case "docx":
+      return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    case "pptx":
+      return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+    default:
+      return "application/octet-stream";
+  }
+}
+
+export const scriptForgeTool = {
+  name: "ScriptForge",
+
+  config: {
+    title: "ScriptForge ✍️ — Document Generator",
+    description:
+      "Generates binary document data (PDF, DOCX, PPTX) from text content. Returns Base64 encoded file data for frontend handling.",
+
+    parameters: {
+      type: "object",
+      properties: {
+        format: {
+          type: "string",
+          enum: ["pdf", "docx", "pptx"],
+          description: "The file format to generate.",
+        },
+        title: {
+          type: "string",
+          description:
+            "The main title of the document (e.g., 'Project Report').",
+        },
+        content: {
+          type: "string",
+          description:
+            "The full text content of the document. Use \\n for new lines.",
+        },
+        filename: {
+          type: "string",
+          description:
+            "The desired name for the file download (without extension).",
+        },
+      },
+      required: ["format", "title", "content", "filename"],
+    },
+  },
+
+  execute: async ({ format, title, content, filename }) => {
+    try {
+      const result = await generateDocument({ format, title, content });
+
+      const base64Data = result.buffer.toString("base64");
+      const fullFileName = `${filename}.${format}`;
+      const mimeType = getMimeType(format);
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `✅ **ScriptForge Success!**\n\nGenerated **${title}** as a \`.${format}\` file.\nThe document data has been sent to the frontend for download.`,
+          },
+        ],
+        structuredContent: {
+          status: "success",
+          fileName: fullFileName,
+          mimeType: mimeType,
+          fileData: base64Data,
+        },
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `❌ ScriptForge Error: Failed to create document. ${error.message}`,
           },
         ],
         structuredContent: {

@@ -16,6 +16,7 @@ import {
   IronQueryTool,
   novaFlowTool,
   phantomScraperTool,
+  scriptForgeTool,
   viperCartTool,
   viperStackTool,
 } from "./tools/tools.js";
@@ -91,6 +92,12 @@ VaronMcpServer.registerTool(
   chronosTool.name,
   chronosTool.config,
   chronosTool.execute
+);
+
+VaronMcpServer.registerTool(
+  scriptForgeTool.name,
+  scriptForgeTool.config,
+  scriptForgeTool.execute
 );
 
 const server = http.createServer(app);
