@@ -6,6 +6,7 @@ import { scrapeDuckDuckGo } from "../utils/HydraSearch.js";
 import IronQuery from "../utils/IronQuery.js";
 import NovaFlowTool from "../utils/NovaFlow.js";
 import { scrapeWebPage } from "../utils/PhantomScraper.js";
+import ViperStack from "../utils/ViperStack.js";
 
 export const cobraAITool = {
   name: "CobraAI",
@@ -595,5 +596,73 @@ export const blackFireAITool = {
         },
       };
     }
+  },
+};
+
+export const viperStackTool = {
+  name: "ViperStack",
+
+  config: {
+    title: "ViperStack — Python Systems Engineer & Automation Builder",
+    description:
+      "Write, debug, optimize, and teach Python scripts. Supports automation, APIs, backend functions, utilities, data processing, and step-by-step learning.",
+
+    parameters: {
+      type: "object",
+      properties: {
+        task: {
+          type: "string",
+          enum: [
+            "write_script",
+            "optimize_script",
+            "debug_script",
+            "explain_code",
+            "teach_python",
+            "convert_to_python",
+            "build_api",
+            "build_automation",
+          ],
+          description: "What ViperStack should do with Python.",
+        },
+
+        input: {
+          type: "string",
+          description:
+            "The code, description, or problem you want ViperStack to work on.",
+        },
+
+        context: {
+          type: "string",
+          description:
+            "Optional extra details such as goals, examples, or requirements.",
+        },
+      },
+      required: ["task", "input"],
+    },
+  },
+
+  execute: async ({ task, input, context }) => {
+    const result = await ViperStack({
+      task,
+      input,
+      context,
+    });
+
+    const outputText = `ViperStack completed the task: ${task}\n\n${result}`;
+
+    return {
+      content: [
+        {
+          type: "text",
+          text:
+            `🐍 **ViperStack – Task Completed Successfully!**\n\n` +
+            `**Task:** ${task}\n\n` +
+            `**Output:**\n${outputText}`,
+        },
+      ],
+      structuredContent: {
+        result: outputText,
+      },
+    };
   },
 };

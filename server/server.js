@@ -15,6 +15,7 @@ import {
   novaFlowTool,
   phantomScraperTool,
   viperCartTool,
+  viperStackTool,
 } from "./tools/tools.js";
 import VaronMcpServer from "./connections/VaronMcpServer.js";
 
@@ -72,8 +73,14 @@ VaronMcpServer.registerTool(
   blackFireAITool.execute
 );
 
+VaronMcpServer.registerTool(
+  viperStackTool.name,
+  viperStackTool.config,
+  viperStackTool.execute
+);
+
 const server = http.createServer(app);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 const io = new Server(server, {
   cors: {
