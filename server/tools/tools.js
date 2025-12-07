@@ -6,9 +6,9 @@ export const cobraAITool = {
   name: "CobraAI",
 
   config: {
-    title: "Cobra AI — Frontend Code Generator",
+    title: "Cobra AI — Frontend Code Generator and Teacher",
     description:
-      "Generate complete frontend components, sections, UI layouts, pages, or full websites using Cobra AI's elite Next.js + React + Tailwind + GSAP + Framer Motion expertise.",
+      "Generate complete frontend components, sections, UI layouts, pages, or full websites using Cobra AI's elite Next.js + React + Tailwind + GSAP + Framer Motion expertise. Cobra AI also teaches frontend engineering concepts, debugging, and best practices.",
 
     parameters: {
       type: "object",
@@ -217,7 +217,6 @@ export const viperCartTool = {
     }
   },
 };
-
 
 export const novaFlow = {
   name: "NovaFlow",
