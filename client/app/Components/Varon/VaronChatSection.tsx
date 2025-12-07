@@ -357,11 +357,13 @@ const MessageItem = ({
   message,
   isDarkMode,
   isTyping,
+  onRegenerate,
 }: {
   message: any;
   isDarkMode: boolean;
   isLastMessage: boolean;
   isTyping: boolean;
+  onRegenerate?: () => void;
 }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [feedback, setFeedback] = useState<"none" | "liked" | "disliked">(
@@ -723,7 +725,7 @@ const MessageItem = ({
                           {isReading ? "Stop Reading" : "Read Aloud"}
                         </button>
                         <button
-                          onClick={() => setIsMenuOpen(false)}
+                          onClick={onRegenerate}
                           className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm transition-colors ${
                             isDarkMode
                               ? "hover:bg-gray-800 text-gray-200"
@@ -766,6 +768,7 @@ const VaronChatSection = ({
   ThinkingResponse,
   ThinkingStatus,
   ThinkingTools,
+  handleRegenerate,
 }: {
   isTyping: boolean;
   isDarkMode: boolean;
@@ -777,6 +780,7 @@ const VaronChatSection = ({
   ThinkingResponse: string;
   ThinkingStatus: string;
   ThinkingTools?: string[];
+  handleRegenerate: () => void;
 }) => {
   const [inputHeight, setInputHeight] = useState<number>(52);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -817,6 +821,7 @@ const VaronChatSection = ({
                 isDarkMode={isDarkMode}
                 isLastMessage={index === messages.length - 1}
                 isTyping={isTyping}
+                onRegenerate={handleRegenerate}
               />
             ))}
           </AnimatePresence>
@@ -828,7 +833,6 @@ const VaronChatSection = ({
               className="flex justify-start w-full mb-6"
             >
               <div className="flex gap-4 max-w-[85%] w-full">
-                {/* Avatar */}
                 <div className="shrink-0 mt-1">
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${

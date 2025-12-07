@@ -197,6 +197,19 @@ export default function VaronAIPage() {
     FetchUserInfo();
   }, []);
 
+  const handleRegenerate = () => {
+    const lastUserMessage = [...messages]
+      .reverse()
+      .find((msg: any) => msg.sender === "user");
+
+    if (lastUserMessage) {
+      setInputMessage(lastUserMessage.text);
+      setTimeout(() => {
+        handleSendMessage({ preventDefault: () => {} } as any);
+      }, 0);
+    }
+  };
+
   return (
     <div
       className={`min-h-screen transition-colors duration-300 ${
@@ -243,6 +256,7 @@ export default function VaronAIPage() {
             ThinkingResponse={ThinkingResponse}
             ThinkingStatus={ThinkingStatus}
             ThinkingTools={ThinkingTools}
+            handleRegenerate={handleRegenerate}
           />
         )}
       </main>
