@@ -874,7 +874,7 @@ export const scriptForgeTool = {
             text: `✅ **ScriptForge Success!**\n\nGenerated **${title}** as a \`.${format}\` file.\nThe document data has been sent to the frontend for download.`,
           },
         ],
-        structuredContent: {
+        structuredContentDownload: {
           status: "success",
           fileName: fullFileName,
           mimeType: mimeType,

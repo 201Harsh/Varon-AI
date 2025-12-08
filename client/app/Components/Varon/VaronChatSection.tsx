@@ -15,6 +15,7 @@ import {
   FiFlag,
   FiChevronDown,
   FiDownload,
+  FiFileText,
 } from "react-icons/fi";
 import { HiSparkles, HiWrenchScrewdriver } from "react-icons/hi2";
 import { useEffect, useState, useRef } from "react";
@@ -230,6 +231,92 @@ const ToolInvocation = ({
           </div>
         </motion.div>
       ))}
+    </div>
+  );
+};
+
+// --- NEW COMPONENT: File Download Item ---
+const FileDownloadItem = ({
+  download,
+  isDarkMode,
+}: {
+  download: { fileName: string; mimeType: string; fileData: string };
+  isDarkMode: boolean;
+}) => {
+  if (!download) return null;
+
+  const handleDownloadClick = () => {
+    try {
+      // Decode Base64
+      const byteCharacters = atob(download.fileData);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: download.mimeType });
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = download.fileName;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Download failed", error);
+    }
+  };
+
+  return (
+    <div className="w-full mb-3 max-w-[95%] md:max-w-full flex flex-col gap-2">
+      <motion.div
+        initial={{ opacity: 0, y: 5 }}
+        animate={{ opacity: 1, y: 0 }}
+        className={`relative flex items-center justify-between gap-3 py-3 px-4 rounded-xl border overflow-hidden ${
+          isDarkMode
+            ? "bg-[#1e1e1f] border-emerald-800 text-emerald-200"
+            : "bg-white border-emerald-100 text-emerald-700 shadow-sm"
+        }`}
+      >
+        <div className="flex items-center gap-3 min-w-0">
+          <div
+            className={`p-2 rounded-lg shrink-0 ${
+              isDarkMode
+                ? "bg-emerald-800 text-gray-100"
+                : "bg-emerald-100 text-emerald-500"
+            }`}
+          >
+            <FiFileText className="text-lg" />
+          </div>
+
+          <div className="flex flex-col min-w-0">
+            <span className="text-[10px] font-mono opacity-60 uppercase tracking-wider">
+              File Generated Successfully
+            </span>
+            <span
+              className="font-semibold text-sm truncate mt-0.5"
+              title={download.fileName}
+            >
+              {download.fileName}
+            </span>
+          </div>
+        </div>
+
+        <button
+          onClick={handleDownloadClick}
+          className={`flex items-center gap-2 px-3 py-1.5 text-xs font-bold rounded-lg transition-all active:scale-95 shrink-0 ${
+            isDarkMode
+              ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+              : "bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-200 shadow-md"
+          }`}
+        >
+          <FiDownload className="text-sm" />
+          Download
+        </button>
+      </motion.div>
     </div>
   );
 };
@@ -611,6 +698,14 @@ const MessageItem = ({
               tools={message.tools}
               isDarkMode={isDarkMode}
               isLive={false}
+            />
+          )}
+
+          {/* --- RENDER FILE DOWNLOAD --- */}
+          {!isUser && message.download && (
+            <FileDownloadItem
+              download={message.download}
+              isDarkMode={isDarkMode}
             />
           )}
 

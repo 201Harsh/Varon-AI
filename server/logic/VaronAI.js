@@ -478,7 +478,12 @@ Use this as your core operating instruction for all Varon AI interactions.`;
           socket.emit("tool-call", `Calling Tool: ${ToolCall.name}`);
           const executor = VaronMcpServer.getExecutor(ToolCall.name);
           const ToolResult = await executor(ToolCall.args);
-          // console.log(ToolResult);
+          if (ToolResult.structuredContentDownload) {
+            socket.emit(
+              "tool-result-download",
+              ToolResult.structuredContentDownload
+            );
+          }
           fullResponseText += ToolResult.content[0].text;
           continue;
         }
@@ -491,6 +496,7 @@ Use this as your core operating instruction for all Varon AI interactions.`;
 
     socket.emit("server-reply", fullResponseText);
   } catch (error) {
+    console.log(error);
     const Varonerror =
       "Varon is unable to process your request. Please try again later.";
     socket.emit("thinking-status", "Varon ERROR: AI_Response_Error");

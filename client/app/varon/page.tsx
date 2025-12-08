@@ -25,6 +25,9 @@ export default function VaronAIPage() {
   const [ThinkingStatus, setThinkingStatus] = useState("");
   const [ThinkingTools, setThinkingTools] = useState<string[]>([]);
 
+  // --- NEW: Ref to hold download data temporarily ---
+  const downloadDataRef = useRef<any>(null);
+
   const thinkingResponseRef = useRef("");
   const thinkingStatusRef = useRef("");
   const thinkingToolsRef = useRef<string[]>([]);
@@ -78,6 +81,11 @@ export default function VaronAIPage() {
       setThinkingTools([...thinkingToolsRef.current]);
     };
 
+    // --- NEW: Listener for File Download Data ---
+    const onToolDownload = (data: any) => {
+      downloadDataRef.current = data;
+    };
+
     const onThinkingStatus = (msg: string) => {
       setThinkingStatus(msg);
       thinkingStatusRef.current = msg;
@@ -106,6 +114,10 @@ export default function VaronAIPage() {
           thinkingToolsRef.current.length > 0
             ? [...thinkingToolsRef.current]
             : null,
+        // --- Attach Download Data to the message if it exists ---
+        download: downloadDataRef.current
+          ? { ...downloadDataRef.current }
+          : null,
       };
 
       setMessages((prev) => [...prev, varonMessage]);
@@ -116,11 +128,13 @@ export default function VaronAIPage() {
       thinkingResponseRef.current = "";
       thinkingStatusRef.current = "";
       thinkingToolsRef.current = [];
+      downloadDataRef.current = null; // Clear after attaching
     };
 
     socket.on("connect", onConnect);
     socket.on("connect_error", onConnectError);
     socket.on("tool-call", onToolCall);
+    socket.on("tool-result-download", onToolDownload); // Register listener
     socket.on("thinking-status", onThinkingStatus);
     socket.on("thinking-response", onThinkingResponse);
     socket.on("server-reply", onServerReply);
@@ -129,6 +143,7 @@ export default function VaronAIPage() {
       socket.off("connect", onConnect);
       socket.off("connect_error", onConnectError);
       socket.off("tool-call", onToolCall);
+      socket.off("tool-result-download", onToolDownload); // Unregister listener
       socket.off("thinking-status", onThinkingStatus);
       socket.off("thinking-response", onThinkingResponse);
       socket.off("server-reply", onServerReply);
@@ -159,6 +174,7 @@ export default function VaronAIPage() {
     thinkingResponseRef.current = "";
     thinkingStatusRef.current = "";
     thinkingToolsRef.current = [];
+    downloadDataRef.current = null;
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -184,6 +200,7 @@ export default function VaronAIPage() {
     thinkingResponseRef.current = "";
     thinkingStatusRef.current = "";
     thinkingToolsRef.current = [];
+    downloadDataRef.current = null;
   };
 
   const FetchUserInfo = async () => {
