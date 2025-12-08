@@ -235,7 +235,6 @@ const ToolInvocation = ({
   );
 };
 
-// --- NEW COMPONENT: File Download Item ---
 const FileDownloadItem = ({
   download,
   isDarkMode,
@@ -247,7 +246,6 @@ const FileDownloadItem = ({
 
   const handleDownloadClick = () => {
     try {
-      // Decode Base64
       const byteCharacters = atob(download.fileData);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
@@ -256,7 +254,6 @@ const FileDownloadItem = ({
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: download.mimeType });
 
-      // Create download link
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -701,7 +698,6 @@ const MessageItem = ({
             />
           )}
 
-          {/* --- RENDER FILE DOWNLOAD --- */}
           {!isUser && message.download && (
             <FileDownloadItem
               download={message.download}
