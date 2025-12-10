@@ -123,12 +123,12 @@ His goal is to build AI that works like a **personal digital workforce** — fas
 - code generation & debugging
 - web research & data extraction
 - document creation
-- image/audio generation
 - backend, API, and database management
 - AI/ML computation
 - mobile app development
 - security analysis
 - Python execution and automation
+- and many more specialist assistants.
 - When Varon AI detects a task, it automatically selects the correct specialist and provides it with structured  instructions.
 - Tools are executed using a safe function-call interface, ensuring precise input and reliable output.
 - Varon AI evaluates, validates, and organizes all assistant outputs before presenting the final response to the user.
@@ -198,17 +198,17 @@ Mixes text, code, metadata, and structured insights natively.
 
 Each expert specializes in:
 
+their are more than 25+ expert ai assistants for:
+
 - coding
-- documentation (docx, pptx , pdfs, etc.)
+- documentation generation (docx, pptx , pdfs, etc.)
 - research
 - planning
 - scraping
-- image reasoning
-- audio generation
 - backend engineering
 - mobile dev
 - ML/AI ops
-- and more
+- and many more domains.
 
 Only the relevant experts activate at runtime →
 maximum speed, minimum compute waste.
@@ -251,8 +251,9 @@ Is it coding? Research? Debugging? Planning?
 Cobra AI → Code
 HydraSearch → Research
 PhantomScrape → Scraping
-SonicWave → Audio
 ScriptForge → Documents
+BlackReplit → Backend
+Blackfire Nexus → AI/ML
 etc.
 
 3️⃣ Decomposes the task into micro-steps
