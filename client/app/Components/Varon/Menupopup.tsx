@@ -127,12 +127,10 @@ export const PopupModal = ({
           </button>
         </div>
 
-        {/* Content Body */}
         <div className="p-4 md:p-6 overflow-y-auto custom-scrollbar flex-1">
           {getContent()}
         </div>
 
-        {/* Footer Actions */}
         <div
           className={`px-4 md:px-6 py-4 border-t flex justify-end gap-3 shrink-0 ${
             isDarkMode
@@ -142,7 +140,7 @@ export const PopupModal = ({
         >
           <button
             onClick={onClose}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+            className={`cursor-pointer px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
               isDarkMode
                 ? "text-gray-400 hover:text-white hover:bg-gray-800"
                 : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
@@ -150,25 +148,25 @@ export const PopupModal = ({
           >
             Close
           </button>
-          {type !== "help" && type !== "subscription" && (
-            <button
-              onClick={onClose}
-              className={`px-5 py-2 rounded-xl text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all active:scale-95 ${
-                isDarkMode
-                  ? "bg-emerald-600 hover:bg-emerald-500"
-                  : "bg-emerald-500 hover:bg-emerald-600"
-              }`}
-            >
-              Save Changes
-            </button>
-          )}
+          {type !== "help" &&
+            type !== "subscription" &&
+            type !== "settings" && (
+              <button
+                onClick={onClose}
+                className={`px-5 py-2 rounded-xl text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all active:scale-95 cursor-pointer ${
+                  isDarkMode
+                    ? "bg-emerald-600 hover:bg-emerald-500"
+                    : "bg-emerald-500 hover:bg-emerald-600"
+                }`}
+              >
+                Save Changes
+              </button>
+            )}
         </div>
       </motion.div>
     </div>
   );
 };
-
-// --- Sub-components for Content ---
 
 const CustomizeAIContent = ({ isDarkMode }: { isDarkMode: boolean }) => (
   <div className="space-y-6">
@@ -202,18 +200,17 @@ const CustomizeAIContent = ({ isDarkMode }: { isDarkMode: boolean }) => (
       <div className="space-y-5">
         <RangeSlider
           label="Creativity (Temperature)"
-          value={75}
+          value={82.5}
           isDarkMode={isDarkMode}
         />
         <RangeSlider
           label="Response Length"
-          value={60}
+          value={67.26}
           isDarkMode={isDarkMode}
         />
       </div>
     </div>
 
-    {/* System Instructions TextArea */}
     <div className="space-y-2">
       <label
         className={`text-sm font-medium ${
@@ -237,33 +234,6 @@ const CustomizeAIContent = ({ isDarkMode }: { isDarkMode: boolean }) => (
         These instructions will be prepended to every conversation.
       </p>
     </div>
-
-    {/* Tone Selector */}
-    <div className="space-y-2">
-      <label
-        className={`text-sm font-medium ${
-          isDarkMode ? "text-gray-300" : "text-gray-700"
-        }`}
-      >
-        Response Tone
-      </label>
-      <div className="grid grid-cols-3 gap-2">
-        {["Professional", "Friendly", "Concise"].map((tone, i) => (
-          <button
-            key={i}
-            className={`py-2 px-3 rounded-lg text-sm border transition-all ${
-              i === 0
-                ? "border-emerald-500 bg-emerald-500/10 text-emerald-500 font-medium"
-                : isDarkMode
-                ? "border-gray-700 bg-gray-800 text-gray-400 hover:border-gray-600"
-                : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
-            }`}
-          >
-            {tone}
-          </button>
-        ))}
-      </div>
-    </div>
   </div>
 );
 
@@ -275,7 +245,6 @@ const SettingsContent = ({
   toggleTheme: () => void;
 }) => (
   <div className="space-y-4">
-    {/* Theme Toggle Control */}
     <div
       className={`flex items-center justify-between p-3 rounded-xl border ${
         isDarkMode
@@ -311,7 +280,6 @@ const SettingsContent = ({
         </div>
       </div>
 
-      {/* Animated Switch Button */}
       <button
         onClick={toggleTheme}
         className={`w-12 h-6 rounded-full transition-colors relative focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ${
@@ -328,7 +296,6 @@ const SettingsContent = ({
       </button>
     </div>
 
-    {/* Other Settings Toggles */}
     <ToggleItem
       icon={FiBell}
       title="Notifications"
@@ -404,7 +371,6 @@ const SubscriptionContent = ({ isDarkMode }: { isDarkMode: boolean }) => {
         </p>
       </div>
 
-      {/* Grid: 1 col on mobile, 3 cols on tablet/desktop */}
       <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
         {plans.map((plan, i) => (
           <div
@@ -549,8 +515,6 @@ const HelpContent = ({ isDarkMode }: { isDarkMode: boolean }) => {
   );
 };
 
-// --- Helper Components ---
-
 const RangeSlider = ({ label, value, isDarkMode }: any) => (
   <div>
     <div className="flex justify-between text-xs mb-2">
@@ -572,7 +536,6 @@ const RangeSlider = ({ label, value, isDarkMode }: any) => (
   </div>
 );
 
-// Toggle Item for non-theme switches (Notifications etc)
 const ToggleItem = ({
   icon: Icon,
   title,
