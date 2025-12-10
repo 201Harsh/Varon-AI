@@ -3,7 +3,7 @@ import VaronMcpServer from "../connections/VaronMcpServer.js";
 
 const ai = new GoogleGenAI({ apiKey: process.env.VARON_AI_API_KEY });
 
-async function ModelVaronAI({ prompt, socket, User }) {
+async function ModelVaronAI({ prompt, socket, User, messages }) {
   if (!prompt) {
     socket.emit("server-reply", "Please provide a valid prompt.");
     return;
@@ -12,6 +12,34 @@ async function ModelVaronAI({ prompt, socket, User }) {
     socket.emit("server-reply", "Please login to use Varon AI.");
     return;
   }
+
+  const pastInteractions = messages.filter((msg) => msg.text !== prompt);
+
+  const formattedChat =
+    pastInteractions.length > 0
+      ? pastInteractions
+          .map((msg) => {
+            const role =
+              msg.sender === "user" ? `User (${User.name})` : "Varon AI";
+            const time = new Date(msg.timestamp).toLocaleTimeString();
+
+            let log = `[${time}] ${role}: ${msg.text}`;
+
+            if (msg.sender === "varon") {
+              if (msg.thinking?.response) {
+                log += `\n    (Context - Previous Thought: ${msg.thinking.status})`;
+              }
+              if (msg.tools && msg.tools.length > 0) {
+                log += `\n    (Context - Tools Used: ${msg.tools.join(", ")})`;
+              }
+              if (msg.download) {
+                log += `\n    (Context - Generated File: ${msg.download.fileName})`;
+              }
+            }
+            return log;
+          })
+          .join("\n\n")
+      : "No previous messages - this is a new session.";
 
   const mcpTools = VaronMcpServer.getVaronRegisteredTools();
 
@@ -113,6 +141,18 @@ His goal is to build AI that works like a **personal digital workforce** — fas
 - User ID: ${User._id}
 - Use this data to personalize responses and maintain context.
 - Always Repond in a Friendly, Human-like tone with emojis and with User's Name.
+
+
+# 🧠 MEMORY CONTEXT & PAST INTERACTIONS
+Below is the history of our conversation. Use this to maintain continuity.
+--------------------------------------------------
+${formattedChat}
+--------------------------------------------------
+- If the history above is empty, this is a new session.
+- If the history shows I (Varon AI) used a tool previously, I should remember the result of that tool.
+- I should not repeat the greeting if I have already greeted the user in the history above.
+- You must remember all past interactions for context and then Respond according to the context.
+
 
 
 # 🧠 AGENTIC INTELLIGENCE & TOOL OPERATIONS

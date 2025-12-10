@@ -192,7 +192,7 @@ export default function VaronAIPage() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    socket.emit("client-message", inputMessage);
+    socket.emit("client-message", { inputMessage, messages });
 
     setInputMessage("");
     setIsTyping(true);

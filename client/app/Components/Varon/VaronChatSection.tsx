@@ -70,7 +70,6 @@ const TypingStatus = ({ text }: { text: string }) => {
 const CodeBlock = ({
   language,
   value,
-  isDarkMode,
 }: {
   language: string;
   value: string;

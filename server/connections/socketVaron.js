@@ -29,7 +29,7 @@ const socketVaron = async ({ io }) => {
         "Tell me — what can I do for you today? 🚀"
     );
 
-    socket.on("client-message", async (msg) => {
+    socket.on("client-message", async ({ inputMessage: msg, messages }) => {
       if (!socket.user) {
         console.log("User not Authneticated");
         return socket.emit(
@@ -38,7 +38,7 @@ const socketVaron = async ({ io }) => {
         );
       }
 
-      ModelVaronAI({ prompt: msg, socket, User });
+      ModelVaronAI({ prompt: msg, socket, User, messages });
     });
 
     socket.on("disconnect", async () => {
