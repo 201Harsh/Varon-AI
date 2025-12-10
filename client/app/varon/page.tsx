@@ -53,6 +53,9 @@ export default function VaronAIPage() {
     if (!socket) return;
 
     const onConnect = () => {
+      setTimeout(() => {
+        document.title = "Varon AI - Connected";
+      }, 120);
       toast.success("Connected to Varon AI.", {
         position: "top-right",
         autoClose: 2500,
@@ -153,6 +156,9 @@ export default function VaronAIPage() {
   };
 
   const disconnect = () => {
+    setTimeout(() => {
+      document.title = "Varon AI";
+    }, 80);
     socket.disconnect();
     toast.success("Disconnected from Varon AI.", {
       position: "top-right",
