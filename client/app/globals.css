@@ -8,5 +8,10 @@ body {
 .scrollbar-small {
   scrollbar-color: #9b9b9b transparent;
   scrollbar-width: auto;
-  z-index: 10000;
+}
+
+.scrollbar-small-bar {
+  scrollbar-color: #9b9b9b transparent;
+  scrollbar-width: auto;
+  z-index: 100;
 }
