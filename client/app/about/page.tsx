@@ -66,7 +66,6 @@ export default function AboutPage() {
 
         <LandingHeader />
 
-        {/* Theme Toggle */}
         <div className="container mx-auto px-6 relative z-10 mt-12 ">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -97,7 +96,6 @@ export default function AboutPage() {
         </div>
       </header>
 
-      {/* Navigation Tabs */}
       <div className="container mx-auto px-6 -mt-8 relative z-20">
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {[
@@ -126,9 +124,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* Content Sections */}
       <div className="container mx-auto px-6 pb-20">
-        {/* Mission Section */}
         {activeTab === "mission" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -251,7 +247,6 @@ export default function AboutPage() {
               </div>
             </div>
 
-            {/* Problem Solution Section */}
             <div
               className={`rounded-2xl p-8 md:p-12 border transition-colors duration-300 ${
                 isDarkMode
@@ -428,7 +423,6 @@ export default function AboutPage() {
               ))}
             </div>
 
-            {/* AI Team Structure */}
             <div
               className={`rounded-2xl p-8 border transition-colors duration-300 ${
                 isDarkMode
@@ -513,7 +507,6 @@ export default function AboutPage() {
           </motion.div>
         )}
 
-        {/* Technology Section */}
         {activeTab === "technology" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -653,7 +646,6 @@ export default function AboutPage() {
               ))}
             </div>
 
-            {/* Key Features */}
             <div
               className={`rounded-2xl p-8 border transition-colors duration-300 ${
                 isDarkMode
@@ -738,7 +730,6 @@ export default function AboutPage() {
           </motion.div>
         )}
 
-        {/* Developer Section */}
         {activeTab === "developer" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -772,7 +763,6 @@ export default function AboutPage() {
               }`}
             >
               <div className="flex flex-col md:flex-row items-center gap-8">
-                {/* Developer Avatar */}
                 <div className="shrink-0">
                   <div className="w-52 h-52 bg-linear-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
                     <Image
@@ -787,7 +777,6 @@ export default function AboutPage() {
                   </div>
                 </div>
 
-                {/* Developer Info */}
                 <div className="flex-1 text-center md:text-left">
                   <h3
                     className={`text-4xl font-bold mb-2 transition-colors duration-300 ${
@@ -946,7 +935,6 @@ export default function AboutPage() {
               </div>
             </div>
 
-            {/* Philosophy */}
             <div
               className={`rounded-2xl p-8 border transition-colors duration-300 ${
                 isDarkMode
