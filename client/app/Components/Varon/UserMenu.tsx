@@ -108,7 +108,7 @@ const UserMenu = ({
                 top: `${position.top}px`,
                 right: `${position.right}px`,
               }}
-              className={`fixed z-50 w-80 rounded-2xl shadow-2xl border backdrop-blur-2xl mr-4 md:mr-6 ${
+              className={`fixed z-100 w-80 rounded-2xl shadow-2xl border backdrop-blur-2xl mr-4 md:mr-6 ${
                 isDarkMode
                   ? "bg-gray-900/95 border-gray-700/50 shadow-black/50"
                   : "bg-white/95 border-gray-200/50 shadow-xl"
