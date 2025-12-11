@@ -65,7 +65,6 @@ export default function RegisterPage() {
 
   const router = useRouter();
 
-  // Validation functions
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -82,21 +81,18 @@ export default function RegisterPage() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    // Name validation
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
     } else if (!validateName(formData.name)) {
       newErrors.name = "Name must be at least 3 characters long";
     }
 
-    // Email validation
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!validateEmail(formData.email)) {
       newErrors.email = "Please enter a valid email address";
     }
 
-    // Password validation
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (!validatePassword(formData.password)) {
@@ -124,7 +120,6 @@ export default function RegisterPage() {
     return true;
   };
 
-  // Separate function for credentials submission
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -173,7 +168,6 @@ export default function RegisterPage() {
     }
   };
 
-  // Separate function for OTP verification
   const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -222,7 +216,6 @@ export default function RegisterPage() {
     }
   };
 
-  // Separate function for Google authentication
   const handleGoogleAuth = async () => {
     setIsLoading(true);
     setErrors({});
@@ -244,7 +237,6 @@ export default function RegisterPage() {
     newOtp[index] = value;
     setOtp(newOtp);
 
-    // Clear OTP error when user starts typing
     if (errors.otp) {
       setErrors((prev) => ({ ...prev, otp: undefined }));
     }
@@ -252,7 +244,6 @@ export default function RegisterPage() {
       setOtpErrors({});
     }
 
-    // Auto-focus next input
     if (value && index < 5) {
       const nextInput = document.getElementById(`otp-${index + 1}`);
       if (nextInput) nextInput.focus();
@@ -270,7 +261,6 @@ export default function RegisterPage() {
     });
     setOtp(newOtp);
 
-    // Clear errors on paste
     if (errors.otp) {
       setErrors((prev) => ({ ...prev, otp: undefined }));
     }
@@ -289,7 +279,6 @@ export default function RegisterPage() {
     setErrors((prev) => ({ ...prev, otp: undefined }));
     setOtpErrors({});
     console.log("Resending OTP to:", formData.email);
-    // In real app, this would call your OTP resend API
     alert("New OTP sent to your email!");
   };
 
@@ -311,7 +300,6 @@ export default function RegisterPage() {
       }`}
     >
       <div className="w-full max-w-md">
-        {/* Theme Toggle Button */}
         <div className="absolute right-20 top-20">
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -350,7 +338,6 @@ export default function RegisterPage() {
           </p>
         </motion.div>
 
-        {/* Main Card */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -361,7 +348,6 @@ export default function RegisterPage() {
               : "bg-white border-gray-200 shadow-xl"
           }`}
         >
-          {/* General Errors and Success Display */}
           {messages.general && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -415,7 +401,6 @@ export default function RegisterPage() {
           )}
 
           <AnimatePresence mode="wait">
-            {/* Credentials Step */}
             {step === "credentials" && (
               <motion.div
                 key="credentials"
@@ -473,7 +458,6 @@ export default function RegisterPage() {
                     )}
                   </div>
 
-                  {/* Email Field */}
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 transition-colors duration-300 ${
@@ -521,7 +505,6 @@ export default function RegisterPage() {
                     )}
                   </div>
 
-                  {/* Password Field */}
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 transition-colors duration-300 ${

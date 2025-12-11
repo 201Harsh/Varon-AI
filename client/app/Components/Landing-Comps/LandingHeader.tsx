@@ -1,9 +1,8 @@
-import { FaRobot } from "react-icons/fa";
 import { FiSun, FiMoon, FiX, FiMenu } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useTheme } from "@/app/theme/ThemeToogle"; // Ensure this path is correct
+import { useTheme } from "@/app/theme/ThemeToogle";
 import Image from "next/image";
 
 const LandingHeader = () => {
@@ -11,7 +10,6 @@ const LandingHeader = () => {
   const [activeSection] = useState("hero");
   const { toggleTheme, isDarkMode } = useTheme();
 
-  // Prevent scrolling when menu is open
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -39,7 +37,6 @@ const LandingHeader = () => {
       >
         <div className="container mx-auto">
           <div className="flex items-center justify-between">
-            {/* Logo */}
             <Link href="/">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -73,7 +70,6 @@ const LandingHeader = () => {
               </motion.div>
             </Link>
 
-            {/* Desktop Actions */}
             <div className="flex items-center space-x-4">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -92,7 +88,6 @@ const LandingHeader = () => {
                 )}
               </motion.button>
 
-              {/* Desktop Menu Links */}
               <div className="hidden lg:flex items-center space-x-8 whitespace-nowrap">
                 {navLinks.map(({ item, link }, index) => (
                   <Link
@@ -122,7 +117,6 @@ const LandingHeader = () => {
                 </motion.button>
               </div>
 
-              {/* Mobile Menu Toggle Button (Visible only when menu is closed) */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -152,11 +146,9 @@ const LandingHeader = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay & Drawer */}
       <AnimatePresence>
         {isMenuOpen && (
           <>
-            {/* 1. Backdrop (Blur + Overlay) */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -166,7 +158,6 @@ const LandingHeader = () => {
               className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden"
             />
 
-            {/* 2. The Drawer (80% Width, Right Aligned) */}
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -178,7 +169,6 @@ const LandingHeader = () => {
                   : "bg-white border-l border-gray-200"
               }`}
             >
-              {/* Drawer Header */}
               <div className="p-5 flex items-center justify-between border-b border-gray-100 dark:border-gray-800">
                 <span
                   className={`text-lg font-bold ${
@@ -188,7 +178,6 @@ const LandingHeader = () => {
                   Menu
                 </span>
 
-                {/* Close Button / Theme Toggle Group */}
                 <div className="flex items-center gap-3">
                   <button
                     onClick={toggleTheme}
@@ -216,7 +205,6 @@ const LandingHeader = () => {
                 </div>
               </div>
 
-              {/* Drawer Content */}
               <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
                 {navLinks.map(({ item, link }, idx) => (
                   <motion.div
@@ -241,7 +229,6 @@ const LandingHeader = () => {
                   </motion.div>
                 ))}
 
-                {/* Mobile Get Started Button */}
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -260,7 +247,6 @@ const LandingHeader = () => {
                 </motion.div>
               </div>
 
-              {/* Drawer Footer (Optional) */}
               <div className="p-6 text-center border-t border-gray-100 dark:border-gray-800">
                 <p
                   className={`text-xs ${

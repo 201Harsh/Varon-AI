@@ -9,7 +9,6 @@ import {
   FaLinkedin,
   FaGithub,
   FaPaperPlane,
-  FaRobot,
 } from "react-icons/fa";
 import {
   FiUser,
@@ -32,7 +31,6 @@ export default function ContactPage() {
         isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
       }`}
     >
-      {/* Header */}
       <header className="relative py-20 overflow-hidden">
         <div
           className={`absolute inset-0 transition-colors duration-300 ${
@@ -74,10 +72,8 @@ export default function ContactPage() {
         </div>
       </header>
 
-      {/* Contact Content */}
       <div className="container mx-auto px-6 pb-20 mt-8">
         <div className="grid lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
-          {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -244,14 +240,12 @@ export default function ContactPage() {
             </form>
           </motion.div>
 
-          {/* Contact Information */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-8"
           >
-            {/* Contact Methods */}
             <div
               className={`rounded-2xl p-8 border transition-colors duration-300 ${
                 isDarkMode
@@ -349,7 +343,6 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Response Time */}
             <div
               className={`rounded-2xl p-8 border transition-colors duration-300 ${
                 isDarkMode
@@ -392,7 +385,6 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Social Links */}
             <div
               className={`rounded-2xl p-8 border transition-colors duration-300 ${
                 isDarkMode
@@ -459,7 +451,6 @@ export default function ContactPage() {
           </motion.div>
         </div>
 
-        {/* FAQ Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

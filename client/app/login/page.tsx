@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   FaEnvelope,
   FaLock,
-  FaGoogle,
   FaEye,
   FaEyeSlash,
   FaExclamationTriangle,
@@ -53,7 +52,6 @@ export default function LoginPage() {
 
   const router = useRouter();
 
-  // Validation functions
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -66,14 +64,12 @@ export default function LoginPage() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    // Email validation
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!validateEmail(formData.email)) {
       newErrors.email = "Please enter a valid email address";
     }
 
-    // Password validation
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (!validatePassword(formData.password)) {
@@ -84,7 +80,6 @@ export default function LoginPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Check if account is temporarily locked
   const isAccountLocked = (): boolean => {
     if (loginAttempts.lockedUntil && Date.now() < loginAttempts.lockedUntil) {
       const remainingTime = Math.ceil(
@@ -98,14 +93,12 @@ export default function LoginPage() {
     return false;
   };
 
-  // Reset lock if time has passed
   const resetLockIfExpired = () => {
     if (loginAttempts.lockedUntil && Date.now() >= loginAttempts.lockedUntil) {
       setLoginAttempts({ count: 0, lastAttempt: 0 });
     }
   };
 
-  // Separate function for email/password login
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -150,17 +143,14 @@ export default function LoginPage() {
     }
   };
 
-  // Separate function for Google authentication
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
     setErrors({});
 
     try {
-      // Fake Google auth simulation
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       console.log("Google authentication initiated");
-      // Here you would typically redirect to Google OAuth
       alert("Google authentication would be implemented here.");
     } catch (error) {
       setErrors({ general: "Google authentication failed. Please try again." });
@@ -169,7 +159,6 @@ export default function LoginPage() {
     }
   };
 
-  // Handle forgot password
   const handleForgotPassword = () => {
     if (!formData.email) {
       setErrors({ email: "Please enter your email address to reset password" });
@@ -196,7 +185,6 @@ export default function LoginPage() {
       }`}
     >
       <div className="w-full max-w-md">
-        {/* Theme Toggle Button */}
         <div className="absolute right-20 top-20">
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -216,7 +204,6 @@ export default function LoginPage() {
           </motion.button>
         </div>
 
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -235,7 +222,6 @@ export default function LoginPage() {
           </p>
         </motion.div>
 
-        {/* Main Card */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -246,7 +232,6 @@ export default function LoginPage() {
               : "bg-white border-gray-200 shadow-xl"
           }`}
         >
-          {/* General Error Display */}
           {errors.general && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -285,9 +270,7 @@ export default function LoginPage() {
             </motion.div>
           )}
 
-          {/* Email/Password Form */}
           <form onSubmit={handleEmailLogin} className="space-y-6">
-            {/* Email Field */}
             <div>
               <label
                 className={`block text-sm font-medium mb-2 transition-colors duration-300 ${
@@ -335,7 +318,6 @@ export default function LoginPage() {
               )}
             </div>
 
-            {/* Password Field */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label
@@ -411,7 +393,6 @@ export default function LoginPage() {
               )}
             </div>
 
-            {/* Remember Me Checkbox */}
             <div className="flex items-center">
               <input
                 type="checkbox"
@@ -434,7 +415,6 @@ export default function LoginPage() {
               </label>
             </div>
 
-            {/* Sign In Button */}
             <motion.button
               type="submit"
               disabled={
@@ -478,7 +458,6 @@ export default function LoginPage() {
             </motion.button>
           </form>
 
-          {/* Divider */}
           <div className="flex items-center my-6">
             <div
               className={`flex-1 h-px transition-colors duration-300 ${
@@ -499,7 +478,6 @@ export default function LoginPage() {
             ></div>
           </div>
 
-          {/* Google Auth Button */}
           <motion.button
             onClick={handleGoogleLogin}
             disabled={googleLoading}
@@ -539,7 +517,6 @@ export default function LoginPage() {
           </motion.button>
         </motion.div>
 
-        {/* Footer Links */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -561,7 +538,6 @@ export default function LoginPage() {
           </p>
         </motion.div>
 
-        {/* Security Note */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

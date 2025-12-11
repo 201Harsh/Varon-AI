@@ -435,7 +435,6 @@ export default function AIAssistantsPage() {
         isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
       }`}
     >
-      {/* Header */}
       <header className="relative py-12 md:py-20 overflow-hidden">
         <div
           className={`absolute inset-0 transition-colors duration-300 ${
@@ -478,7 +477,6 @@ export default function AIAssistantsPage() {
       </header>
 
       <div className="container mx-auto px-4 sm:px-6 pb-20 mt-8">
-        {/* How Varon Thinks Section */}
         <section className="mb-16 md:mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -527,7 +525,6 @@ export default function AIAssistantsPage() {
               </motion.button>
             </div>
 
-            {/* Process Visualization */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {processSteps.map((step, index) => (
                 <motion.div
@@ -607,7 +604,6 @@ export default function AIAssistantsPage() {
               ))}
             </div>
 
-            {/* Process Explanation */}
             <div
               className={`mt-8 p-4 sm:p-6 rounded-xl border transition-colors duration-300 ${
                 isDarkMode
@@ -682,7 +678,6 @@ export default function AIAssistantsPage() {
           </motion.div>
         </section>
 
-        {/* AI Assistants Grid */}
         <section>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -717,7 +712,6 @@ export default function AIAssistantsPage() {
               </div>
             </div>
 
-            {/* Categories Grid */}
             <div className="space-y-4 sm:space-y-6">
               {aiAssistants.map((category, categoryIndex) => (
                 <motion.div
@@ -731,7 +725,6 @@ export default function AIAssistantsPage() {
                       : "bg-white border-gray-200"
                   }`}
                 >
-                  {/* Category Header */}
                   <button
                     onClick={() => toggleCategory(category.category)}
                     className={`w-full p-4 sm:p-6 md:p-8 text-left transition-colors duration-300 ${
@@ -763,7 +756,6 @@ export default function AIAssistantsPage() {
                         </div>
                       </div>
 
-                      {/* Mobile Description (shown below icon) */}
                       <p
                         className={`text-xs sm:hidden w-full transition-colors duration-300 ${
                           isDarkMode ? "text-gray-400" : "text-gray-600"
@@ -791,7 +783,6 @@ export default function AIAssistantsPage() {
                     </div>
                   </button>
 
-                  {/* Expandable Content */}
                   <AnimatePresence>
                     {expandedCategory === category.category && (
                       <motion.div
@@ -908,7 +899,6 @@ export default function AIAssistantsPage() {
           </motion.div>
         </section>
 
-        {/* Call to Action */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

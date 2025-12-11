@@ -25,10 +25,8 @@ const LandingFooter = () => {
           isDarkMode ? "bg-black border-gray-800" : "bg-white border-gray-200"
         }`}
       >
-        {/* Main Footer Content */}
         <div className="container mx-auto px-6 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-            {/* Brand Column */}
             <div className="lg:col-span-1">
               <div className="flex items-center space-x-3 mb-6">
                 <div
@@ -69,7 +67,6 @@ const LandingFooter = () => {
                 specialized AI assistants. Perfect results, every time.
               </p>
 
-              {/* Social Links */}
               <div className="flex space-x-4">
                 {[
                   { icon: FaTwitter, href: "#", label: "Twitter" },
@@ -93,7 +90,6 @@ const LandingFooter = () => {
               </div>
             </div>
 
-            {/* Product Column */}
             <div>
               <h3
                 className={`font-semibold text-lg mb-6 transition-colors duration-300 ${
@@ -124,7 +120,6 @@ const LandingFooter = () => {
               </ul>
             </div>
 
-            {/* Resources Column */}
             <div>
               <h3
                 className={`font-semibold text-lg mb-6 transition-colors duration-300 ${
@@ -155,7 +150,6 @@ const LandingFooter = () => {
               </ul>
             </div>
 
-            {/* Company Column */}
             <div>
               <h3
                 className={`font-semibold text-lg mb-6 transition-colors duration-300 ${
@@ -187,7 +181,6 @@ const LandingFooter = () => {
             </div>
           </div>
 
-          {/* Newsletter Subscription */}
           <div
             className={`mt-12 pt-8 border-t transition-colors duration-300 ${
               isDarkMode ? "border-gray-800" : "border-gray-200"
@@ -236,7 +229,6 @@ const LandingFooter = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div
           className={`border-t py-6 transition-colors duration-300 ${
             isDarkMode
@@ -246,7 +238,6 @@ const LandingFooter = () => {
         >
           <div className="container mx-auto px-6">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              {/* Copyright and Links */}
               <div className="flex flex-col sm:flex-row items-center gap-4 text-sm">
                 <div
                   className={`transition-colors duration-300 ${
@@ -278,7 +269,6 @@ const LandingFooter = () => {
                 </div>
               </div>
 
-              {/* Made with love and Scroll to Top */}
               <div className="flex items-center gap-6">
                 <div
                   className={`flex items-center gap-1 text-sm transition-colors duration-300 ${
