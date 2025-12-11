@@ -370,7 +370,7 @@ export default function DocsPage() {
 
                 <div className="flex flex-wrap gap-4 mb-10">
                   <a
-                    href="https://ravx-os.vercel.app/"
+                    href="https://varonai.vercel.app/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold bg-emerald-500 text-white hover:bg-emerald-600 transition-colors"
