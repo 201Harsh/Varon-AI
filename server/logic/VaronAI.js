@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import VaronMcpServer from "../connections/VaronMcpServer.js";
 
-const ai = new GoogleGenAI({ apiKey: process.env.VARON_AI_API_KEY1 });
+const ai = new GoogleGenAI({ apiKey: process.env.VARON_AI_API_KEY });
 
 async function ModelVaronAI({ prompt, socket, User, messages }) {
   if (!prompt) {
