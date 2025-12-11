@@ -901,7 +901,7 @@ const VaronChatSection = ({
         isDarkMode ? "text-gray-100" : " text-gray-800"
       }`}
     >
-      <div className="flex-1 overflow-y-auto scrollbar-small-bar">
+      <div className="flex-1 overflow-y-auto scrollbar-small">
         <div className="max-w-3xl mx-auto w-full px-4 md:px-6 py-6 pb-40">
           <AnimatePresence mode="popLayout">
             {messages.map((message: any, index: number) => (
@@ -969,7 +969,7 @@ const VaronChatSection = ({
       </div>
 
       <div
-        className={`fixed bottom-0 left-0 right-0 z-100 pb-6 px-4 md:px-8 duration-300`}
+        className={`fixed bottom-0 left-0 right-0 z-50 pb-6 px-4 md:px-8 duration-300`}
       >
         <div className="max-w-3xl mx-auto w-full">
           <form onSubmit={handleSendMessage} className="relative group">
