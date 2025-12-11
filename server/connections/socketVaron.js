@@ -16,10 +16,10 @@ const socketVaron = async ({ io }) => {
     const hour = new Date().getHours();
     let greet;
 
-    if (hour < 12) greet = "Good Morning";
-    else if (hour < 17) greet = "Good Afternoon";
-    else if (hour < 21) greet = "Good Evening";
-    else greet = "Good Night";
+    if (hour < 12) greet = "Good Morning!";
+    else if (hour < 17) greet = "Good Afternoon!";
+    else if (hour < 21) greet = "Good Evening!";
+    else greet = "BatMan Night!";
 
     socket.emit(
       "server-reply",
@@ -37,7 +37,7 @@ const socketVaron = async ({ io }) => {
           "Please login or register first for Live Chat with Varon AI."
         );
       }
-
+      
       ModelVaronAI({ prompt: msg, socket, User, messages });
     });
 
