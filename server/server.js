@@ -120,3 +120,5 @@ server.listen(PORT, () => {
   // console.log("MCP Server is Active");
   ConnectToDB();
 });
+
+module.exports = app;
