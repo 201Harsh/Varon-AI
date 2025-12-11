@@ -5,6 +5,7 @@ import CobraAITool from "../utils/CobraAI.js";
 import FluxAudit from "../utils/FluxAudit.js";
 import { getRealTimeData } from "../utils/GetRealTimeUpdates.js";
 import { scrapeDuckDuckGo } from "../utils/HydraSearch.js";
+import HydraSummarizer from "../utils/HydraSummarizer.js";
 import IronQuery from "../utils/IronQuery.js";
 import NovaFlowTool from "../utils/NovaFlow.js";
 import { scrapeWebPage } from "../utils/PhantomScraper.js";
@@ -104,11 +105,15 @@ export const hydraSearchTool = {
           )
           .join("\n");
 
+      const HydraSummary = await HydraSummarizer({ RawOutp: results });
       return {
         content: [
           {
             type: "text",
-            text: formattedText,
+            text:
+              formattedText +
+              `\n\n **Here is Search Result Summary**:---\n\n` +
+              HydraSummary,
           },
         ],
 
