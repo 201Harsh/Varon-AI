@@ -22,6 +22,8 @@ import {
 } from "./tools/tools.js";
 import VaronMcpServer from "./connections/VaronMcpServer.js";
 
+const ServerApp = app;
+
 VaronMcpServer.registerTool(
   cobraAITool.name,
   cobraAITool.config,
@@ -100,7 +102,7 @@ VaronMcpServer.registerTool(
   scriptForgeTool.execute
 );
 
-const server = http.createServer(app);
+const server = http.createServer(ServerApp);
 const PORT = process.env.PORT || 5000;
 
 const io = new Server(server, {
@@ -121,4 +123,4 @@ server.listen(PORT, () => {
   ConnectToDB();
 });
 
-module.exports = app;
+export default ServerApp;
