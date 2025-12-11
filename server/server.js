@@ -115,8 +115,8 @@ io.use(socketAuth);
 socketVaron({ io });
 
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log("Socket IO is Working ");
-  console.log("MCP Server is Active");
+  // console.log(`Server is running on port ${PORT}`);
+  // console.log("Socket IO is Working ");
+  // console.log("MCP Server is Active");
   ConnectToDB();
 });

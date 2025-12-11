@@ -7,11 +7,9 @@ const socketVaron = async ({ io }) => {
 
     const User = await UserModel.findById(UserId);
     if (!User) {
-      console.log("User not found for socket connection", socket.id);
       return socket.disconnect();
     }
 
-    console.log("a user connected", socket.id);
 
     const hour = new Date().getHours();
     let greet;
@@ -31,7 +29,6 @@ const socketVaron = async ({ io }) => {
 
     socket.on("client-message", async ({ inputMessage: msg, messages }) => {
       if (!socket.user) {
-        console.log("User not Authneticated");
         return socket.emit(
           "server-reply",
           "Please login or register first for Live Chat with Varon AI."
@@ -42,7 +39,6 @@ const socketVaron = async ({ io }) => {
     });
 
     socket.on("disconnect", async () => {
-      console.log("a user disconnected", socket.id);
     });
   });
 };

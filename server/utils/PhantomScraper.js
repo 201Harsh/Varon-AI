@@ -101,15 +101,12 @@ async function scrapeWebPage(startUrl) {
     const queue = [startUrl];
     let combinedContent = "";
 
-    console.log(`Starting crawl at: ${startUrl}`);
 
     while (queue.length > 0 && visited.size < MAX_PAGES) {
       const currentUrl = queue.shift();
 
       if (visited.has(currentUrl)) continue;
       visited.add(currentUrl);
-
-      console.log(`Crawling (${visited.size}/${MAX_PAGES}): ${currentUrl}`);
 
       const { text, links } = await scrapeSinglePage(browser, currentUrl);
 
