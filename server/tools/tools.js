@@ -4,7 +4,7 @@ import BlackReplit from "../utils/BlackReplit.js";
 import CobraAITool from "../utils/CobraAI.js";
 import FluxAudit from "../utils/FluxAudit.js";
 import { getRealTimeData } from "../utils/GetRealTimeUpdates.js";
-import { scrapeDuckDuckGo } from "../utils/HydraSearch.js";
+import { hydraSearch } from "../utils/HydraSearch.js";
 import HydraSummarizer from "../utils/HydraSummarizer.js";
 import IronQuery from "../utils/IronQuery.js";
 import NovaFlowTool from "../utils/NovaFlow.js";
@@ -92,16 +92,16 @@ export const hydraSearchTool = {
 
   execute: async ({ query }) => {
     try {
-      const results = await scrapeDuckDuckGo(query);
+      const results = await hydraSearch(query);
 
       const formattedText =
         `🟣 **HydraSearch — Results for:** \`${query}\`\n\n` +
         results
           .map(
             (r, i) =>
-              `**${i + 1}. ${r.title}**\n🔗 [View HydraSearch Page](${
-                r.link
-              })\n📝${r.snippet}\n`
+              `**${i + 1}. ${r.title}**\n🔗 [${r.displayLink}](${r.link})\n📝${
+                r.snippet
+              }\n`
           )
           .join("\n");
 
@@ -164,7 +164,7 @@ export const viperCartTool = {
   execute: async ({ query }) => {
     try {
       const amazonQuery = `site:amazon.com  ${query}`;
-      const results = await scrapeDuckDuckGo(amazonQuery);
+      const results = await hydraSearch(amazonQuery);
 
       if (results.length === 0) {
         return {
@@ -175,8 +175,8 @@ export const viperCartTool = {
 
       const cleanedResults = results.map((r) => {
         const cleanTitle = r.title
-          .replace(/^Amazon\.com\s*[:|-]\s*/i, "")
-          .replace(/\s*[:|-]\s*Amazon\.com$/i, "")
+          .replace(/^Amazon\.in\s*[:|-]\s*/i, "")
+          .replace(/\s*[:|-]\s*Amazon\.in$/i, "")
           .trim();
 
         return {
@@ -190,7 +190,7 @@ export const viperCartTool = {
         cleanedResults
           .map(
             (r, i) =>
-              `**${i + 1}. ${r.title}**\n🔗 [View Product](${r.link})\n📝 ${
+              `**${i + 1}. ${r.title}**\n🔗 [${r.displayLink}](${r.link})\n📝 ${
                 r.snippet
               }\n`
           )
@@ -815,19 +815,6 @@ export const chronosTool = {
   },
 };
 
-function getMimeType(format) {
-  switch (format.toLowerCase()) {
-    case "pdf":
-      return "application/pdf";
-    case "docx":
-      return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    case "pptx":
-      return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-    default:
-      return "application/octet-stream";
-  }
-}
-
 export const scriptForgeTool = {
   name: "ScriptForge",
 
@@ -865,6 +852,18 @@ export const scriptForgeTool = {
   },
 
   execute: async ({ format, title, content, filename }) => {
+    function getMimeType(format) {
+      switch (format.toLowerCase()) {
+        case "pdf":
+          return "application/pdf";
+        case "docx":
+          return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        case "pptx":
+          return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+        default:
+          return "application/octet-stream";
+      }
+    }
     try {
       const result = await generateDocument({ format, title, content });
 

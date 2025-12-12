@@ -1,38 +1,33 @@
 import axios from "axios";
-import * as cheerio from "cheerio";
 
-export async function scrapeDuckDuckGo(query) {
+export async function hydraSearch(query) {
   try {
-    const url = "https://html.duckduckgo.com/html/";
-
-    const response = await axios.get(url, {
-      params: { q: query },
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-      },
-    });
-    
-    const $ = cheerio.load(response.data);
-    const results = [];
-
-    $(".result").each((i, element) => {
-      const title = $(element).find(".result__title .result__a").text().trim();
-      const link = $(element).find(".result__title .result__a").attr("href");
-      const snippet = $(element).find(".result__snippet").text().trim();
-
-      if (title && link) {
-        results.push({
-          title,
-          link,
-          snippet,
-        });
+    const response = await axios.get(
+      "https://www.googleapis.com/customsearch/v1",
+      {
+        params: {
+          key: process.env.GOOGLE_SEARCH_API_KEY,
+          cx: process.env.GOOGLE_SEARCH_ENGINE_ID,
+          q: query,
+        },
       }
-    });
+    );
+
+    const items = response.data.items || [];
+
+    const results = items.map((item) => ({
+      title: item.title,
+      link: item.link,
+      snippet: item.snippet || "",
+      displayLink: item.displayLink || "",
+    }));
 
     return results.slice(0, 10);
-  } catch (error) {
-    console.error("Search Error:", error.message);
+  } catch (err) {
+    console.error(
+      "HydraSearch Google Error:",
+      err.response?.data || err.message
+    );
     return [];
   }
 }
