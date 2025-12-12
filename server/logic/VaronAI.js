@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import VaronMcpServer from "../connections/VaronMcpServer.js";
 
-const ai = new GoogleGenAI({ apiKey: process.env.VARON_AI_API_KEY1 });
+const ai = new GoogleGenAI({ apiKey: process.env.VARON_AI_API_KEY });
 
 async function ModelVaronAI({ prompt, socket, User, messages }) {
   if (!prompt) {
@@ -537,6 +537,7 @@ Use this as your core operating instruction for all Varon AI interactions.`;
 
     socket.emit("server-reply", fullResponseText);
   } catch (error) {
+    console.error("Varon AI Error:", error.message);
     const Varonerror =
       "Varon is unable to process your request. Please try again later.";
     socket.emit("thinking-status", "Varon ERROR: AI_Response_Error");
