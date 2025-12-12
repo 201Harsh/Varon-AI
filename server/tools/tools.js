@@ -163,7 +163,7 @@ export const viperCartTool = {
 
   execute: async ({ query }) => {
     try {
-      const amazonQuery = `site:amazon.com  ${query}`;
+      const amazonQuery = `site:amazon.in  ${query}`;
       const results = await hydraSearch(amazonQuery);
 
       if (results.length === 0) {
