@@ -105,7 +105,7 @@ export const hydraSearchTool = {
           )
           .join("\n");
 
-      const HydraSummary = await HydraSummarizer({ RawOutp: results });
+      const HydraSummary = await HydraSummarizer({ RawOutp: formattedText });
       return {
         content: [
           {
