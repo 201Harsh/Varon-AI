@@ -69,6 +69,13 @@ export const LoginUserCheck = async ({ email, password }) => {
     throw createError("Invalid Credentials.", 404);
   }
 
+  if (!user.password) {
+    throw createError(
+      "This account uses Google Login. Please click 'Continue with Google'.",
+      404
+    );
+  }
+
   const isPasswordMatch = await user.ComparePassword(password);
 
   if (!isPasswordMatch) {

@@ -155,13 +155,6 @@ export const LoginUser = async (req, res) => {
       });
     }
 
-    if (!user.password) {
-      return res.status(400).json({
-        error:
-          "This account uses Google Login. Please click 'Continue with Google'.",
-      });
-    }
-
     const token = User.JwtGenToken();
 
     res.cookie("token_id_user", token, {

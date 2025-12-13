@@ -67,7 +67,6 @@ async function scrapeSinglePage(browser, url) {
 
     return { text: textContent, links: Array.from(links) };
   } catch (e) {
-    console.warn(`Failed to scrape individual page ${url}: ${e.message}`);
     return { text: "", links: [] };
   } finally {
     await page.close();

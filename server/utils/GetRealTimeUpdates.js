@@ -124,7 +124,6 @@ export async function getRealTimeData(location) {
       ...timeData,
     };
   } catch (error) {
-    console.error("Chronos Error:", error);
     throw error;
   }
 }

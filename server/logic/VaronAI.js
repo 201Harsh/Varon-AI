@@ -537,7 +537,6 @@ Use this as your core operating instruction for all Varon AI interactions.`;
 
     socket.emit("server-reply", fullResponseText);
   } catch (error) {
-    console.error("Varon AI Error:", error.message);
     const Varonerror =
       "Varon is unable to process your request. Please try again later.";
     socket.emit("thinking-status", "Varon ERROR: AI_Response_Error");

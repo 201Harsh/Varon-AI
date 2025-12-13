@@ -262,7 +262,6 @@ const FileDownloadItem = ({
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
-      console.error("Download failed", error);
     }
   };
 
@@ -472,7 +471,6 @@ const MessageItem = ({
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
-      console.error("Failed to copy:", err);
     }
   };
 

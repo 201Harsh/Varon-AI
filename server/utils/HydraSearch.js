@@ -25,10 +25,6 @@ export async function hydraSearchUsingGoogle(query) {
 
     return results.slice(0, 10);
   } catch (err) {
-    console.error(
-      "HydraSearch Google Error:",
-      err.response?.data || err.message
-    );
     return [];
   }
 }
@@ -86,7 +82,6 @@ export async function hydraSearch(query) {
 
     return results;
   } catch (err) {
-    console.error("HydraSearch Error:", err.message);
     return [
       {
         title: "Search Failed",

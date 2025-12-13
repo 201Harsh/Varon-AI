@@ -132,7 +132,6 @@ export async function generateDocument({ format, title, content }) {
     }
     return { success: true, buffer };
   } catch (error) {
-    console.error("ScriptForge Logic Error:", error);
     throw new Error(`Failed to generate document: ${error.message}`);
   }
 }

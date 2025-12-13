@@ -12,6 +12,9 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 import { PopupModal } from "./Menupopup";
+import AxiosProxyInstance from "@/config/AxiosProxyInstance";
+import { toast, Zoom } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface UserMenuProps {
   isOpen: boolean;
@@ -37,6 +40,8 @@ const UserMenu = ({
 }: UserMenuProps) => {
   // State to track which popup is active
   const [activePopup, setActivePopup] = useState<string | null>(null);
+
+  const router = useRouter();
 
   const menuItems = [
     {
@@ -65,18 +70,33 @@ const UserMenu = ({
     },
   ];
 
-  // When a menu item is clicked:
-  // 1. Open the specific popup
-  // 2. Close the dropdown menu
   const handleMenuAction = (action: string) => {
     setActivePopup(action);
     onClose();
   };
 
-  const handleLogout = () => {
-    console.log("Logging out...");
-    onClose();
-    // Add your logout logic here
+  const handleLogout = async () => {
+    try {
+      const res = await AxiosProxyInstance.post("/api/logout");
+
+      if (res.status === 200) {
+        router.push("/login");
+      }
+    } catch (error) {
+      toast.error("Logout failed. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: isDarkMode ? "dark" : "light",
+        transition: Zoom,
+      });
+    } finally {
+      onClose();
+    }
   };
 
   const handleDisconnect = () => {
