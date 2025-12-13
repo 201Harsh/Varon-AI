@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   email: {
     type: String,
@@ -15,8 +14,14 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
-    select: false
+    required: function () {
+      return !this.googleId;
+    },
+    select: false,
+  },
+  googleId: {
+    type: String,
+    select: false,
   },
   createdAt: {
     type: Date,
@@ -26,7 +31,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.JwtGenToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN 
+    expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
 
@@ -40,4 +45,4 @@ userSchema.statics.HashPassword = async function (password) {
 
 const UserModel = mongoose.model("user", userSchema);
 
-export default UserModel; 
+export default UserModel;
