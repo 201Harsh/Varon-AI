@@ -148,10 +148,7 @@ export default function LoginPage() {
     setErrors({});
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      console.log("Google authentication initiated");
-      alert("Google authentication would be implemented here.");
+      window.location.href = `${process.env.NEXT_PUBLIC_SERVER_URL}/users/google`;
     } catch (error) {
       setErrors({ general: "Google authentication failed. Please try again." });
     } finally {

@@ -221,8 +221,7 @@ export default function RegisterPage() {
     setErrors({});
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setErrors({ general: "Google authentication failed. Please try again." });
+      window.location.href = `${process.env.NEXT_PUBLIC_SERVER_URL}/users/google`;
     } catch (error) {
       setErrors({ general: "Google authentication failed. Please try again." });
     } finally {

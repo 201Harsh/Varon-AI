@@ -3,12 +3,14 @@ import {
   GetUser,
   LoginUser,
   LogoutUser,
+  RegisterAndLoginUsingGoogle,
   RegisterUser,
   VerifyUser,
 } from "../controllers/user.controller.js";
 import { body } from "express-validator";
 import ValidateData from "../middlewares/validated.middleware.js";
 import AuthUser from "../middlewares/auth.middleware.js";
+import passport from "passport";
 
 const UserRouter = express.Router();
 
@@ -55,5 +57,22 @@ UserRouter.post(
 UserRouter.post("/logout", AuthUser, LogoutUser);
 
 UserRouter.get("/get", AuthUser, GetUser);
+
+UserRouter.get(
+  "/google",
+  passport.authenticate("google", {
+    session: false,
+    scope: ["profile", "email"],
+  })
+);
+
+UserRouter.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: "/login",
+  }),
+  RegisterAndLoginUsingGoogle
+);
 
 export default UserRouter;

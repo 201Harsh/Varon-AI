@@ -5,6 +5,7 @@ import {
   LoginUserCheck,
   VerifyUserOtp,
 } from "../services/user.service.js";
+import "../lib/passport.js";
 
 export const RegisterUser = async (req, res) => {
   try {
@@ -154,6 +155,13 @@ export const LoginUser = async (req, res) => {
       });
     }
 
+    if (!user.password) {
+      return res.status(400).json({
+        error:
+          "This account uses Google Login. Please click 'Continue with Google'.",
+      });
+    }
+
     const token = User.JwtGenToken();
 
     res.cookie("token_id_user", token, {
@@ -207,5 +215,18 @@ export const GetUser = async (req, res) => {
     res.status(500).json({
       error: error.message,
     });
+  }
+};
+
+export const RegisterAndLoginUsingGoogle = async (req, res) => {
+  try {
+    const user = req.user;
+    const token = user.JwtGenToken();
+
+    const nextJsApiUrl = `${process.env.CLIENT_SIDE_URL}/api/auth`;
+
+    return res.redirect(`${nextJsApiUrl}?token=${token}`);
+  } catch (error) {
+    return res.redirect(`${process.env.CLIENT_SIDE_URL}/login?error=AuthFailed`);
   }
 };
