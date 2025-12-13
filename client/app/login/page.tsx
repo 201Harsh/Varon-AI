@@ -120,7 +120,6 @@ export default function LoginPage() {
       const res = await AxiosProxyInstance.post("/api/login", formData);
 
       if (res.status === 200) {
-        console.log(res.data);
         setLoginAttempts({ count: 0, lastAttempt: 0 });
         setErrors({});
         router.push("/varon");
@@ -167,7 +166,6 @@ export default function LoginPage() {
       return;
     }
 
-    console.log("Password reset requested for:", formData.email);
     alert(`Password reset instructions sent to ${formData.email}`);
   };
 
@@ -526,7 +524,6 @@ export default function LoginPage() {
             Don't have an account?{" "}
             <Link href="/register">
               <button
-                onClick={() => console.log("Navigate to register")}
                 className="text-emerald-500 cursor-pointer hover:text-emerald-400 font-medium inline-flex items-center gap-1"
               >
                 Create Account <FiArrowRight className="text-xs" />

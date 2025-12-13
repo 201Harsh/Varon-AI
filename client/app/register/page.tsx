@@ -189,7 +189,6 @@ export default function RegisterPage() {
       });
 
       if (res.status === 200) {
-        console.log(res.data);
         setShowOtpPopup(false);
         setMessages({
           general: res.data?.message || "OTP verified successfully.",
@@ -197,7 +196,6 @@ export default function RegisterPage() {
         router.push("/varon");
       }
     } catch (error: any) {
-      console.log(error.response.status);
       if (error.response.status === 400) {
         setErrors({
           otp:
@@ -855,7 +853,6 @@ export default function RegisterPage() {
               Already have an account?{" "}
               <Link href="/login">
                 <button
-                  onClick={() => console.log("Navigate to login")}
                   className="text-emerald-500 hover:text-emerald-400 font-medium cursor-pointer"
                 >
                   Log In

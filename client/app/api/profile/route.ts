@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request) {
   try {
     const token = (await cookies()).get("token_id_user")?.value;
-    console.log(token)
 
     if (!token) {
       return Response.json(

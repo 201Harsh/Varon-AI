@@ -488,7 +488,6 @@ const MessageItem = ({
           text: message.text,
         });
       } catch (err) {
-        console.log("Error sharing:", err);
       }
     } else {
       handleCopy();
