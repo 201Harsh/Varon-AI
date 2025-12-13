@@ -114,6 +114,10 @@ const io = new Server(server, {
 io.use(socketAuth);
 socketVaron({ io });
 
+app.get("/health", (req, res) => {
+  res.status(200).send("Server is awake and active");
+});
+
 server.listen(PORT, () => {
   // console.log(`Server is running on port ${PORT}`);
   // console.log("Socket IO is Working ");
