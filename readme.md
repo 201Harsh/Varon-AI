@@ -4,7 +4,7 @@
 
 ![Varon AI Banner](https://img.shields.io/badge/💠_Varon_AI-Multi_Agent_Intelligence_System-8A2BE2?style=for-the-badge&logo=apacheairflow&logoColor=white)
 
-**Varon AI** is a next‑generation **Unified Multi‑Agent AI Ecosystem**, engineered inside the fictional **Vortex Intelligence Labs (VIL)** by **Harsh Pandey**.  
+**Varon AI** is a next‑generation **Unified Multi‑Agent AI Ecosystem**, engineered inside the **Vortex Intelligence Labs (VIL)** by **Harsh Pandey**.  
 It orchestrates a full team of **specialized AI agents** capable of coding, research, scraping, database work, content creation, automation, product search, weather/time updates, and more — all through an advanced neural orchestration pipeline.
 
 Varon isn’t just an AI.  
@@ -36,7 +36,7 @@ It is a **high‑precision cognitive operating system** built for real‑world e
 
 ## 🧠 About Varon AI
 
-**Varon AI** is a fictional high‑performance **Agentic AI Commander** designed to manage, coordinate, and validate the work of multiple expert AI agents.  
+**Varon AI** is a high‑performance **Agentic AI Commander** designed to manage, coordinate, and validate the work of multiple expert AI agents.  
 Its mission is simple:
 
 > _“Give real‑world power to artificial intelligence.”_
