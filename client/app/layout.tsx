@@ -20,12 +20,11 @@ export default function RootLayout({
         autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
-        closeOnClick={false}
+        closeOnClick={true}
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="dark"
         transition={Slide}
       />
       <html lang="en">

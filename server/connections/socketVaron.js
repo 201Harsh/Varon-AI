@@ -17,7 +17,7 @@ const socketVaron = async ({ io }) => {
     if (hour < 12) greet = "Good Morning!";
     else if (hour < 17) greet = "Good Afternoon!";
     else if (hour < 21) greet = "Good Evening!";
-    else greet = "BatMan Night!";
+    else greet = "Batman Night!";
 
     socket.emit(
       "server-reply",

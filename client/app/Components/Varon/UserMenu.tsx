@@ -81,6 +81,17 @@ const UserMenu = ({
 
       if (res.status === 200) {
         router.push("/login");
+        toast.success(res.data.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: isDarkMode ? "dark" : "light",
+          transition: Zoom,
+        });
       }
     } catch (error) {
       toast.error("Logout failed. Please try again.", {
