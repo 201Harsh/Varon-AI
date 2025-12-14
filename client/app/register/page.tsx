@@ -271,12 +271,28 @@ export default function RegisterPage() {
     }
   };
 
-  const resendOTP = () => {
+  const resendOTP = async () => {
     setOtp(["", "", "", "", "", ""]);
     setErrors((prev) => ({ ...prev, otp: undefined }));
     setOtpErrors({});
-    console.log("Resending OTP to:", formData.email);
-    alert("New OTP sent to your email!");
+
+    try {
+      const res = await AxiosInstance.post("/users/resend", {
+        email: formData.email,
+      });
+
+      if (res.status === 200) {
+        setMessages({
+          general: res.data?.message || "OTP resent successfully.",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      setErrors((prev) => ({
+        ...prev,
+        general: "Failed to resend OTP. Please try again.",
+      }));
+    }
   };
 
   const clearError = (field: keyof FormErrors) => {
@@ -852,9 +868,7 @@ export default function RegisterPage() {
             >
               Already have an account?{" "}
               <Link href="/login">
-                <button
-                  className="text-emerald-500 hover:text-emerald-400 font-medium cursor-pointer"
-                >
+                <button className="text-emerald-500 hover:text-emerald-400 font-medium cursor-pointer">
                   Log In
                 </button>
               </Link>

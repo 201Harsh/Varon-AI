@@ -166,7 +166,8 @@ export default function LoginPage() {
       return;
     }
 
-    alert(`Password reset instructions sent to ${formData.email}`);
+    setErrors({ general: "Use Continue with Google to Access your account" });
+    setFormData({ ...formData, password: "" });
   };
 
   const clearError = (field: keyof FormErrors) => {
@@ -523,9 +524,7 @@ export default function LoginPage() {
           <p className="text-sm">
             Don't have an account?{" "}
             <Link href="/register">
-              <button
-                className="text-emerald-500 cursor-pointer hover:text-emerald-400 font-medium inline-flex items-center gap-1"
-              >
+              <button className="text-emerald-500 cursor-pointer hover:text-emerald-400 font-medium inline-flex items-center gap-1">
                 Create Account <FiArrowRight className="text-xs" />
               </button>
             </Link>

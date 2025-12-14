@@ -5,6 +5,7 @@ import {
   LogoutUser,
   RegisterAndLoginUsingGoogle,
   RegisterUser,
+  ResendUserOtp,
   VerifyUser,
 } from "../controllers/user.controller.js";
 import { body } from "express-validator";
@@ -39,6 +40,15 @@ UserRouter.post(
   ],
   ValidateData,
   VerifyUser
+);
+
+UserRouter.post(
+  "/resend",
+  [
+    body("email").trim().isEmail().withMessage("Invalid email!"),
+  ],
+  ValidateData,
+  ResendUserOtp
 );
 
 UserRouter.post(

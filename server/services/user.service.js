@@ -58,6 +58,28 @@ export const VerifyUserOtp = async ({ email, otp }) => {
   return user;
 };
 
+export const ResendUserOtplogic = async ({ email, otp }) => {
+  if (!email) {
+    throw createError("Proper Values are required to resend a user otp.", 406);
+  }
+
+  if (!otp) {
+    throw createError("Proper Values are required to resend a user otp.", 406);
+  }
+
+  const tempuser = await TempUserModel.findOne({ email });
+
+  if (!tempuser) {
+    throw createError("User not found.", 404);
+  }
+
+  tempuser.otp = otp;
+  tempuser.otpExpiry = Date.now() + 5 * 60 * 1000;
+  await tempuser.save();
+
+  return tempuser;
+};
+
 export const LoginUserCheck = async ({ email, password }) => {
   if (!email || !password) {
     throw createError("Proper Values are required to login a user.", 406);
