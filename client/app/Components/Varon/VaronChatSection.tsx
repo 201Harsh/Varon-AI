@@ -401,7 +401,7 @@ const ThinkingProcess = ({
             >
               <div
                 ref={bodyRef}
-                className={`px-4 pb-4 pt-0 text-xs md:text-[13px] font-mono leading-relaxed whitespace-pre-wrap max-h-[300px] overflow-y-auto custom-scrollbar ${
+                className={`px-4 pb-4 pt-0 text-xs md:text-[13px] font-mono leading-relaxed whitespace-pre-wrap max-h-75 overflow-y-auto custom-scrollbar ${
                   isDarkMode ? "text-gray-400" : "text-gray-600"
                 }`}
               >
@@ -966,7 +966,7 @@ const VaronChatSection = ({
       </div>
 
       <div
-        className={`fixed bottom-0 left-0 right-0 z-50 pb-6 px-4 md:px-8 duration-300`}
+        className={`fixed bottom-5 md:bottom-0 left-0 right-0 z-50 pb-6 px-4 md:px-8 duration-300`}
       >
         <div className="max-w-3xl mx-auto w-full">
           <form onSubmit={handleSendMessage} className="relative group">
@@ -994,7 +994,7 @@ const VaronChatSection = ({
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Message Varon AI..."
-                className={`w-[95%] bg-transparent max-h-[200px] py-3 pl-4 pr-12 outline-none resize-none scrollbar-small leading-relaxed ${
+                className={`w-[95%] bg-transparent max-h-50 py-3 pl-4 pr-12 outline-none resize-none scrollbar-small leading-relaxed ${
                   isDarkMode
                     ? "text-white placeholder-gray-500"
                     : "text-gray-900 placeholder-gray-400"

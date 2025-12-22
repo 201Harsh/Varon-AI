@@ -53,13 +53,13 @@ const VaronHeader = ({
   return (
     <>
       <header
-        className={`border-b transition-all duration-300 fixed z-40 top-0 left-0 right-0 backdrop-blur-md ${
+        className={`border-b transition-all duration-300 fixed z-40 top-4 md:top-0 left-0 right-0 backdrop-blur-md ${
           isDarkMode
             ? "bg-black/20 border-emerald-500/10 supports-backdrop-filter:bg-black/30"
             : "bg-white/80 border-emerald-500/20 supports-backdrop-filter:bg-white/60"
         }`}
       >
-        <div className="container mx-auto px-4 sm:px-6 py-3">
+        <div className="container mx-auto px-4 sm:px-6 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div
