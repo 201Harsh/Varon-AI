@@ -10,8 +10,8 @@ const VaronConnectionSection = ({
   simulateConnection: () => void;
 }) => {
   return (
-    <div className="min-h-[calc(100vh-80px)] flex items-center justify-center relative overflow-hidden p-10">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" />
+    <div className="min-h-[calc(100vh-120px)] flex items-center justify-center relative overflow-hidden p-10">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" />
 
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
