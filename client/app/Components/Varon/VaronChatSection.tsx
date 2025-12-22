@@ -966,7 +966,7 @@ const VaronChatSection = ({
       </div>
 
       <div
-        className={`fixed bottom-5 md:bottom-0 left-0 right-0 z-50 pb-6 px-4 md:px-8 duration-300`}
+        className={`fixed bottom-4 md:bottom-0 left-0 right-0 z-50 pb-6 px-4 md:px-8 duration-300`}
       >
         <div className="max-w-3xl mx-auto w-full">
           <form onSubmit={handleSendMessage} className="relative group">
