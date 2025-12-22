@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.response?.data?.message },
+      { error: error.response?.data?.message || error.response?.data},
       { status: error.response?.status }
     );
   }
