@@ -27,7 +27,7 @@ export async function GET(req: Request) {
   } catch (error: any) {
     if (error.response) {
       return Response.json(
-        { error: error.response.data.error },
+        { error: error.response.data.error || error.response?.data  },
         { status: error.response.status }
       );
     }

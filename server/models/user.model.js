@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     select: false,
   },
+  vtoken: {
+    type: Number,
+    default: 20,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -241,11 +241,7 @@ export default function LoginPage() {
               <FaExclamationTriangle className="text-lg mt-0.5 shrink-0" />
               <div className="flex-1">
                 <p className="text-sm font-medium">{errors.general}</p>
-                {loginAttempts.count > 0 && !loginAttempts.lockedUntil && (
-                  <p className="text-xs mt-1 opacity-80">
-                    Attempts: {loginAttempts.count}/5
-                  </p>
-                )}
+
                 {loginAttempts.lockedUntil && (
                   <button
                     onClick={handleForgotPassword}
@@ -407,7 +403,7 @@ export default function LoginPage() {
                   isDarkMode ? "text-gray-300" : "text-gray-700"
                 }`}
               >
-                Remember me for 30 days
+                Remember me for this session
               </label>
             </div>
 
@@ -443,7 +439,7 @@ export default function LoginPage() {
                 Date.now() < loginAttempts.lockedUntil ? (
                 <>
                   <FiKey className="text-xl" />
-                  Account Locked
+                  Locked
                 </>
               ) : (
                 <>
