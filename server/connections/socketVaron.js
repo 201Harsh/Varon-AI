@@ -10,6 +10,15 @@ const socketVaron = async ({ io }) => {
       return socket.disconnect();
     }
 
+    if (User.vtoken <= 0) {
+      return socket.emit(
+        "server-reply",
+        "⚠️ **Token Limit Exceeded**\n\n" +
+          "You've reached your current usage limit 💳.\n" +
+          "Upgrade your plan to continue chatting with 👑 **Varon AI** without interruptions.\n\n" +
+          "✨ Smarter. Faster. Unlimited."
+      );
+    }
 
     const hour = new Date().getHours();
     let greet;
@@ -34,12 +43,13 @@ const socketVaron = async ({ io }) => {
           "Please login or register first for Live Chat with Varon AI."
         );
       }
-      
+
       ModelVaronAI({ prompt: msg, socket, User, messages });
+      User.vtoken -= 1;
+      await User.save();
     });
 
-    socket.on("disconnect", async () => {
-    });
+    socket.on("disconnect", async () => {});
   });
 };
 
