@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-extra";
+import { executablePath } from "puppeteer"; // <--- IMPORT THIS
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import * as cheerio from "cheerio";
 import PhantomSummarizer from "./PhantomScrapeSummerizer.js";
@@ -69,7 +70,8 @@ async function scrapeSinglePage(browser, url) {
   } catch (e) {
     return { text: "", links: [] };
   } finally {
-    await page.close();
+    // Ensure the page is closed even if errors occur to save memory
+    if (page && !page.isClosed()) await page.close();
   }
 }
 
@@ -77,29 +79,44 @@ async function scrapeSinglePage(browser, url) {
  * @param {string} startUrl
  * @returns {Promise<string>}
  */
-
 async function scrapeWebPage(startUrl) {
   let browser;
   try {
+    // 1. Detect Environment
+    const isProduction = process.env.NODE_ENV === "production";
+
+    // 2. Define Base Arguments (Safe for both)
+    const launchArgs = [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-accelerated-2d-canvas",
+      "--no-first-run",
+      "--no-zygote",
+      "--disable-gpu",
+    ];
+
+    // 3. Add Linux-Specific Arguments (CRITICAL FIX)
+    // We ONLY add '--single-process' if we are on Render.
+    // Adding this on Windows is what caused your crash.
+    if (isProduction) {
+      launchArgs.push("--single-process");
+    }
+
     browser = await puppeteer.launch({
       headless: true,
       ignoreHTTPSErrors: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-accelerated-2d-canvas",
-        "--no-first-run",
-        "--no-zygote",
-        "--disable-gpu",
-      ],
+      // Logic: Use system path on Render, auto-detect on Local
+      executablePath: isProduction
+        ? process.env.PUPPETEER_EXECUTABLE_PATH || executablePath()
+        : executablePath(),
+      args: launchArgs,
     });
 
     const MAX_PAGES = 5;
     const visited = new Set();
     const queue = [startUrl];
     let combinedContent = "";
-
 
     while (queue.length > 0 && visited.size < MAX_PAGES) {
       const currentUrl = queue.shift();
@@ -125,6 +142,7 @@ async function scrapeWebPage(startUrl) {
     });
     return PhantomSummarizerResult + safePayload;
   } catch (error) {
+    console.error("Scraping failed:", error); // Added clearer logging
     throw new Error(`Browser Error: ${error.message}`);
   } finally {
     if (browser) await browser.close();
